@@ -1,0 +1,19 @@
+{
+  "name": "assiggheorghebackend",
+  "version": "1.0.0",
+  "description": "Assigment Gheorghe",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.coventry.ac.uk/304CEM-2021SEPJAN/AssigGheorgheBackEnd.git"
+  },
+  "author": "Gheorghe Craciun",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^2.13.0",
+    "koa-router": "^9.4.0"
+  }
+}
