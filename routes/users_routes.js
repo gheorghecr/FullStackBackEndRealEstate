@@ -5,7 +5,7 @@ const bodyParser = require('koa-bodyparser');
 const model = require('../models/users_model');
 
 // Import auth part
-//const auth = require('../controllers/auth');
+const auth = require('../controllers/auth');
 
 // Password encryption
 const bcrypt = require('bcrypt');
@@ -23,7 +23,7 @@ const router = Router({prefix: '/api/users'});
 router.get('/', /*auth,*/ getAll);
 router.post('/', bodyParser(), /*validateUser,*/  createAccount);
 
-router.get('/:id([0-9]{1,})', /*auth,*/ getById);
+router.get('/:id([0-9]{1,})', auth, getById);
 router.put('/:id([0-9]{1,})', /*auth,*/ bodyParser(), /*validateUserUpdate,*/ updateUserInfo);
 router.del('/:id([0-9]{1,})', /*auth,*/ deleteUserById);
 

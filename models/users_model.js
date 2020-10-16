@@ -18,7 +18,7 @@ exports.findByUsername = async function findByUsername (usarname) {
 //get user info by ID
 exports.getUserInfoById = async function getUserInfoById (id) {
   // TODO: use page, limit, order to give pagination
-  let query = "SELECT * FROM users WHERE ID = ?;"; 
+  let query = "SELECT * FROM users WHERE userID = ?;"; 
   let values = [id];
   let data = await db.run_query(query, values); 
   return data;
