@@ -44,19 +44,27 @@ async function getAll(cnx) {
 
 async function getById(cnx){ 
   let id = cnx.params.id; 
-  let article =  await model.getUserInfoById(id);
+  let user =  await model.getUserInfoById(id);
   
-  const permission = permissions.read(cnx.state.user, article[0]);
+  // if user is found in the database continue
+  // otherwise send message back saying user not found
+  if (user.length) {
+    const permission = permissions.read(cnx.state.user, user[0]);
   
-  //filter data which user cannot see
-  article[0] = permission.filter(article[0])
+    //filter data which user cannot see
+    user[0] = permission.filter(user[0])
 
-  if (!permission.granted) {
-    cnx.status = 403;
-  } else {
-    if (article.length) {
-    cnx.body = article[0];
+    if (!permission.granted) {
+      cnx.status = 403;
+    } else {
+      if (user.length) {
+        cnx.status = 201;
+        cnx.body = user[0];
+      }
     }
+  } else {
+    cnx.status = 404;
+    cnx.body = {Message: "User Not found"};
   }
 }
 
@@ -73,7 +81,7 @@ async function createAccount(cnx) {
     cnx.status = 201;
     cnx.body = {ID: result.insertId}
   } else {
-    //And wrong response code
+    cnx.status = 500;
   }
 }
 
@@ -85,27 +93,35 @@ async function updateUserInfo(cnx) {
   //get the user first, (check if exisits)
   let user =  await model.getUserInfoById(id);
   
-  //check permission if user can update info
-  const permission = permissions.update(cnx.state.user, user[0]);
-  
-  if (!permission.granted) {
-    cnx.status = 403;
-    cnx.body = {Message: "You don't have permission to update this."};
-  } else {
-    // if user is updating password encryp it
-    if(body.password) {
-      body.password = bcrypt.hashSync(body.password, 10);
-    }
-    //perform update
-    let result =  await model.updateById(id, body);
-    if (result.affectedRows > 0) {
-      cnx.status = 201;
-      cnx.body = {Message: "Account Updated succesfully"};
+  // if user is found in the database continue
+  // otherwise send message back saying user not found
+  if (user.length) {
+    //check permission if user can update info
+    const permission = permissions.update(cnx.state.user, user[0]);
+
+    if (!permission.granted) {
+      cnx.status = 403;
+      cnx.body = {Message: "You don't have permission to update this."};
     } else {
-      cnx.status = 404;
-      cnx.body = {Message: "Nothing was updated"};
+      // if user is updating password encryp it
+      if(body.password) {
+        body.password = bcrypt.hashSync(body.password, 10);
+      }
+      //perform update on database
+      let result =  await model.updateById(id, body);
+      if (result.affectedRows > 0) {
+        cnx.status = 201;
+        cnx.body = {Message: "Account Updated succesfully"};
+      } else {
+        cnx.status = 404;
+        cnx.body = {Message: "Nothing was updated"};
+      }
     }
+  } else {
+    cnx.status = 404;
+    cnx.body = {Message: "User Not found"};
   }
+  
 }
 
 // Delete account by ID
