@@ -6,6 +6,7 @@
 */
 var mysql = require('promise-mysql');
 var info = require('../config');
+const { v4: uuidv4 } = require('uuid');
 
 
 
