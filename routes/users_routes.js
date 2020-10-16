@@ -14,7 +14,7 @@ const bcrypt = require('bcrypt');
 //const {validateUser, validateUserUpdate} = require('../controllers/validation');
 
 // Deal with Permissions
-//const permissions = require('../permissions/users');
+const permissions = require('../permissions/users_permissions');
 
 // Since we are handling articles use a URI that begings with an appropriate path
 const router = Router({prefix: '/api/v1/users'});
@@ -31,7 +31,7 @@ router.del('/:id([0-9]{1,})', /*auth,*/ deleteUserById);
 //Now we define the handler functions used abose.
 
 async function getAll(cnx) {
-  const permission = can.readAll(cnx.state.user);
+  const permission = permissions.readAll(cnx.state.user);
   if (!permission.granted) {
     cnx.status = 403;
   } else {
@@ -46,7 +46,7 @@ async function getById(cnx){
   let id = cnx.params.id; 
   let article =  await model.getUserInfoById(id);
   
-  const permission = can.read(cnx.state.user, article[0]);
+  const permission = permissions.read(cnx.state.user, article[0]);
   
   //filter data which user cannot see
   article[0] = permission.filter(article[0])
@@ -84,7 +84,7 @@ async function updateArticle(cnx) {
   let article =  await model.getUserInfoById(id);
   
   //check permission
-  const permission = can.update(cnx.state.user, article[0]);
+  const permission = permissions.update(cnx.state.user, article[0]);
   
   if (!permission.granted) {
     cnx.status = 403;
