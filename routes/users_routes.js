@@ -2,30 +2,30 @@ const Router = require('koa-router');
 const bodyParser = require('koa-bodyparser');
 
 // Connect with model for DB
-const model = require('../models/users');
+const model = require('../models/users_model');
 
 // Import auth part
-const auth = require('../controllers/auth');
+//const auth = require('../controllers/auth');
 
 // Password encryption
 const bcrypt = require('bcrypt');
 
 // Validation Schemas
-const {validateUser, validateUserUpdate} = require('../controllers/validation');
+//const {validateUser, validateUserUpdate} = require('../controllers/validation');
 
 // Deal with Permissions
-const permissions = require('../permissions/users');
+//const permissions = require('../permissions/users');
 
 // Since we are handling articles use a URI that begings with an appropriate path
 const router = Router({prefix: '/api/v1/users'});
 
 
-router.get('/', auth, getAll);
-router.post('/', bodyParser(), validateUser,  createAccount);
+router.get('/', /*auth,*/ getAll);
+router.post('/', bodyParser(), /*validateUser,*/  createAccount);
 
-router.get('/:id([0-9]{1,})', auth, getById);
-router.put('/:id([0-9]{1,})', auth, bodyParser(), validateUserUpdate, updateArticle);
-router.del('/:id([0-9]{1,})', auth, deleteUserById);
+router.get('/:id([0-9]{1,})', /*auth,*/ getById);
+router.put('/:id([0-9]{1,})', /*auth,*/ bodyParser(), /*validateUserUpdate,*/ updateArticle);
+router.del('/:id([0-9]{1,})', /*auth,*/ deleteUserById);
 
 
 //Now we define the handler functions used abose.
