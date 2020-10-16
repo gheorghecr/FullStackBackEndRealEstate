@@ -24,7 +24,7 @@ router.get('/', /*auth,*/ getAll);
 router.post('/', bodyParser(), /*validateUser,*/  createAccount);
 
 router.get('/:id([0-9]{1,})', /*auth,*/ getById);
-router.put('/:id([0-9]{1,})', /*auth,*/ bodyParser(), /*validateUserUpdate,*/ updateArticle);
+router.put('/:id([0-9]{1,})', /*auth,*/ bodyParser(), /*validateUserUpdate,*/ updateUserInfo);
 router.del('/:id([0-9]{1,})', /*auth,*/ deleteUserById);
 
 
@@ -77,15 +77,16 @@ async function createAccount(cnx) {
   }
 }
 
-async function updateArticle(cnx) { 
+//update user personal info
+async function updateUserInfo(cnx) { 
   let id = cnx.params.id; 
   let body = cnx.request.body; 
   
-  //get the article first (check if exisits)
-  let article =  await model.getUserInfoById(id);
+  //get the user first, (check if exisits)
+  let user =  await model.getUserInfoById(id);
   
-  //check permission
-  const permission = permissions.update(cnx.state.user, article[0]);
+  //check permission if user can update info
+  const permission = permissions.update(cnx.state.user, user[0]);
   
   if (!permission.granted) {
     cnx.status = 403;
