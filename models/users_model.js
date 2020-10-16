@@ -24,7 +24,7 @@ exports.getUserInfoById = async function getUserInfoById (id) {
   return data;
 }
 
-//register
+//Create account 
 exports.register = async function register (user) {
   let query = "INSERT INTO users SET ?"; 
   let data = await db.run_query(query, user); 
@@ -42,7 +42,7 @@ exports.updateById = async function updateById (id, article) {
 
 //delete user account by ID
 exports.deleteAccountById = async function deleteAccountById (id) {
-  let query = "DELETE FROM users WHERE ID = ?";
+  let query = "DELETE FROM users WHERE userID = ?";
   let values = [id];
   let data = await db.run_query(query, values);
   return data;

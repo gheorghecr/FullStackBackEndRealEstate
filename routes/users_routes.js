@@ -17,7 +17,7 @@ const bcrypt = require('bcrypt');
 const permissions = require('../permissions/users_permissions');
 
 // Since we are handling articles use a URI that begings with an appropriate path
-const router = Router({prefix: '/api/v1/users'});
+const router = Router({prefix: '/api/users'});
 
 
 router.get('/', /*auth,*/ getAll);
@@ -60,7 +60,7 @@ async function getById(cnx){
   }
 }
 
-//create account 
+//Create account function
 async function createAccount(cnx) { 
   let body = cnx.request.body; 
   
@@ -71,8 +71,9 @@ async function createAccount(cnx) {
   let result =  await model.register(body);
   if (result) {
     cnx.status = 201;
-    console.log(result)
     cnx.body = {ID: result.insertId}
+  } else {
+    //And wrong response code
   }
 }
 
@@ -92,7 +93,7 @@ async function updateArticle(cnx) {
     let result =  await model.updateById(id, body);
     if (result.affectedRows > 0) {
       cnx.status = 201;
-      cnx.body = {Message: "Article Updated succesfully"};
+      cnx.body = {Message: "Account Updated succesfully"};
       console.log(result)
     } else {
       cnx.status = 404;
@@ -102,6 +103,7 @@ async function updateArticle(cnx) {
   }
 }
 
+// Delete account by ID
 async function deleteUserById(cnx){ 
   /// Get the ID from the route parameters. 
   let id = cnx.params.id; 
@@ -111,7 +113,7 @@ async function deleteUserById(cnx){
   // Otherwise return a 404 Not Found status code
   if (result) {
     cnx.status = 201;
-    cnx.body = {Message: "Article Deleted succesfully"};
+    cnx.body = {Message: "Account Deleted succesfully"};
   } else {
     cnx.status = 404; 
   }  
