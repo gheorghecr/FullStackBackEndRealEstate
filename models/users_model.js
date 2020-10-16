@@ -33,7 +33,7 @@ exports.register = async function register (user) {
 
 //update information
 exports.updateById = async function updateById (id, article) {
-  let query = "UPDATE users SET ? WHERE ID = ?";
+  let query = "UPDATE users SET ? WHERE userID = ?";
   let values = [article, id];
   let data = await db.run_query(query, values); 
   return data;

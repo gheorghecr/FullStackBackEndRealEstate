@@ -20,12 +20,12 @@ const permissions = require('../permissions/users_permissions');
 const router = Router({prefix: '/api/users'});
 
 
-router.get('/', /*auth,*/ getAll);
+router.get('/', auth, getAll);
 router.post('/', bodyParser(), /*validateUser,*/  createAccount);
 
 router.get('/:id([0-9]{1,})', auth, getById);
-router.put('/:id([0-9]{1,})', /*auth,*/ bodyParser(), /*validateUserUpdate,*/ updateUserInfo);
-router.del('/:id([0-9]{1,})', /*auth,*/ deleteUserById);
+router.put('/:id([0-9]{1,})', auth, bodyParser(), /*validateUserUpdate,*/ updateUserInfo);
+router.del('/:id([0-9]{1,})', auth, deleteUserById);
 
 
 //Now we define the handler functions used abose.
@@ -90,16 +90,20 @@ async function updateUserInfo(cnx) {
   
   if (!permission.granted) {
     cnx.status = 403;
+    cnx.body = {Message: "You don't have permission to update this."};
   } else {
+    // if user is updating password encryp it
+    if(body.password) {
+      body.password = bcrypt.hashSync(body.password, 10);
+    }
+    //perform update
     let result =  await model.updateById(id, body);
     if (result.affectedRows > 0) {
       cnx.status = 201;
       cnx.body = {Message: "Account Updated succesfully"};
-      console.log(result)
     } else {
       cnx.status = 404;
       cnx.body = {Message: "Nothing was updated"};
-      console.log(result)
     }
   }
 }
