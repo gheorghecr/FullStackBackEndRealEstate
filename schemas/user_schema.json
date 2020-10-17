@@ -150,7 +150,7 @@
       "type": "object",
       "properties": {
         "ID": {
-          "description": "ID of the updated user record",
+          "description": "ID of the deleted user record",
           "type": "integer"
         },
         "deleted": {

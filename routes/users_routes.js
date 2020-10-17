@@ -145,7 +145,7 @@ async function updateUserInfo(cnx) {
       let result =  await model.updateById(id, body);
       if (result.affectedRows > 0) {
         cnx.status = 200;
-        cnx.body = {Message: "Account Updated succesfully", link: `${cnx.request.path}/${id}`};
+        cnx.body = {id: id, updated: true, link: `${cnx.request.path}/${id}`};
       } else {
         cnx.status = 400;
         cnx.body = {Message: "Nothing was updated"};
@@ -186,10 +186,10 @@ async function deleteUserById(cnx){
       console.log(result);
       if (result.affectedRows > 0) {
         cnx.status = 200;
-        cnx.body = {Message: "Account deleted succesfully"};
+        cnx.body = {ID: id, deleted: true};
       } else {
         cnx.status = 400;
-        cnx.body = {Message: "Nothing was deleted"};
+        cnx.body = {ID: id, deleted: true};
       }
     }
   } else {
