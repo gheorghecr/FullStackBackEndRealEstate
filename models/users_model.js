@@ -1,6 +1,5 @@
 const db = require('../helpers/database');
 
-
 //get All users info
 exports.getAll = async function getAll () {
   let query = "SELECT * FROM users";
