@@ -1,5 +1,8 @@
-// Export database connection information. 
-// // Use the environment settings or given defaults. 
+/**
+* A module to configure the acess to the database. Use the environment settings or given defaults.
+* @module cofig.js
+* @author Gheorghe Craciun
+*/
 exports.config = { host: process.env.DB_HOST || "localhost", 
                   port: process.env.DB_PORT || 3306,
                   user: process.env.DB_USER || "root", 

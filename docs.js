@@ -1,3 +1,8 @@
+/**
+* A module to set up the application documentation and it's routes for the Real Estate Website.
+* @module docs.js
+* @author Gheorghe Craciun
+*/
 const Koa = require('koa');
 const serve = require('koa-static');
 const mount = require('koa-mount');

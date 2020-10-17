@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: config.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,29 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: config.js</h1>
 
     
 
 
 
     
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+* A module to configure the acess to the database. Use the environment settings or given defaults.
+* @module cofig.js
+* @author Gheorghe Craciun
+*/
+exports.config = { host: process.env.DB_HOST || "localhost", 
+                  port: process.env.DB_PORT || 3306,
+                  user: process.env.DB_USER || "root", 
+                  password: process.env.DB_PASSWORD || "codio", 
+                  database: process.env.DB_DATABASE || "real_estate", 
+                  connection_limit: 100
+                 }</code></pre>
+        </article>
+    </section>
 
 
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: docs.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,35 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: docs.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+* A module to set up the application documentation and it's routes for the Real Estate Website.
+* @module docs.js
+* @author Gheorghe Craciun
+*/
+const Koa = require('koa');
+const serve = require('koa-static');
+const mount = require('koa-mount');
+const app = new Koa();
 
+app.use(mount('/', serve('./docs/jsdocs')))  // serve JSDocs
+app.use(mount('/openapi', serve('./docs/openapi')))  // serve OpenAPI
+app.use(mount('/schemas', serve('./schemas')))  // serve schemas
 
-    <h3> </h3>
+let port = process.env.PORT || 3030;
 
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+app.listen(port);
+console.log(`OpenAPI server running on port ${port}`);</code></pre>
+        </article>
+    </section>
 
 
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,40 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: index.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+* A module to set up the application and it's routes for the Real Estate Website.
+* @module index.js
+* @author Gheorghe Craciun
+* @see routes/* for all routes
+*/
 
+const Koa = require('koa'); 
+const Router = require('koa-router'); 
+const app = new Koa(); 
 
-    <h3> </h3>
+//const special = require('./routes/special.js');
+//const articles = require('./routes/articles.js');
+const users = require('./routes/users_routes.js');
 
+//app.use(special.routes());
+//.use(articles.routes());
+app.use(users.routes());
 
+// Run the app as a process on a given port 
+let port =  process.env.PORT || 3000;
 
-
-
-
-
-
-
-
-    
-
-
-
-
-
+app.listen(port);</code></pre>
+        </article>
+    </section>
 
 
 

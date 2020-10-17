@@ -1,5 +1,9 @@
-// Real Estate Assignemnt
-// Set up application and it's routes
+/**
+* A module to set up the application and it's routes for the Real Estate Website.
+* @module index.js
+* @author Gheorghe Craciun
+* @see routes/* for all routes
+*/
 
 const Koa = require('koa'); 
 const Router = require('koa-router'); 

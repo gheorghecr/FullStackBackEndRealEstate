@@ -1,3 +1,9 @@
+/**
+* A module to handle permissions on USERS.
+* @module permissions/user_permissions.js
+* @author Gheorghe Craciun
+*/
+
 const AccessControl = require('role-acl');
 
 const ac = new AccessControl();
