@@ -11,7 +11,7 @@ const auth = require('../controllers/auth');
 const bcrypt = require('bcrypt');
 
 // Validation Schemas
-//const {validateUser, validateUserUpdate} = require('../controllers/validation');
+const {validateUser, validateUserUpdate} = require('../controllers/validation');
 
 // Deal with Permissions
 const permissions = require('../permissions/users_permissions');
@@ -21,10 +21,10 @@ const router = Router({prefix: '/api/users'});
 
 
 router.get('/', auth, getAll);
-router.post('/', bodyParser(), /*validateUser,*/  createAccount);
+router.post('/', bodyParser(), validateUser,  createAccount);
 
 router.get('/:id([0-9]{1,})', auth, getById);
-router.put('/:id([0-9]{1,})', auth, bodyParser(), /*validateUserUpdate,*/ updateUserInfo);
+router.put('/:id([0-9]{1,})', auth, bodyParser(), validateUserUpdate, updateUserInfo);
 router.del('/:id([0-9]{1,})', auth, deleteUserById);
 
 
