@@ -42,6 +42,9 @@ paths:
             application/json:
               schema:
                 $ref: ./user_schema.json#/definitions/userUpdated
+        '501':
+          description: User not created
+            
     get:
       tags:
         - Users
@@ -99,6 +102,10 @@ paths:
             application/json:
               schema:
                 $ref: ./user_schema.json#/definitions/userUpdated
+        '400':
+          description: "Nothing was updated"
+        '403': 
+          description: "No permission to update this."
         '404':
           description: Not found
     delete:

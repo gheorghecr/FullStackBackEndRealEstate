@@ -45,10 +45,12 @@ router.del('/:id([0-9]{1,})', auth, deleteUserById);
 async function getAll(cnx) {
   const permission = permissions.readAll(cnx.state.user);
   if (!permission.granted) {
-    cnx.status = 403;
+    cnx.status = 401;
+    cnx.body = {Message: "Only admin users can list all accounts"};
   } else {
     const result = await model.getAll();
     if (result.length) {
+      cnx.status = 200;
       cnx.body = result;
     }
   }
@@ -75,10 +77,11 @@ async function getById(cnx){
     //filter data which user cannot see
     user[0] = permission.filter(user[0])
     if (!permission.granted) {
-      cnx.status = 403;
+      cnx.status = 401;
+      cnx.body = {Message: "Non-admin users can only view their own record"};
     } else {
       if (user.length) {
-        cnx.status = 201;
+        cnx.status = 200;
         cnx.body = user[0];
       }
     }
@@ -99,14 +102,14 @@ async function createAccount(cnx) {
   // encrypt password
   const hash = bcrypt.hashSync(body.password, 10);
   body.password = hash;
-  
   // perform query on database
   let result =  await model.register(body);
   if (result) {
     cnx.status = 201;
-    cnx.body = {ID: result.insertId}
+    cnx.body = {id: result.insertId, created: true, link: `${cnx.request.path}/${result.insertId}`};
   } else {
-    cnx.status = 500;
+    cnx.status = 501;
+    cnx.body = {Error: "User not created"}
   }
 }
 
@@ -141,10 +144,10 @@ async function updateUserInfo(cnx) {
       //perform update on database
       let result =  await model.updateById(id, body);
       if (result.affectedRows > 0) {
-        cnx.status = 201;
-        cnx.body = {Message: "Account Updated succesfully"};
+        cnx.status = 200;
+        cnx.body = {Message: "Account Updated succesfully", link: `${cnx.request.path}/${id}`};
       } else {
-        cnx.status = 404;
+        cnx.status = 400;
         cnx.body = {Message: "Nothing was updated"};
       }
     }
@@ -156,8 +159,7 @@ async function updateUserInfo(cnx) {
 }
 
 /**
- * Funtion allows an user to delete it's own account. And then lets the user know if update was sucessful or not.
- * Admin can delete any user account.
+ * Funtion allows an ADMIN to delete an account. And then lets the ADMIN know if update was sucessful or not.
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */
@@ -165,16 +167,36 @@ async function deleteUserById(cnx){
   /// Get the ID from the route parameters. 
   let id = cnx.params.id; 
   
-  let result = await model.deleteAccountById(id);
+  //get the user first, (check if exisits)
+  let user =  await model.getUserInfoById(id);
   
-  // If it exists then return the article as JSON. 
-  // Otherwise return a 404 Not Found status code
-  if (result) {
-    cnx.status = 201;
-    cnx.body = {Message: "Account Deleted succesfully"};
+  // if user is found in the database continue
+  // otherwise send message back saying user not found
+  if (user.length) {
+    //check permission if user can update info
+    const permission = permissions.delete(cnx.state.user, user[0]);
+
+    if (!permission.granted) {
+      // if permission is not granted
+      cnx.status = 403;
+      cnx.body = {Message: "You don't have permission to update this."};
+    } else {
+      //perform delete on database
+      let result = await model.deleteAccountById(id);
+      console.log(result);
+      if (result.affectedRows > 0) {
+        cnx.status = 200;
+        cnx.body = {Message: "Account deleted succesfully"};
+      } else {
+        cnx.status = 400;
+        cnx.body = {Message: "Nothing was deleted"};
+      }
+    }
   } else {
-    cnx.status = 404; 
-  }  
+    cnx.status = 404;
+    cnx.body = {Message: "User Not found"};
+  }
+  let result = await model.deleteAccountById(id);  
 }
 
 // Export object.
