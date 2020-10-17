@@ -1,6 +1,6 @@
 /**
 * A module to handle permissions on USERS.
-* @module permissions/user_permissions.js
+* @module permissions/user_permissions
 * @author Gheorghe Craciun
 */
 

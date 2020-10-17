@@ -1,6 +1,6 @@
 /**
 * A module to set up the application and it's routes for the Real Estate Website.
-* @module index.js
+* @module index
 * @author Gheorghe Craciun
 * @see routes/* for all routes
 */

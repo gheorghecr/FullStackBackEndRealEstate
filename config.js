@@ -1,6 +1,6 @@
 /**
 * A module to configure the acess to the database. Use the environment settings or given defaults.
-* @module cofig.js
+* @module cofig
 * @author Gheorghe Craciun
 */
 exports.config = { host: process.env.DB_HOST || "localhost", 

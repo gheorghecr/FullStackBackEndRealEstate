@@ -1,6 +1,6 @@
 /**
 * A module to handle the user routes.
-* @module routes/user_routes.js
+* @module routes/user_routes
 * @author Gheorghe Craciun
 */
 
