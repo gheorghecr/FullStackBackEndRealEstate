@@ -1,5 +1,5 @@
 /**
-* A module to perform querys on the database.
+* A module to perform querys related with the user on the database.
 * @module models/user_model
 * @author Gheorghe Craciun
 */

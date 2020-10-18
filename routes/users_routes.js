@@ -5,6 +5,7 @@
 */
 
 const Router = require('koa-router');
+
 const bodyParser = require('koa-bodyparser');
 
 // Password encryption

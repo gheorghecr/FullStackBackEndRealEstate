@@ -7,16 +7,12 @@
 
 const Koa = require('koa');
 
-// const Router = require('koa-router'); //DELETE THIS AT THE END
-
 const app = new Koa();
 
-// const special = require('./routes/special.js');
-// const articles = require('./routes/articles.js');
+const preperties = require('./routes/properties_routes.js');
 const users = require('./routes/users_routes.js');
 
-// app.use(special.routes());
-// .use(articles.routes());
+app.use(preperties.routes());
 app.use(users.routes());
 
 // Run the app as a process on a given port
