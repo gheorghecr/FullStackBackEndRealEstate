@@ -124,4 +124,22 @@ paths:
           description: Only admin users can delete accounts
         '404':
           description: Not found
-          
+  /properties:
+    summary: Represents an property
+    description: >
+      This resource represents an individual property in the system.
+      Each property is identified by a numeric `id`.    
+    get:
+      tags:
+        - Properties
+      description:
+        Get a list of all properties.
+      responses:
+        '200':
+          description: List of properties
+          content:
+            application/json:
+              schema:
+                $ref: ./properties_schema.json#/definitions/propertiesView
+        '404':
+          description: No properties where found.       

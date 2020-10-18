@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    
+    "propertiesView": {
+      "$id": "#propertiesView",
+      "title": "Properties View",
+      "description": "Data visible to all users.",
+      "type": "object",
+      "properties": {
+        "prop_ID": {
+          "description": "Property ID",
+          "type": "integer"
+        },
+        "price": {
+          "description": "Property price",
+          "type": "integer"
+        },
+        "title": {
+          "description": "Property title",
+          "type": "string"
+        },
+        "description": {
+          "description": "Property description",
+          "type": "string"
+        },
+        "status": {
+          "description": "Property status (Under Offer, For sale, Sold)",
+          "type": "string"
+        },
+        "visibility": {
+          "description": "If property is can viewed by normal admin",
+          "type": "boolean"
+        },
+        "highPriority": {
+          "description": "If property has a high priority",
+          "type": "boolean"
+        },
+        "sellerID": {
+          "description": "Real estate agent account ID",
+          "type": "integer"
+        },
+        "buyerID": {
+          "description": "Client account ID",
+          "type": "integer"
+        },
+        "dateAdded": {
+          "description": "TIMESTAMP when property was added",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

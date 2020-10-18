@@ -28,7 +28,7 @@ const router = Router({ prefix: '/api/properties' });
 
 // Handle functions
 /**
- * Funtion that gets the the list of all properties, from the DB and returns it.
+ * Funtion that gets the the list of all properties, that are visible to the public.
  * @param {object} cnx - The request object.
  * @returns {function} - List of all properties.
  */
@@ -37,6 +37,8 @@ async function getAllProp(cnx) {
     if (result.length) {
       cnx.status = 200;
       cnx.body = result;
+    } else {
+      cnx.status = 404;
     }
 }
 

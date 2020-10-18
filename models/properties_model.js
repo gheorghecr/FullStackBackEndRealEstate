@@ -6,11 +6,11 @@
 const db = require('../helpers/database');
 
 /**
- * SQL Query function to gett all properties from the DB.
+ * SQL Query function to gett all properties that are visible from the DB.
  * @returns {object} data - The response object containing all properties data.
  */
 exports.getAll = async function getAll() {
-  const query = 'SELECT * FROM properties';
+  const query = 'SELECT * FROM properties WHERE visibility = 1';
   const data = await db.run_query(query);
   return data;
 }
