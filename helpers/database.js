@@ -4,11 +4,11 @@
 * @author Gheorghe Craciun
 * @see models/* for the models that require this module
 */
-var mysql = require('promise-mysql');
-var info = require('../config');
+const mysql = require('promise-mysql');
+
 const { v4: uuidv4 } = require('uuid');
 
-
+const info = require('../config');
 
 /**
 * Run an SQL query against the DB, end the connection and return the result.
@@ -20,7 +20,7 @@ const { v4: uuidv4 } = require('uuid');
 exports.run_query = async function run_query(query, values) {
   try {
     const connection = await mysql.createConnection(info.config);
-    let data = await connection.query(query, values);
+    const data = await connection.query(query, values);
     await connection.end();
     return data;
   } catch (error) {
@@ -30,10 +30,9 @@ exports.run_query = async function run_query(query, values) {
      */
     const errorId = uuidv4();
     console.error(Date.now(), errorId, query, values, error.message);
-    throw new DatabaseException("Database error.", error.code, errorId);
+    throw new DatabaseException('Database error.', error.code, errorId);
   }
 }
-
 
 /**
  * A custom error constructor to re-raise DB errors in a sanitised way.
