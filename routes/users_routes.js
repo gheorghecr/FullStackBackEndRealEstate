@@ -161,7 +161,7 @@ async function deleteUserById(cnx) {
   // if user is found in the database continue
   // otherwise send message back saying user not found
   if (user.length) {
-    // check permission if user can update info
+    // check permission if user can delete info
     const permission = permissions.delete(cnx.state.user, user[0]);
 
     if (!permission.granted) {
@@ -175,7 +175,7 @@ async function deleteUserById(cnx) {
         cnx.body = { ID: id, deleted: true };
       } else {
         cnx.status = 400;
-        cnx.body = { ID: id, deleted: true };
+        cnx.body = { ID: id, deleted: false };
       }
     }
   } else {
