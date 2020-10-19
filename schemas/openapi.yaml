@@ -120,8 +120,10 @@ paths:
             application/json:
               schema:
                 $ref: ./user_schema.json#/definitions/userDeleted
-        '401':
-          description: Only admin users can delete accounts
+        '400':
+          description: Bad Request
+        '403':
+          description: No Permissions to delete
         '404':
           description: Not found
   /properties:
@@ -186,6 +188,24 @@ paths:
                 $ref: ./properties_schema.json#/definitions/propertiesView
         '404':
           description: Not found.
+    delete:
+      tags:
+        - Properties
+      description:
+        Delete property by id.
+      responses:
+        '200':
+          description: Confirmation of deletion.
+          content:
+            application/json:
+              schema:
+                $ref: ./user_schema.json#/definitions/userDeleted
+        '400':
+          description: Bad Request
+        '403':
+          description: No Permissions to delete
+        '404':
+          description: Not found
   /properties/highpriority:
     summary: Represents an list of properties with high priority
     description: >
@@ -202,6 +222,6 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ./properties_schema.json#/definitions/propertiesView
+                $ref: ./properties_schema.json#/definitions/propertyDeleted
         '404':
           description: No properties with high priority where found.

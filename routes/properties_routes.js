@@ -100,6 +100,43 @@ async function getAllPropHighPriority(cnx) {
 }
 
 
+/**
+ * Funtion allows an ADMIN to delete an property.
+ * And then lets the ADMIN know if update was sucessful or not.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function deletePropById(cnx) {
+  /// Get the property ID from the route parameters.
+  const propID = cnx.params.id;
+
+  // get the property first, (check if exisits)
+  const property = await model.getPropByID(propID);
+
+  // if property is found in the database continue
+  // otherwise send message back saying user not found
+  if (property.length) {
+    // check permission if user can delete info
+    const permission = permissions.deleteProp(cnx.state.user, property[0]);
+    if (!permission.granted) {
+      // if permission is not granted
+      cnx.status = 403;
+    } else {
+      // perform delete on database
+      const result = await model.deletePropertyById(propID);
+      if (result.affectedRows > 0) {
+        cnx.status = 200;
+        cnx.body = { ID: propID, deleted: true };
+      } else {
+        cnx.status = 400;
+        cnx.body = { ID: propID, deleted: false };
+      }
+    }
+  } else {
+    cnx.status = 404;
+  }
+}
+
 
 
 
@@ -109,7 +146,7 @@ router.get('/highpriority', getAllPropHighPriority);
 // router.post('/', bodyParser(), validateUser, createAccount);
 router.get('/:id([0-9]{1,})', getAllPropById);
 // router.put('/:id([0-9]{1,})', auth, bodyParser(), validateUserUpdate, updateUserInfo);
-// router.del('/:id([0-9]{1,})', auth, deleteUserById);
+router.del('/:id([0-9]{1,})', auth, deletePropById);
 
 // Export object.
 module.exports = router;

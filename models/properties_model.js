@@ -44,3 +44,13 @@ exports.getPropHighPriority = async function getPropHighPriority() {
   const data = await db.run_query(query);
   return data;
 }
+
+/**
+ * SQL Query function delte a property by it's ID from DB.
+ * @returns {object} data - The response object.
+ */
+exports.deletePropertyById = async function deletePropertyById(id) {
+  const query = 'DELETE FROM properties WHERE prop_ID = ?';
+  const data = await db.run_query(query, id);
+  return data;
+}
