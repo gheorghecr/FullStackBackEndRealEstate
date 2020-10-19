@@ -24,3 +24,13 @@ exports.getAllAdminView = async function getAllAdminView() {
   const data = await db.run_query(query);
   return data;
 }
+
+/**
+ * SQL Query function to get an property details by it's ID.
+ * @returns {object} data - The response object containing the property details.
+ */
+exports.getPropByID = async function getPropByID(propID) {
+  const query = 'SELECT * FROM properties WHERE prop_ID = ?';
+  const data = await db.run_query(query, propID);
+  return data;
+}

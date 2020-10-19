@@ -31,7 +31,7 @@ const router = Router({ prefix: '/api/properties' });
 
 // Handle functions
 /**
- * Funtion that gets the the list of all properties, that are visible to the admin.
+ * Funtion that gets the list of all properties, that are visible to the admin.
  * @param {object} cnx - The request object.
  * @returns {function} - List of all properties.
  */
@@ -53,20 +53,37 @@ async function getAllPropAdminView(cnx) {
 }
 
 /**
- * Funtion that gets the the list of all properties, that are visible to the public.
+ * Funtion that gets the list of all properties, that are visible to the public.
  * Includes the ones where the visibility is set to false.
  * @param {object} cnx - The request object.
  * @returns {function} - List of all properties.
  */
 async function getAllProp(cnx) {
   const result = await model.getAll();
-    if (result.length) {
-      cnx.status = 200;
-      cnx.body = result;
-    } else {
-      cnx.status = 404;
-    }
+  if (result.length) {
+    cnx.status = 200;
+    cnx.body = result;
+  } else {
+    cnx.status = 404;
+  }
 }
+
+/**
+ * Funtion that gets the an property detail by it's ID.
+ * @param {object} cnx - The request object.
+ * @returns {function} - Property details.
+ */
+async function getAllPropById(cnx) {
+  const id = cnx.params.id;
+  const result = await model.getPropByID(id);
+  if (result.length) {
+    cnx.status = 200;
+    cnx.body = result;
+  } else {
+    cnx.status = 404;
+  }
+}
+
 
 
 
@@ -74,7 +91,7 @@ async function getAllProp(cnx) {
 router.get('/', getAllProp);
 router.get('/adminview', auth, getAllPropAdminView);
 // router.post('/', bodyParser(), validateUser, createAccount);
-// router.get('/:id([0-9]{1,})', auth, getById);
+router.get('/:id([0-9]{1,})', getAllPropById);
 // router.put('/:id([0-9]{1,})', auth, bodyParser(), validateUserUpdate, updateUserInfo);
 // router.del('/:id([0-9]{1,})', auth, deleteUserById);
 
