@@ -14,3 +14,13 @@ exports.getAll = async function getAll() {
   const data = await db.run_query(query);
   return data;
 }
+
+/**
+ * SQL Query function to gett all properties (Admin view) from the DB.
+ * @returns {object} data - The response object containing all properties data.
+ */
+exports.getAllAdminView = async function getAllAdminView() {
+  const query = 'SELECT * FROM properties';
+  const data = await db.run_query(query);
+  return data;
+}

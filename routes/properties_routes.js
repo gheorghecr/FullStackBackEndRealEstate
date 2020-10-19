@@ -14,6 +14,9 @@ const bcrypt = require('bcrypt');
 // Connect with model for DB
 const model = require('../models/properties_model');
 
+// Connect with model for DB
+const model_users = require('../models/users_model');
+
 // Import auth part
 const auth = require('../controllers/auth');
 
@@ -28,7 +31,30 @@ const router = Router({ prefix: '/api/properties' });
 
 // Handle functions
 /**
+ * Funtion that gets the the list of all properties, that are visible to the admin.
+ * @param {object} cnx - The request object.
+ * @returns {function} - List of all properties.
+ */
+async function getAllPropAdminView(cnx) {
+  const permission = permissions.readAllAdmin(cnx.state.user);
+  if (!permission.granted) {
+    //permission not granted
+    cnx.status = 401;
+  } else {
+    //permission granted
+    const result = await model.getAllAdminView();
+    if (result.length) {
+      cnx.status = 200;
+      cnx.body = result;
+    } else {
+      cnx.status = 404;
+    }
+  }
+}
+
+/**
  * Funtion that gets the the list of all properties, that are visible to the public.
+ * Includes the ones where the visibility is set to false.
  * @param {object} cnx - The request object.
  * @returns {function} - List of all properties.
  */
@@ -46,6 +72,7 @@ async function getAllProp(cnx) {
 
 
 router.get('/', getAllProp);
+router.get('/adminview', auth, getAllPropAdminView);
 // router.post('/', bodyParser(), validateUser, createAccount);
 // router.get('/:id([0-9]{1,})', auth, getById);
 // router.put('/:id([0-9]{1,})', auth, bodyParser(), validateUserUpdate, updateUserInfo);
