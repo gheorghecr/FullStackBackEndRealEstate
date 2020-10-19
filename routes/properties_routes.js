@@ -84,12 +84,28 @@ async function getAllPropById(cnx) {
   }
 }
 
+/**
+ * Funtion that gets all properties with high priority.
+ * @param {object} cnx - The request object.
+ * @returns {function} - List of properties with high priority.
+ */
+async function getAllPropHighPriority(cnx) {
+  const result = await model.getPropHighPriority();
+  if (result.length) {
+    cnx.status = 200;
+    cnx.body = result;
+  } else {
+    cnx.status = 404;
+  }
+}
+
 
 
 
 
 router.get('/', getAllProp);
 router.get('/adminview', auth, getAllPropAdminView);
+router.get('/highpriority', getAllPropHighPriority);
 // router.post('/', bodyParser(), validateUser, createAccount);
 router.get('/:id([0-9]{1,})', getAllPropById);
 // router.put('/:id([0-9]{1,})', auth, bodyParser(), validateUserUpdate, updateUserInfo);
