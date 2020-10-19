@@ -49,6 +49,23 @@
           "type": "string"
         }
       }
+    },
+      
+    "propertyDeleted": {
+      "$id": "#propertyDeleted",
+      "title": "Property Deleted",
+      "description": "Confirmation of a successful deletion",
+      "type": "object",
+      "properties": {
+        "ID": {
+          "description": "ID of the deleted property record",
+          "type": "integer"
+        },
+        "deleted": {
+          "description": "Boolean indicator of success",
+          "type": "boolean"
+        }
+      }
     }
   }
 }
