@@ -50,6 +50,28 @@
         }
       }
     },
+    
+    "propertiesToggleHighPriority": {
+      "$id": "#propertiesToggleHighPriority",
+      "title": "Properties Toggle High Priotity",
+      "description": "Confirmation of a successful user update",
+      "type": "object",
+      "properties": {
+        "ID": {
+          "description": "ID of the updated property.",
+          "type": "integer"
+        },
+        "updated": {
+          "description": "Boolean indicator of success",
+          "type": "boolean"
+        },
+        "link": {
+          "description": "Path to retrieve user record",
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
       
     "propertyDeleted": {
       "$id": "#propertyDeleted",

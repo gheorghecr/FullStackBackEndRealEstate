@@ -137,12 +137,49 @@ async function deletePropById(cnx) {
   }
 }
 
+/**
+ * Funtion that toggles the high priority attribute of a property by it's ID.
+ * @param {object} cnx - The request object.
+ * @returns {function} - List of properties with high priority.
+ */
+async function toggleHighPriority(cnx) {
+  /// Get the property ID from the route parameters.
+  const propID = cnx.params.id;
+
+  // get the property first, (check if exisits)
+  const property = await model.getPropByID(propID);
+
+  // if property is found in the database continue
+  // otherwise send message back saying user not found
+  if (property.length) {
+    // check permission if user can delete info
+    const permission = permissions.toggleHighPriority(cnx.state.user, property[0]);
+    if (!permission.granted) {
+      // if permission is not granted
+      cnx.status = 403;
+    } else {
+      // perform update on database
+      const result = await model.toggleHighPriority(propID);
+      if (result.affectedRows > 0) {
+        cnx.status = 200;
+        cnx.body = { ID: propID, updated: true, link: `${cnx.request.path}` };
+      } else {
+        cnx.status = 400;
+        cnx.body = { ID: propID, updated: false };
+      }
+    }
+  } else {
+    cnx.status = 404;
+  }
+}
+
 
 
 
 router.get('/', getAllProp);
 router.get('/adminview', auth, getAllPropAdminView);
 router.get('/highpriority', getAllPropHighPriority);
+router.get('/togglehighpriority/:id([0-9]{1,})', auth, toggleHighPriority);
 // router.post('/', bodyParser(), validateUser, createAccount);
 router.get('/:id([0-9]{1,})', getAllPropById);
 // router.put('/:id([0-9]{1,})', auth, bodyParser(), validateUserUpdate, updateUserInfo);

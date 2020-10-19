@@ -201,11 +201,11 @@ paths:
               schema:
                 $ref: ./user_schema.json#/definitions/userDeleted
         '400':
-          description: Bad Request
+          description: Bad Request.
         '403':
-          description: No Permissions to delete
+          description: No Permissions to delete.
         '404':
-          description: Not found
+          description: Not found.
   /properties/highpriority:
     summary: Represents an list of properties with high priority
     description: >
@@ -223,5 +223,27 @@ paths:
             application/json:
               schema:
                 $ref: ./properties_schema.json#/definitions/propertyDeleted
+        '404':
+          description: No properties with high priority where found.
+  /properties/togglehighpriority/{id}:
+    summary: Represents an list of properties with high priority
+    description: >
+      This resource toggles the high priority attribute of a property. 
+    get:
+      tags:
+        - Properties
+      description:
+        Toggle the high priority attribute of a property.
+      responses:
+        '200':
+          description: Confirmation of update.
+          content:
+            application/json:
+              schema:
+                $ref: ./properties_schema.json#/definitions/propertiesToggleHighPriority
+        '400':
+          description: Bad Request.
+        '403':
+          description: No Permissions to update.
         '404':
           description: No properties with high priority where found.
