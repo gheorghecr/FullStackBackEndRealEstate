@@ -28,7 +28,7 @@ const router = Router({ prefix: '/api/users' });
 
 // Handle functions
 /**
- * Funtion that gets the the list of all users Personal Info, from the DB and returns it,
+ * Function that gets the the list of all users Personal Info, from the DB and returns it,
  * if the user is an ADMIN.
  * @param {object} cnx - The request object.
  * @returns {function} - List of all users with it's personal data.
@@ -47,7 +47,7 @@ async function getAll(cnx) {
 }
 
 /**
- * Funtion that gets and returns an user (by it's ID) personal Info.
+ * Function that gets and returns an user (by it's ID) personal Info.
  * Each user can only acess it's own data.
  * If the user is an ADMIN  has acess to all users data. Filters data
  * so it does not show sentive data such as password.
@@ -82,7 +82,7 @@ async function getById(cnx) {
 }
 
 /**
- * Funtion allows an user to register on the application.
+ * Function allows an user to register on the application.
  * And return and the userID if account was sucessfully created.
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
@@ -104,7 +104,7 @@ async function createAccount(cnx) {
 }
 
 /**
- * Funtion allows an user to update it's own personal data.
+ * Function allows an user to update it's own personal data.
  * And then lets the user know if update was sucessful or not.
  * Admin can update any user data.
  * @param {object} cnx - The request object.
