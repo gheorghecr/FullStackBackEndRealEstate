@@ -137,6 +137,21 @@
         }
       }
     },
+    
+    "propertyUpdateStatus": {
+      "$id": "#propertyUpdateStatus",
+      "title": "Property Updated",
+      "description": "Confirmation of a successful user update",
+      "type": "object",
+      "properties": {
+        "status": {
+          "description": "New status for the property",
+          "type": "string"
+        }
+      },
+      "required": ["status"],
+      "additionalProperties": false
+    },
       
     "propertyDeleted": {
       "$id": "#propertyDeleted",

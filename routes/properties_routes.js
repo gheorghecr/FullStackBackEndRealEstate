@@ -175,7 +175,7 @@ async function toggleHighPriority(cnx) {
 
 
 /**
- * Function allows an user to add a new property.
+ * Function allows an admin to add a new property.
  * And return and the propertyID if property was sucessfully created.
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
@@ -202,6 +202,44 @@ async function addProperty(cnx) {
   }
 }
 
+/**
+ * Function allows an admin to update the status. (For sale, Under Offer, Sold)
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function updateStatusByID(cnx) {
+  /// Get the property ID from the route parameters.
+  const propID = cnx.params.id;
+  
+  const body = cnx.request.body;
+
+  // get the property first, (check if exisits)
+  const property = await model.getPropByID(propID);
+
+  // if property is found in the database continue
+  // otherwise send message back saying user not found
+  if (property.length) {
+    // check permission if user can delete info
+    const permission = permissions.updateStatus(cnx.state.user);
+    if (!permission.granted) {
+      // if permission is not granted
+      cnx.status = 403;
+    } else {
+      // perform update on database
+      const result = await model.updateStatus(body.status,propID);
+      if (result.affectedRows > 0) {
+        cnx.status = 200;
+        cnx.body = { ID: propID, updated: true, link: `/api/properties/${propID}` };
+      } else {
+        cnx.status = 501;
+        cnx.body = { ID: propID, updated: false };
+      }
+    }
+  } else {
+    cnx.status = 404;
+  }
+}
+
 
 
 
@@ -209,8 +247,11 @@ router.get('/', getAllProp);
 router.get('/adminview', auth, getAllPropAdminView);
 router.get('/highpriority', getAllPropHighPriority);
 router.get('/togglehighpriority/:id([0-9]{1,})', auth, toggleHighPriority);
-router.post('/', bodyParser(), auth, validatePropertyAdd, addProperty); 
 router.get('/:id([0-9]{1,})', getAllPropById);
+
+// Post's
+router.post('/', bodyParser(), auth, validatePropertyAdd, addProperty); 
+router.put('/status/:id([0-9]{1,})', bodyParser(), auth, updateStatusByID); 
 // router.put('/:id([0-9]{1,})', auth, bodyParser(), validateUserUpdate, updateUserInfo);
 router.del('/:id([0-9]{1,})', auth, deletePropById); 
 

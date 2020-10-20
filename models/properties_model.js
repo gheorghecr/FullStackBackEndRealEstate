@@ -48,7 +48,7 @@ exports.getPropHighPriority = async function getPropHighPriority() {
 
 /**
  * SQL Query function delete a property by it's ID from DB.
- * @param {integer} id - User Object.
+ * @param {integer} id - Property ID.
  * @returns {object} data - The response object.
  */
 exports.deletePropertyById = async function deletePropertyById(id) {
@@ -60,7 +60,7 @@ exports.deletePropertyById = async function deletePropertyById(id) {
 
 /**
  * SQL Query function to toggle the highPriority attribute of a property by it's ID.
- * @param {integer} id - User Object.
+ * @param {integer} id - Property ID.
  * @returns {object} data - The response object.
  */
 exports.toggleHighPriority = async function toggleHighPriority(id) {
@@ -78,5 +78,18 @@ exports.toggleHighPriority = async function toggleHighPriority(id) {
 exports.addProperty = async function addProperty(property) {
   const query = 'INSERT INTO properties SET ?';
   const data = await db.run_query(query, property);
+  return data;
+}
+
+/**
+ * SQL Query function to update the property status.
+ * @param {integer} id - Property ID.
+ * @param {string} status - Property Status
+ * @returns {object} data - The response object.
+ */
+exports.updateStatus = async function updateStatus(status,id) {
+  const query = 'UPDATE properties SET status = ? WHERE prop_ID = ?';
+  const values = [status, id];
+  const data = await db.run_query(query, values);
   return data;
 }

@@ -270,3 +270,37 @@ paths:
           description: No Permissions to update.
         '404':
           description: No properties with high priority where found.
+  /properties/status/{id}:
+    summary: Update property Status
+    description: >
+      This resource updates the status attribute of the property.
+    put:
+      tags:
+        - Properties
+      description:
+        Update property status.
+      requestBody:
+        description: Property new status.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./properties_schema.json#/definitions/propertyUpdateStatus
+      responses:
+        '200':
+          description: Confirmation of update.
+          content:
+            application/json:
+              schema:
+                $ref: ./properties_schema.json#/definitions/propertyUpdated
+        '501':
+          description: Negation of update.
+          content:
+            application/json:
+              schema:
+                $ref: ./properties_schema.json#/definitions/propertyUpdated
+        '403':
+          description: No Permissions to update.
+        '404':
+          description: No properties with high priority where found.
+          
