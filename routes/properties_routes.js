@@ -21,7 +21,7 @@ const model_users = require('../models/users_model');
 const auth = require('../controllers/auth');
 
 // Validation Schemas
-const { validateUser, validateUserUpdate } = require('../controllers/validation');
+const { validatePropertyAdd } = require('../controllers/validation');
 
 // Deal with Permissions
 const permissions = require('../permissions/properties_permissions');
@@ -174,16 +174,45 @@ async function toggleHighPriority(cnx) {
 }
 
 
+/**
+ * Function allows an user to add a new property.
+ * And return and the propertyID if property was sucessfully created.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function addProperty(cnx) {
+  const body = cnx.request.body;
+
+  // check permission if user can add new property
+  const permission = permissions.addProperty(cnx.state.user);
+  if (!permission.granted) {
+    // if permission is not granted
+    cnx.status = 403;
+  } else {
+    // perform query on database
+    const result = await model.addProperty(body);
+    if (result) {
+      //property addedd
+      cnx.status = 201;
+      cnx.body = { id: result.insertId, created: true, link: `${cnx.request.path}/${result.insertId}` };
+    } else {
+      //property not addedd
+      cnx.status = 501;
+    }
+  }
+}
+
+
 
 
 router.get('/', getAllProp);
 router.get('/adminview', auth, getAllPropAdminView);
 router.get('/highpriority', getAllPropHighPriority);
 router.get('/togglehighpriority/:id([0-9]{1,})', auth, toggleHighPriority);
-// router.post('/', bodyParser(), validateUser, createAccount);
+router.post('/', bodyParser(), auth, validatePropertyAdd, addProperty); 
 router.get('/:id([0-9]{1,})', getAllPropById);
 // router.put('/:id([0-9]{1,})', auth, bodyParser(), validateUserUpdate, updateUserInfo);
-router.del('/:id([0-9]{1,})', auth, deletePropById);
+router.del('/:id([0-9]{1,})', auth, deletePropById); 
 
 // Export object.
 module.exports = router;

@@ -11,6 +11,8 @@ const userSchema = require('../schemas/user_schema.json').definitions.user;
 
 const userUpdateSchema = require('../schemas/user_schema.json').definitions.userUpdate;
 
+const propertyAddSchema = require('../schemas/properties_schema.json').definitions.addProperty;
+
 /**
  * Wrapper that returns a Koa middleware validator for a given schema.
  * @param {object} schema - The JSON schema definition of the resource
@@ -52,3 +54,5 @@ const makeKoaValidator = (schema, resource) => {
 exports.validateUser = makeKoaValidator(userSchema, 'user');
 /** Validate data against user schema for updating existing users */
 exports.validateUserUpdate = makeKoaValidator(userUpdateSchema, 'userUpdate');
+/** Validate data against properties schema for adding a new property */
+exports.validatePropertyAdd = makeKoaValidator(propertyAddSchema, 'addProperty');

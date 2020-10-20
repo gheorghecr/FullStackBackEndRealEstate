@@ -27,6 +27,7 @@ exports.getAllAdminView = async function getAllAdminView() {
 
 /**
  * SQL Query function to get an property details by it's ID.
+ * @param {integer} propID - property ID.
  * @returns {object} data - The response object containing the property details.
  */
 exports.getPropByID = async function getPropByID(propID) {
@@ -47,6 +48,7 @@ exports.getPropHighPriority = async function getPropHighPriority() {
 
 /**
  * SQL Query function delete a property by it's ID from DB.
+ * @param {integer} id - User Object.
  * @returns {object} data - The response object.
  */
 exports.deletePropertyById = async function deletePropertyById(id) {
@@ -58,6 +60,7 @@ exports.deletePropertyById = async function deletePropertyById(id) {
 
 /**
  * SQL Query function to toggle the highPriority attribute of a property by it's ID.
+ * @param {integer} id - User Object.
  * @returns {object} data - The response object.
  */
 exports.toggleHighPriority = async function toggleHighPriority(id) {
@@ -66,3 +69,14 @@ exports.toggleHighPriority = async function toggleHighPriority(id) {
   return data;
 }
 
+
+/**
+ * SQL Query function to add an new property.
+ * @param {object} property - User Object.
+ * @returns {object} data - The response object.
+ */
+exports.addProperty = async function addProperty(property) {
+  const query = 'INSERT INTO properties SET ?';
+  const data = await db.run_query(query, property);
+  return data;
+}

@@ -144,7 +144,30 @@ paths:
               schema:
                 $ref: ./properties_schema.json#/definitions/propertiesView
         '404':
-          description: No properties where found.  
+          description: No properties where found.
+    post:
+      tags:
+        - Properties
+      description:
+        Add a new property.
+      requestBody:
+        description: All new property data.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./properties_schema.json#/definitions/addProperty
+      responses:
+        '201':
+          description: Property added
+          content:
+            application/json:
+              schema:
+                $ref: ./properties_schema.json#/definitions/propertyUpdated
+        '403':
+          description: No permission to add a new property
+        '501':
+          description: Property not added
   /properties/adminview:
     summary: Represents an property
     description: >
