@@ -28,6 +28,10 @@
           "description": "Property status (Under Offer, For sale, Sold)",
           "type": "string"
         },
+        "location": {
+          "description": "Property Address",
+          "type": "string"
+        },
         "visibility": {
           "description": "If property is can viewed by normal admin",
           "type": "boolean"
@@ -73,6 +77,10 @@
           "description": "Status of the property (For Sale, Under Offer, Sold)",
           "type": "string"
         },
+        "location": {
+          "description": "Property Address",
+          "type": "string"
+        },
         "visibility": {
           "description": "If property is visible to the general public or not",
           "type": "boolean"
@@ -90,7 +98,7 @@
           "type": "integer"
         }
       },
-      "required": ["price", "title", "description", "status", "sellerID"],
+      "required": ["price", "title", "description", "status", "location", "sellerID"],
       "additionalProperties": false
     },
     
