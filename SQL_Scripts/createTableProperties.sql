@@ -4,6 +4,7 @@ CREATE TABLE properties (
     title VARCHAR(150) NOT NULL,
     description TEXT NOT NULL,
     status VARCHAR(50) NOT NULL,
+    location VARCHAR(150) NOT NULL,
     visibility BOOLEAN DEFAULT TRUE,
     highPriority BOOLEAN DEFAULT FALSE, 
     sellerID INT NOT NULL,
