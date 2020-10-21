@@ -23,7 +23,7 @@ const { validateUser, validateUserUpdate } = require('../controllers/validation'
 // Deal with Permissions
 const permissions = require('../permissions/users_permissions');
 
-// Since we are handling users use a URI that begings with an appropriate path
+// Since we are handling users use a URI that begin's with an appropriate path
 const router = Router({ prefix: '/api/users' });
 
 // Handle functions
@@ -48,14 +48,14 @@ async function getAll(cnx) {
 
 /**
  * Function that gets and returns an user (by it's ID) personal Info.
- * Each user can only acess it's own data.
- * If the user is an ADMIN  has acess to all users data. Filters data
- * so it does not show sentive data such as password.
+ * Each user can only access it's own data.
+ * If the user is an ADMIN  has access to all users data. Filters data
+ * so it does not show sensitive data such as password.
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */
 async function getById(cnx) {
-  const { id } = cnx.params;
+  const id = cnx.params.id;
 
   // get user from DB (check if exists)
   const user = await model.getUserInfoById(id);
@@ -70,23 +70,25 @@ async function getById(cnx) {
     user[0] = permission.filter(user[0]);
     if (!permission.granted) {
       cnx.status = 401;
-    } else if (user.length) {
-      cnx.status = 200;
-      cnx.body = user[0];
     } else {
-      cnx.status = 404;
+      if (user.length) {
+        cnx.status = 200;
+        cnx.body = user[0];
+      } else {
+        cnx.status = 404;
+      }
     }
   }
 }
 
 /**
  * Function allows an user to register on the application.
- * And return and the userID if account was sucessfully created.
+ * And return and the userID if account was successfully created.
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */
 async function createAccount(cnx) {
-  const { body } = cnx.request;
+  const body = cnx.request.body;
 
   // encrypt password
   const hash = bcrypt.hashSync(body.password, 10);
@@ -103,16 +105,16 @@ async function createAccount(cnx) {
 
 /**
  * Function allows an user to update it's own personal data.
- * And then lets the user know if update was sucessful or not.
+ * And then lets the user know if update was successful or not.
  * Admin can update any user data.
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */
 async function updateUserInfo(cnx) {
-  const { id } = cnx.params;
-  const { body } = cnx.request;
+  const id = cnx.params.id;
+  const body = cnx.request.body;
 
-  // get the user first, (check if exisits)
+  // get the user first, (check if exists)
   const user = await model.getUserInfoById(id);
 
   // if user is found in the database continue
@@ -125,7 +127,7 @@ async function updateUserInfo(cnx) {
       // if permission is not granted
       cnx.status = 403;
     } else {
-      // if user is updating password, encryp it
+      // if user is updating password, encrypt it
       if (body.password) {
         body.password = bcrypt.hashSync(body.password, 10);
       }
@@ -133,7 +135,7 @@ async function updateUserInfo(cnx) {
       const result = await model.updateById(id, body);
       if (result.affectedRows > 0) {
         cnx.status = 200;
-        cnx.body = { id, updated: true, link: `${cnx.request.path}/${id}` };
+        cnx.body = { id: id, updated: true, link: `${cnx.request.path}/${id}` };
       } else {
         cnx.status = 400;
       }
@@ -144,16 +146,16 @@ async function updateUserInfo(cnx) {
 }
 
 /**
- * Funtion allows an ADMIN to delete an account.
- * And then lets the ADMIN know if update was sucessful or not.
+ * Function allows an ADMIN to delete an account.
+ * And then lets the ADMIN know if update was successful or not.
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */
 async function deleteUserById(cnx) {
   /// Get the ID from the route parameters.
-  const { id } = cnx.params;
+  const id = cnx.params.id;
 
-  // get the user first, (check if exisits)
+  // get the user first, (check if exists)
   const user = await model.getUserInfoById(id);
 
   // if user is found in the database continue
