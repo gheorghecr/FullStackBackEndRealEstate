@@ -11,5 +11,7 @@ module.exports = {
     ecmaVersion: 12,
   },
   rules: {
+    "no-param-reassign": 0,
+    "prefer-destructuring": ["error", {"object": true, "array": false}]
   },
 };
