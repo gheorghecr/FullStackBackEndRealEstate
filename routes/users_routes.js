@@ -55,7 +55,7 @@ async function getAll(cnx) {
  * @returns {object} cnx - The response object.
  */
 async function getById(cnx) {
-  const id = cnx.params.id;
+  const { id } = cnx.params;
 
   // get user from DB (check if exists)
   const user = await model.getUserInfoById(id);
@@ -70,13 +70,11 @@ async function getById(cnx) {
     user[0] = permission.filter(user[0]);
     if (!permission.granted) {
       cnx.status = 401;
+    } else if (user.length) {
+      cnx.status = 200;
+      cnx.body = user[0];
     } else {
-      if (user.length) {
-        cnx.status = 200;
-        cnx.body = user[0];
-      } else {
-        cnx.status = 404;
-      }
+      cnx.status = 404;
     }
   }
 }
@@ -88,7 +86,7 @@ async function getById(cnx) {
  * @returns {object} cnx - The response object.
  */
 async function createAccount(cnx) {
-  const body = cnx.request.body;
+  const { body } = cnx.request;
 
   // encrypt password
   const hash = bcrypt.hashSync(body.password, 10);
@@ -111,8 +109,8 @@ async function createAccount(cnx) {
  * @returns {object} cnx - The response object.
  */
 async function updateUserInfo(cnx) {
-  const id = cnx.params.id;
-  const body = cnx.request.body;
+  const { id } = cnx.params;
+  const { body } = cnx.request;
 
   // get the user first, (check if exisits)
   const user = await model.getUserInfoById(id);
@@ -135,7 +133,7 @@ async function updateUserInfo(cnx) {
       const result = await model.updateById(id, body);
       if (result.affectedRows > 0) {
         cnx.status = 200;
-        cnx.body = { id: id, updated: true, link: `${cnx.request.path}/${id}` };
+        cnx.body = { id, updated: true, link: `${cnx.request.path}/${id}` };
       } else {
         cnx.status = 400;
       }
@@ -153,7 +151,7 @@ async function updateUserInfo(cnx) {
  */
 async function deleteUserById(cnx) {
   /// Get the ID from the route parameters.
-  const id = cnx.params.id;
+  const { id } = cnx.params;
 
   // get the user first, (check if exisits)
   const user = await model.getUserInfoById(id);
