@@ -58,7 +58,7 @@
     "addProperty": {
       "$id": "#addProperty",
       "title": "Add property",
-      "description": "Data add a new property.",
+      "description": "Data to add a new property.",
       "type": "object",
       "properties": {
         "price": {
@@ -101,10 +101,55 @@
       "required": ["price", "title", "description", "status", "location", "sellerID"],
       "additionalProperties": false
     },
+
+    "updateProperty": {
+      "$id": "#updateProperty",
+      "title": "Update property",
+      "description": "Data to update a property.",
+      "type": "object",
+      "properties": {
+        "price": {
+          "description": "Property price",
+          "type": "number"
+        },
+        "title": {
+          "description": "Add Title",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the property",
+          "type": "string"
+        },
+        "status": {
+          "description": "Status of the property (For Sale, Under Offer, Sold)",
+          "type": "string"
+        },
+        "location": {
+          "description": "Property Address",
+          "type": "string"
+        },
+        "visibility": {
+          "description": "If property is visible to the general public or not",
+          "type": "boolean"
+        },
+        "highPriority": {
+          "description": "Property is a high Priority",
+          "type": "boolean"
+        },
+        "sellerID": {
+          "description": "Seller ID",
+          "type": "integer"
+        },
+        "buyerID": {
+          "description": "Buyer ID",
+          "type": "integer"
+        }
+      }
+    },
     
     "propertiesToggleHighPriority": {
       "$id": "#propertiesToggleHighPriority",
-      "title": "Properties Toggle High Priotity",
+      "title": "Properties Toggle High Priority",
       "description": "Confirmation of a successful user update",
       "type": "object",
       "properties": {

@@ -22,4 +22,4 @@ exports.readAllAdmin = (requester) => ac.can(requester.role).context({ role: req
 exports.deleteProp = (requester, data) => ac.can(requester.role).context({ requester: requester.userID, owner: data.sellerID }).execute('delete').sync().on('properties');
 exports.toggleHighPriority = (requester, data) => ac.can(requester.role).context({ requester: requester.userID, owner: data.sellerID }).execute('update').sync().on('properties');
 exports.addProperty = (requester) => ac.can(requester.role).execute('create').sync().on('properties');
-exports.updateStatus = (requester) => ac.can(requester.role).execute('update').sync().on('properties');
+exports.update = (requester) => ac.can(requester.role).execute('update').sync().on('properties');

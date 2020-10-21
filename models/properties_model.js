@@ -93,3 +93,16 @@ exports.updateStatus = async function updateStatus(status,id) {
   const data = await db.run_query(query, values);
   return data;
 }
+
+/**
+ * SQL Query function to update the property attributes.  
+ * @param {object} property - Property object.
+ * @param {integer} id - Property ID.
+ * @returns {object} data - The response object.
+ */
+exports.updateProperty = async function updateProperty(property,id) {
+  const query = 'UPDATE properties SET ? WHERE prop_ID = ?';
+  const values = [property, id];
+  const data = await db.run_query(query, values);
+  return data;
+}

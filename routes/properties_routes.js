@@ -21,17 +21,17 @@ const model_users = require('../models/users_model');
 const auth = require('../controllers/auth');
 
 // Validation Schemas
-const { validatePropertyAdd } = require('../controllers/validation');
+const { validatePropertyAdd, validatePropertyUpdate } = require('../controllers/validation');
 
 // Deal with Permissions
 const permissions = require('../permissions/properties_permissions');
 
-// Since we are handling users use a URI that begings with an appropriate path
+// Since we are handling users use a URI that begins with an appropriate path
 const router = Router({ prefix: '/api/properties' });
 
 // Handle functions
 /**
- * Funtion that gets the list of all properties, that are visible to the admin.
+ * Function that gets the list of all properties, that are visible to the admin.
  * @param {object} cnx - The request object.
  * @returns {function} - List of all properties.
  */
@@ -53,7 +53,7 @@ async function getAllPropAdminView(cnx) {
 }
 
 /**
- * Funtion that gets the list of all properties, that are visible to the public.
+ * Function that gets the list of all properties, that are visible to the public.
  * Includes the ones where the visibility is set to false.
  * @param {object} cnx - The request object.
  * @returns {function} - List of all properties.
@@ -69,7 +69,7 @@ async function getAllProp(cnx) {
 }
 
 /**
- * Funtion that gets the an property detail by it's ID.
+ * Function that gets the an property detail by it's ID.
  * @param {object} cnx - The request object.
  * @returns {function} - Property details.
  */
@@ -85,7 +85,7 @@ async function getAllPropById(cnx) {
 }
 
 /**
- * Funtion that gets all properties with high priority.
+ * Function that gets all properties with high priority.
  * @param {object} cnx - The request object.
  * @returns {function} - List of properties with high priority.
  */
@@ -101,8 +101,8 @@ async function getAllPropHighPriority(cnx) {
 
 
 /**
- * Funtion allows an ADMIN to delete an property.
- * And then lets the ADMIN know if update was sucessful or not.
+ * Function allows an ADMIN to delete an property.
+ * And then lets the ADMIN know if update was successful or not.
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */
@@ -110,7 +110,7 @@ async function deletePropById(cnx) {
   /// Get the property ID from the route parameters.
   const propID = cnx.params.id;
 
-  // get the property first, (check if exisits)
+  // get the property first, (check if exists)
   const property = await model.getPropByID(propID);
 
   // if property is found in the database continue
@@ -138,7 +138,7 @@ async function deletePropById(cnx) {
 }
 
 /**
- * Funtion that toggles the high priority attribute of a property by it's ID.
+ * Function that toggles the high priority attribute of a property by it's ID.
  * @param {object} cnx - The request object.
  * @returns {function} - List of properties with high priority.
  */
@@ -146,7 +146,7 @@ async function toggleHighPriority(cnx) {
   /// Get the property ID from the route parameters.
   const propID = cnx.params.id;
 
-  // get the property first, (check if exisits)
+  // get the property first, (check if exists)
   const property = await model.getPropByID(propID);
 
   // if property is found in the database continue
@@ -176,7 +176,7 @@ async function toggleHighPriority(cnx) {
 
 /**
  * Function allows an admin to add a new property.
- * And return and the propertyID if property was sucessfully created.
+ * And return and the propertyID if property was successfully created.
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */
@@ -213,20 +213,58 @@ async function updateStatusByID(cnx) {
   
   const body = cnx.request.body;
 
-  // get the property first, (check if exisits)
+  // get the property first, (check if exists)
   const property = await model.getPropByID(propID);
 
   // if property is found in the database continue
   // otherwise send message back saying user not found
   if (property.length) {
     // check permission if user can delete info
-    const permission = permissions.updateStatus(cnx.state.user);
+    const permission = permissions.update(cnx.state.user);
     if (!permission.granted) {
       // if permission is not granted
       cnx.status = 403;
     } else {
       // perform update on database
-      const result = await model.updateStatus(body.status,propID);
+      const result = await model.update(body.status,propID);
+      if (result.affectedRows > 0) {
+        cnx.status = 200;
+        cnx.body = { ID: propID, updated: true, link: `/api/properties/${propID}` };
+      } else {
+        cnx.status = 501;
+        cnx.body = { ID: propID, updated: false };
+      }
+    }
+  } else {
+    cnx.status = 404;
+  }
+}
+
+/**
+ * Function allows an admin to update an property attributes.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function updatePropertyByID(cnx) {
+  /// Get the property ID from the route parameters.
+  const propID = cnx.params.id;
+  
+  const body = cnx.request.body;
+
+  // get the property first, (check if exists)
+  const property = await model.getPropByID(propID);
+
+  // if property is found in the database continue
+  // otherwise send message back saying user not found
+  if (property.length) {
+    // check permission if user can delete info
+    const permission = permissions.update(cnx.state.user);
+    if (!permission.granted) {
+      // if permission is not granted
+      cnx.status = 403;
+    } else {
+      // perform update on database
+      const result = await model.updateProperty(body,propID);
       if (result.affectedRows > 0) {
         cnx.status = 200;
         cnx.body = { ID: propID, updated: true, link: `/api/properties/${propID}` };
@@ -242,7 +280,7 @@ async function updateStatusByID(cnx) {
 
 
 
-
+// Get's
 router.get('/', getAllProp);
 router.get('/adminview', auth, getAllPropAdminView);
 router.get('/highpriority', getAllPropHighPriority);
@@ -251,8 +289,12 @@ router.get('/:id([0-9]{1,})', getAllPropById);
 
 // Post's
 router.post('/', bodyParser(), auth, validatePropertyAdd, addProperty); 
+
+// Put's
 router.put('/status/:id([0-9]{1,})', bodyParser(), auth, updateStatusByID); 
-// router.put('/:id([0-9]{1,})', auth, bodyParser(), validateUserUpdate, updateUserInfo);
+router.put('/:id([0-9]{1,})', auth, bodyParser(), validatePropertyUpdate, updatePropertyByID); 
+
+// Del's
 router.del('/:id([0-9]{1,})', auth, deletePropById); 
 
 // Export object.
