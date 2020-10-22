@@ -309,14 +309,11 @@ paths:
     summary: Represents the property categories list.
     description: >
       This resource represents the list of property categories.
-    post:
+    get:
       tags:
         - Categories
       description:
         Get the list of property categories.
-      requestBody:
-        description: All property categories.
-        required: true
       responses:
         '201':
           description: List of property categories.
@@ -324,6 +321,24 @@ paths:
             application/json:
               schema:
                 $ref: ./categories_schema.json#/definitions/categoryList
+        '404':
+          description: Nothing found.
+  /categories/{id}:
+    summary: Represents the categories for a given house.
+    description: >
+      This resource represents the categories for a given house.
+    get:
+      tags:
+        - Categories
+      description:
+        Get the list of categories for a given property.
+      responses:
+        '201':
+          description: List of categories for the property.
+          content:
+            application/json:
+              schema:
+                $ref: ./categories_schema.json#/definitions/categoriesForGivenProperty
         '404':
           description: Nothing found.
           

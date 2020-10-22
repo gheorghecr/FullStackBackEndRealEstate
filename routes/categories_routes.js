@@ -29,7 +29,25 @@ async function getAllCategories(cnx) {
     }
 }
 
+/**
+ * Function that gets the list of categories for a given property.
+ * @param {object} cnx - The request object.
+ * @returns {function} - List of all categories.
+ */
+async function getAllCategories(cnx) {
+    const propID = cnx.params.id;
+    
+    const result = await model.getCategoriesForProperty(propID);
+    if (result.length) {
+        cnx.status = 200;
+        cnx.body = result;
+    } else {
+        cnx.status = 404;
+    }
+}
+
 router.get('/', getAllCategories);
+router.get('/:id([0-9]{1,})', getAllCategories);
 
 // Export object.
 module.exports = router;

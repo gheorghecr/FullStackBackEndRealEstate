@@ -14,3 +14,14 @@ exports.getAllCategories = async function getAllCategories() {
     const data = await db.run_query(query);
     return data;
 }
+
+/**
+ * SQL Query function to get the categories for a given property.
+ * @returns {object} data - The response object containing all categories for a given property.
+ */
+exports.getCategoriesForProperty = async function getCategoriesForProperty (id) {
+    let query = "SELECT c.ID, c.name FROM propertyCategories as pc INNER JOIN categories AS c";
+        query += " ON pc.categoryID = c.ID WHERE pc.propertyID = ?;";
+    const result = await db.run_query(query, id);
+    return result;
+  }
