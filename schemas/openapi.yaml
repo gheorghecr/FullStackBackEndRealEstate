@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   version: 1.0.0
-  title: 304CEM Back End Assigment API
+  title: 304CEM Back End Assignment API
   description: A Real Estate website.
   contact:
     name: Gheorghe Craciun
@@ -17,6 +17,8 @@ tags:
     description: API endpoints for user management.
   - name: Properties
     description: Access and perform CRUD operations on properties entries.
+  - name: Categories
+    description: Access the property category list.
 paths:
   /users:
     summary: Represents an individual user
@@ -303,4 +305,25 @@ paths:
           description: No Permissions to update.
         '404':
           description: No properties with high priority where found.
+  /categories:
+    summary: Represents the property categories list.
+    description: >
+      This resource represents the list of property categories.
+    post:
+      tags:
+        - Categories
+      description:
+        Get the list of property categories.
+      requestBody:
+        description: All property categories.
+        required: true
+      responses:
+        '201':
+          description: List of property categories.
+          content:
+            application/json:
+              schema:
+                $ref: ./categories_schema.json#/definitions/categoryList
+        '404':
+          description: Nothing found.
           

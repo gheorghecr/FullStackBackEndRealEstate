@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "categoryList": {
+            "$id": "#categoryList",
+            "title": "Categories List",
+            "description": "A list containing all categories",
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "ID of the category.",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "Name of the category.",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "Description of the category.",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
