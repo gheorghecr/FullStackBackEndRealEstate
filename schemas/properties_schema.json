@@ -144,7 +144,8 @@
           "description": "Buyer ID",
           "type": "integer"
         }
-      }
+      },
+      "additionalProperties": false
     },
     
     "propertiesToggleHighPriority": {
