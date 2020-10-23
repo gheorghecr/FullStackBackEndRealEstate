@@ -17,6 +17,9 @@ const auth = require('../controllers/auth');
 // Deal with Permissions
 const permissions = require('../permissions/categories_permissions');
 
+// Validation Schemas
+const { validateCategoryAdd } = require('../controllers/validation');
+
 // Since we are handling users use a URI that begin's with an appropriate path
 const router = Router({ prefix: '/api/categories' });
 
@@ -58,22 +61,23 @@ async function getAllCategoriesForProperty(cnx) {
  * @returns {object} cnx - The response object.
  */
 async function addCategories(cnx) {
-    const categoryID = cnx.params.id;
+    // check permission if user can add a category
+    const permission = permissions.addCategory(cnx.state.user);
 
-    // check permission if user can delete info
-    const permission = permissions.deleteCategory(cnx.state.user);
+    const body = cnx.request.body;
 
     if (!permission.granted) {
         // if permission is not granted
         cnx.status = 403;
     } else {
-        const result = await model.deleteCategoryById(categoryID);
-        if (result.affectedRows > 0) {
-            cnx.status = 200;
-            cnx.body = { ID: categoryID, deleted: true };
+        const result = await model.addCategory(body);
+        if (result) {
+            // category addedd
+            cnx.status = 201;
+            cnx.body = { id: result.insertId, created: true, link: `${cnx.request.path}/${result.insertId}` };
         } else {
+            // category not addedd
             cnx.status = 501;
-            cnx.body = { ID: categoryID, updated: false };
         }
     }
 }
@@ -85,8 +89,8 @@ async function addCategories(cnx) {
  */
 async function deleteById(cnx) {
     const categoryID = cnx.params.id;
-
-    // check permission if user can delete info
+    
+    // check permission if user can delete a category
     const permission = permissions.deleteCategory(cnx.state.user);
 
     if (!permission.granted) {
@@ -99,7 +103,7 @@ async function deleteById(cnx) {
             cnx.body = { ID: categoryID, deleted: true };
         } else {
             cnx.status = 501;
-            cnx.body = { ID: categoryID, updated: false };
+            cnx.body = { ID: categoryID, deleted: false };
         }
     }
 }
@@ -112,7 +116,7 @@ router.get('/:id([0-9]{1,})', getAllCategoriesForProperty);
 router.del('/:id([0-9]{1,})', auth, deleteById);
 
 // Post
-router.post('/', auth, bodyParser(), addCategories);
+router.post('/', auth, bodyParser(), validateCategoryAdd, addCategories);
 
 // Export object.
 module.exports = router;

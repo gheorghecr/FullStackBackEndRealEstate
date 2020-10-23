@@ -323,6 +323,46 @@ paths:
                 $ref: ./categories_schema.json#/definitions/categoryList
         '404':
           description: Nothing found.
+    post:
+      tags:
+        - Categories
+      description:
+        Add a new category.
+      requestBody:
+        description: All category data.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./categories_schema.json#/definitions/addCategory
+      responses:
+        '201':
+          description: Category added
+          content:
+            application/json:
+              schema:
+                $ref: ./categories_schema.json#/definitions/categoryUpdated
+        '403':
+          description: No permission to add a new category
+        '501':
+          description: Category not added
+    delete:
+      tags:
+        - Categories
+      description:
+        Delete category by id.
+      responses:
+        '200':
+          description: Confirmation of deletion.
+          content:
+            application/json:
+              schema:
+                $ref: ./categories_schema.json#/definitions/categoryDeleted
+        '403':
+          description: No Permissions to delete.
+        '501':
+          description: Category not deleted
+
   /categories/{id}:
     summary: Represents the categories for a given house.
     description: >

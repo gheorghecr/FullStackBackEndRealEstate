@@ -36,4 +36,15 @@ exports.deleteCategoryById = async function deleteCategoryById (id) {
     const query = "DELETE FROM categories WHERE ID = ?;";
     const data = await db.run_query(query, id);
     return data;
-  }
+}
+
+/**
+ * SQL Query function to add a category.
+ * @param {object} category - The category object.
+ * @returns {object} data - The response object.
+ */
+exports.addCategory = async function addCategory (category) {
+    const query = "INSERT INTO categories SET ?;";
+    const data = await db.run_query(query, category);
+    return data;
+}
