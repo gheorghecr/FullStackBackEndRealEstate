@@ -64,7 +64,7 @@ async function addCategories(cnx) {
     // check permission if user can add a category
     const permission = permissions.addCategory(cnx.state.user);
 
-    const body = cnx.request.body;
+    const { body } = cnx.request;
 
     if (!permission.granted) {
         // if permission is not granted
@@ -89,7 +89,7 @@ async function addCategories(cnx) {
  */
 async function deleteById(cnx) {
     const categoryID = cnx.params.id;
-    
+
     // check permission if user can delete a category
     const permission = permissions.deleteCategory(cnx.state.user);
 
