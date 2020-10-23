@@ -1,0 +1,94 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+      "categoriesForGivenProperty": {
+        "$id": "#categoriesForGivenProperty",
+        "title": "Categories for a given property.",
+        "description": "List of categories for a given property.",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "description": "ID of the category.",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name of the category.",
+            "type": "string"
+          }
+        }
+      },
+      "featuresList": {
+        "$id": "#featuresList",
+        "title": "Features List",
+        "description": "A list containing all features",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "description": "ID of the feature.",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name of the feature.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the feature.",
+            "type": "string"
+          }
+        }
+      },
+  
+      "addCategory": {
+        "$id": "#addCategory",
+        "title": "Add category",
+        "description": "Data to add a new category.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the category.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the category",
+            "type": "string"
+          }
+        },
+        "required": ["name", "description"],
+        "additionalProperties": false
+      },
+  
+      "categoryUpdated": {
+        "$id": "#categoryUpdated",
+        "title": "Category Updated",
+        "description": "Confirmation of a successful creation/update.",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "description": "ID of the created/updated property record",
+            "type": "integer"
+          },
+          "deleted": {
+            "description": "Boolean indicator of success",
+            "type": "boolean"
+          }
+        }
+      },
+  
+      "categoryDeleted": {
+        "$id": "#categoryDeleted",
+        "title": "Category Deleted",
+        "description": "Confirmation of a successful deletion",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "description": "ID of the deleted property record",
+            "type": "integer"
+          },
+          "deleted": {
+            "description": "Boolean indicator of success",
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }

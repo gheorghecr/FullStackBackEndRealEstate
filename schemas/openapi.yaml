@@ -18,7 +18,9 @@ tags:
   - name: Properties
     description: Access and perform CRUD operations on properties entries.
   - name: Categories
-    description: Access the property category list.
+    description: Access the property category list.   
+  - name: Features
+    description: Access the property features list. 
 paths:
   /users:
     summary: Represents an individual user
@@ -381,4 +383,22 @@ paths:
           description: No Permissions to delete.
         '501':
           description: Category not deleted
-          
+
+  /features:
+    summary: Represents the property features list.
+    description: >
+      This resource represents the list of property features.
+    get:
+      tags:
+        - Features
+      description:
+        Get the list of property features.
+      responses:
+        '201':
+          description: List of property features.
+          content:
+            application/json:
+              schema:
+                $ref: ./features_schema.json#/definitions/featuresList
+        '404':
+          description: Nothing found.   
