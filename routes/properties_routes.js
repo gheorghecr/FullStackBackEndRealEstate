@@ -8,14 +8,8 @@ const Router = require('koa-router');
 
 const bodyParser = require('koa-bodyparser');
 
-// Password encryption
-const bcrypt = require('bcrypt');
-
 // Connect with model for DB
 const model = require('../models/properties_model');
-
-// Connect with model for DB
-const model_users = require('../models/users_model');
 
 // Import auth part
 const auth = require('../controllers/auth');
@@ -36,20 +30,20 @@ const router = Router({ prefix: '/api/properties' });
  * @returns {object} cnx - List of all properties.
  */
 async function getAllPropAdminView(cnx) {
-  const permission = permissions.readAllAdmin(cnx.state.user);
-  if (!permission.granted) {
-    //permission not granted
-    cnx.status = 401;
-  } else {
-    //permission granted
-    const result = await model.getAllAdminView();
-    if (result.length) {
-      cnx.status = 200;
-      cnx.body = result;
+    const permission = permissions.readAllAdmin(cnx.state.user);
+    if (!permission.granted) {
+    // permission not granted
+        cnx.status = 401;
     } else {
-      cnx.status = 404;
+    // permission granted
+        const result = await model.getAllAdminView();
+        if (result.length) {
+            cnx.status = 200;
+            cnx.body = result;
+        } else {
+            cnx.status = 404;
+        }
     }
-  }
 }
 
 /**
@@ -59,13 +53,13 @@ async function getAllPropAdminView(cnx) {
  * @returns {object} cnx - List of all properties.
  */
 async function getAllProp(cnx) {
-  const result = await model.getAll();
-  if (result.length) {
-    cnx.status = 200;
-    cnx.body = result;
-  } else {
-    cnx.status = 404;
-  }
+    const result = await model.getAll();
+    if (result.length) {
+        cnx.status = 200;
+        cnx.body = result;
+    } else {
+        cnx.status = 404;
+    }
 }
 
 /**
@@ -74,14 +68,14 @@ async function getAllProp(cnx) {
  * @returns {object} cnx - Property details.
  */
 async function getAllPropById(cnx) {
-  const id = cnx.params.id;
-  const result = await model.getPropByID(id);
-  if (result.length) {
-    cnx.status = 200;
-    cnx.body = result;
-  } else {
-    cnx.status = 404;
-  }
+    const { id } = cnx.params;
+    const result = await model.getPropByID(id);
+    if (result.length) {
+        cnx.status = 200;
+        cnx.body = result;
+    } else {
+        cnx.status = 404;
+    }
 }
 
 /**
@@ -90,15 +84,14 @@ async function getAllPropById(cnx) {
  * @returns {object} cnx - List of properties with high priority.
  */
 async function getAllPropHighPriority(cnx) {
-  const result = await model.getPropHighPriority();
-  if (result.length) {
-    cnx.status = 200;
-    cnx.body = result;
-  } else {
-    cnx.status = 404;
-  }
+    const result = await model.getPropHighPriority();
+    if (result.length) {
+        cnx.status = 200;
+        cnx.body = result;
+    } else {
+        cnx.status = 404;
+    }
 }
-
 
 /**
  * Function allows an ADMIN to delete an property.
@@ -107,34 +100,34 @@ async function getAllPropHighPriority(cnx) {
  * @returns {object} cnx - The response object.
  */
 async function deletePropById(cnx) {
-  /// Get the property ID from the route parameters.
-  const propID = cnx.params.id;
+    /// Get the property ID from the route parameters.
+    const propID = cnx.params.id;
 
-  // get the property first, (check if exists)
-  const property = await model.getPropByID(propID);
+    // get the property first, (check if exists)
+    const property = await model.getPropByID(propID);
 
-  // if property is found in the database continue
-  // otherwise send message back saying user not found
-  if (property.length) {
+    // if property is found in the database continue
+    // otherwise send message back saying user not found
+    if (property.length) {
     // check permission if user can delete info
-    const permission = permissions.deleteProp(cnx.state.user, property[0]);
-    if (!permission.granted) {
-      // if permission is not granted
-      cnx.status = 403;
+        const permission = permissions.deleteProp(cnx.state.user, property[0]);
+        if (!permission.granted) {
+            // if permission is not granted
+            cnx.status = 403;
+        } else {
+            // perform delete on database
+            const result = await model.deletePropertyById(propID);
+            if (result.affectedRows > 0) {
+                cnx.status = 200;
+                cnx.body = { ID: propID, deleted: true };
+            } else {
+                cnx.status = 400;
+                cnx.body = { ID: propID, deleted: false };
+            }
+        }
     } else {
-      // perform delete on database
-      const result = await model.deletePropertyById(propID);
-      if (result.affectedRows > 0) {
-        cnx.status = 200;
-        cnx.body = { ID: propID, deleted: true };
-      } else {
-        cnx.status = 400;
-        cnx.body = { ID: propID, deleted: false };
-      }
+        cnx.status = 404;
     }
-  } else {
-    cnx.status = 404;
-  }
 }
 
 /**
@@ -143,36 +136,35 @@ async function deletePropById(cnx) {
  * @returns {object} cnx - The response object.
  */
 async function toggleHighPriority(cnx) {
-  /// Get the property ID from the route parameters.
-  const propID = cnx.params.id;
+    /// Get the property ID from the route parameters.
+    const propID = cnx.params.id;
 
-  // get the property first, (check if exists)
-  const property = await model.getPropByID(propID);
+    // get the property first, (check if exists)
+    const property = await model.getPropByID(propID);
 
-  // if property is found in the database continue
-  // otherwise send message back saying user not found
-  if (property.length) {
+    // if property is found in the database continue
+    // otherwise send message back saying user not found
+    if (property.length) {
     // check permission if user can delete info
-    const permission = permissions.toggleHighPriority(cnx.state.user, property[0]);
-    if (!permission.granted) {
-      // if permission is not granted
-      cnx.status = 403;
+        const permission = permissions.toggleHighPriority(cnx.state.user, property[0]);
+        if (!permission.granted) {
+            // if permission is not granted
+            cnx.status = 403;
+        } else {
+            // perform update on database
+            const result = await model.toggleHighPriority(propID);
+            if (result.affectedRows > 0) {
+                cnx.status = 200;
+                cnx.body = { ID: propID, updated: true, link: `${cnx.request.path}` };
+            } else {
+                cnx.status = 400;
+                cnx.body = { ID: propID, updated: false };
+            }
+        }
     } else {
-      // perform update on database
-      const result = await model.toggleHighPriority(propID);
-      if (result.affectedRows > 0) {
-        cnx.status = 200;
-        cnx.body = { ID: propID, updated: true, link: `${cnx.request.path}` };
-      } else {
-        cnx.status = 400;
-        cnx.body = { ID: propID, updated: false };
-      }
+        cnx.status = 404;
     }
-  } else {
-    cnx.status = 404;
-  }
 }
-
 
 /**
  * Function allows an admin to add a new property.
@@ -181,25 +173,25 @@ async function toggleHighPriority(cnx) {
  * @returns {object} cnx - The response object.
  */
 async function addProperty(cnx) {
-  const body = cnx.request.body;
+    const { body } = cnx.request;
 
-  // check permission if user can add new property
-  const permission = permissions.addProperty(cnx.state.user);
-  if (!permission.granted) {
+    // check permission if user can add new property
+    const permission = permissions.addProperty(cnx.state.user);
+    if (!permission.granted) {
     // if permission is not granted
-    cnx.status = 403;
-  } else {
-    // perform query on database
-    const result = await model.addProperty(body);
-    if (result) {
-      //property addedd
-      cnx.status = 201;
-      cnx.body = { id: result.insertId, created: true, link: `${cnx.request.path}/${result.insertId}` };
+        cnx.status = 403;
     } else {
-      //property not addedd
-      cnx.status = 501;
+    // perform query on database
+        const result = await model.addProperty(body);
+        if (result) {
+            // property addedd
+            cnx.status = 201;
+            cnx.body = { id: result.insertId, created: true, link: `${cnx.request.path}/${result.insertId}` };
+        } else {
+            // property not addedd
+            cnx.status = 501;
+        }
     }
-  }
 }
 
 /**
@@ -208,36 +200,36 @@ async function addProperty(cnx) {
  * @returns {object} cnx - The response object.
  */
 async function updateStatusByID(cnx) {
-  /// Get the property ID from the route parameters.
-  const propID = cnx.params.id;
-  
-  const body = cnx.request.body;
+    /// Get the property ID from the route parameters.
+    const propID = cnx.params.id;
 
-  // get the property first, (check if exists)
-  const property = await model.getPropByID(propID);
+    const { body } = cnx.request;
 
-  // if property is found in the database continue
-  // otherwise send message back saying user not found
-  if (property.length) {
+    // get the property first, (check if exists)
+    const property = await model.getPropByID(propID);
+
+    // if property is found in the database continue
+    // otherwise send message back saying user not found
+    if (property.length) {
     // check permission if user can delete info
-    const permission = permissions.update(cnx.state.user);
-    if (!permission.granted) {
-      // if permission is not granted
-      cnx.status = 403;
+        const permission = permissions.update(cnx.state.user);
+        if (!permission.granted) {
+            // if permission is not granted
+            cnx.status = 403;
+        } else {
+            // perform update on database
+            const result = await model.update(body.status, propID);
+            if (result.affectedRows > 0) {
+                cnx.status = 200;
+                cnx.body = { ID: propID, updated: true, link: `/api/properties/${propID}` };
+            } else {
+                cnx.status = 501;
+                cnx.body = { ID: propID, updated: false };
+            }
+        }
     } else {
-      // perform update on database
-      const result = await model.update(body.status,propID);
-      if (result.affectedRows > 0) {
-        cnx.status = 200;
-        cnx.body = { ID: propID, updated: true, link: `/api/properties/${propID}` };
-      } else {
-        cnx.status = 501;
-        cnx.body = { ID: propID, updated: false };
-      }
+        cnx.status = 404;
     }
-  } else {
-    cnx.status = 404;
-  }
 }
 
 /**
@@ -246,39 +238,37 @@ async function updateStatusByID(cnx) {
  * @returns {object} cnx - The response object.
  */
 async function updatePropertyByID(cnx) {
-  /// Get the property ID from the route parameters.
-  const propID = cnx.params.id;
-  
-  const body = cnx.request.body;
+    /// Get the property ID from the route parameters.
+    const propID = cnx.params.id;
 
-  // get the property first, (check if exists)
-  const property = await model.getPropByID(propID);
+    const { body } = cnx.request;
 
-  // if property is found in the database continue
-  // otherwise send message back saying user not found
-  if (property.length) {
+    // get the property first, (check if exists)
+    const property = await model.getPropByID(propID);
+
+    // if property is found in the database continue
+    // otherwise send message back saying user not found
+    if (property.length) {
     // check permission if user can delete info
-    const permission = permissions.update(cnx.state.user);
-    if (!permission.granted) {
-      // if permission is not granted
-      cnx.status = 403;
+        const permission = permissions.update(cnx.state.user);
+        if (!permission.granted) {
+            // if permission is not granted
+            cnx.status = 403;
+        } else {
+            // perform update on database
+            const result = await model.updateProperty(body, propID);
+            if (result.affectedRows > 0) {
+                cnx.status = 200;
+                cnx.body = { ID: propID, updated: true, link: `/api/properties/${propID}` };
+            } else {
+                cnx.status = 501;
+                cnx.body = { ID: propID, updated: false };
+            }
+        }
     } else {
-      // perform update on database
-      const result = await model.updateProperty(body,propID);
-      if (result.affectedRows > 0) {
-        cnx.status = 200;
-        cnx.body = { ID: propID, updated: true, link: `/api/properties/${propID}` };
-      } else {
-        cnx.status = 501;
-        cnx.body = { ID: propID, updated: false };
-      }
+        cnx.status = 404;
     }
-  } else {
-    cnx.status = 404;
-  }
 }
-
-
 
 // Gets
 router.get('/', getAllProp);
@@ -288,14 +278,14 @@ router.get('/togglehighpriority/:id([0-9]{1,})', auth, toggleHighPriority);
 router.get('/:id([0-9]{1,})', getAllPropById);
 
 // Post's
-router.post('/', bodyParser(), auth, validatePropertyAdd, addProperty); 
+router.post('/', bodyParser(), auth, validatePropertyAdd, addProperty);
 
 // Put's
-router.put('/status/:id([0-9]{1,})', bodyParser(), auth, updateStatusByID); 
-router.put('/:id([0-9]{1,})', auth, bodyParser(), validatePropertyUpdate, updatePropertyByID); 
+router.put('/status/:id([0-9]{1,})', bodyParser(), auth, updateStatusByID);
+router.put('/:id([0-9]{1,})', auth, bodyParser(), validatePropertyUpdate, updatePropertyByID);
 
 // Del's
-router.del('/:id([0-9]{1,})', auth, deletePropById); 
+router.del('/:id([0-9]{1,})', auth, deletePropById);
 
 // Export object.
 module.exports = router;

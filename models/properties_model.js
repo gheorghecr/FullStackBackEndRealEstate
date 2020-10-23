@@ -10,20 +10,20 @@ const db = require('../helpers/database');
  * @returns {object} data - The response object containing all properties data.
  */
 exports.getAll = async function getAll() {
-  const query = 'SELECT * FROM properties WHERE visibility = 1';
-  const data = await db.run_query(query);
-  return data;
-}
+    const query = 'SELECT * FROM properties WHERE visibility = 1';
+    const data = await db.run_query(query);
+    return data;
+};
 
 /**
  * SQL Query function to get all properties (Admin view) from the DB.
  * @returns {object} data - The response object containing all properties data.
  */
 exports.getAllAdminView = async function getAllAdminView() {
-  const query = 'SELECT * FROM properties';
-  const data = await db.run_query(query);
-  return data;
-}
+    const query = 'SELECT * FROM properties';
+    const data = await db.run_query(query);
+    return data;
+};
 
 /**
  * SQL Query function to get an property details by it's ID.
@@ -31,20 +31,20 @@ exports.getAllAdminView = async function getAllAdminView() {
  * @returns {object} data - The response object containing the property details.
  */
 exports.getPropByID = async function getPropByID(propID) {
-  const query = 'SELECT * FROM properties WHERE prop_ID = ?';
-  const data = await db.run_query(query, propID);
-  return data;
-}
+    const query = 'SELECT * FROM properties WHERE prop_ID = ?';
+    const data = await db.run_query(query, propID);
+    return data;
+};
 
 /**
  * SQL Query function to get all properties that have high priority from the DB.
  * @returns {object} data - The response object containing a list of properties with high priority.
  */
 exports.getPropHighPriority = async function getPropHighPriority() {
-  const query = 'SELECT * FROM properties WHERE highPriority = 1';
-  const data = await db.run_query(query);
-  return data;
-}
+    const query = 'SELECT * FROM properties WHERE highPriority = 1';
+    const data = await db.run_query(query);
+    return data;
+};
 
 /**
  * SQL Query function delete a property by it's ID from DB.
@@ -52,11 +52,10 @@ exports.getPropHighPriority = async function getPropHighPriority() {
  * @returns {object} data - The response object.
  */
 exports.deletePropertyById = async function deletePropertyById(id) {
-  const query = 'DELETE FROM properties WHERE prop_ID = ?';
-  const data = await db.run_query(query, id);
-  return data;
-}
-
+    const query = 'DELETE FROM properties WHERE prop_ID = ?';
+    const data = await db.run_query(query, id);
+    return data;
+};
 
 /**
  * SQL Query function to toggle the highPriority attribute of a property by it's ID.
@@ -64,11 +63,10 @@ exports.deletePropertyById = async function deletePropertyById(id) {
  * @returns {object} data - The response object.
  */
 exports.toggleHighPriority = async function toggleHighPriority(id) {
-  const query = 'UPDATE properties SET highPriority = !highPriority WHERE prop_ID = ?';
-  const data = await db.run_query(query, id);
-  return data;
-}
-
+    const query = 'UPDATE properties SET highPriority = !highPriority WHERE prop_ID = ?';
+    const data = await db.run_query(query, id);
+    return data;
+};
 
 /**
  * SQL Query function to add an new property.
@@ -76,10 +74,10 @@ exports.toggleHighPriority = async function toggleHighPriority(id) {
  * @returns {object} data - The response object.
  */
 exports.addProperty = async function addProperty(property) {
-  const query = 'INSERT INTO properties SET ?';
-  const data = await db.run_query(query, property);
-  return data;
-}
+    const query = 'INSERT INTO properties SET ?';
+    const data = await db.run_query(query, property);
+    return data;
+};
 
 /**
  * SQL Query function to update the property status.
@@ -87,22 +85,22 @@ exports.addProperty = async function addProperty(property) {
  * @param {string} status - Property Status
  * @returns {object} data - The response object.
  */
-exports.updateStatus = async function updateStatus(status,id) {
-  const query = 'UPDATE properties SET status = ? WHERE prop_ID = ?';
-  const values = [status, id];
-  const data = await db.run_query(query, values);
-  return data;
-}
+exports.updateStatus = async function updateStatus(status, id) {
+    const query = 'UPDATE properties SET status = ? WHERE prop_ID = ?';
+    const values = [status, id];
+    const data = await db.run_query(query, values);
+    return data;
+};
 
 /**
- * SQL Query function to update the property attributes.  
+ * SQL Query function to update the property attributes.
  * @param {object} property - Property object.
  * @param {integer} id - Property ID.
  * @returns {object} data - The response object.
  */
-exports.updateProperty = async function updateProperty(property,id) {
-  const query = 'UPDATE properties SET ? WHERE prop_ID = ?';
-  const values = [property, id];
-  const data = await db.run_query(query, values);
-  return data;
-}
+exports.updateProperty = async function updateProperty(property, id) {
+    const query = 'UPDATE properties SET ? WHERE prop_ID = ?';
+    const values = [property, id];
+    const data = await db.run_query(query, values);
+    return data;
+};

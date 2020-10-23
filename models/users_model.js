@@ -10,10 +10,10 @@ const db = require('../helpers/database');
  * @returns {object} data - The response object containing all users personal data.
  */
 exports.getAll = async function getAll() {
-  const query = 'SELECT * FROM users';
-  const data = await db.run_query(query);
-  return data;
-}
+    const query = 'SELECT * FROM users';
+    const data = await db.run_query(query);
+    return data;
+};
 
 /**
  * SQL Query function to get a single user personal data by the (unique) username.
@@ -21,10 +21,10 @@ exports.getAll = async function getAll() {
  * @returns {object} data - The response object containing a single user personal info.
  */
 exports.findByUsername = async function findByUsername(username) {
-  const query = 'SELECT * FROM users WHERE username = ?';
-  const data = await db.run_query(query, username);
-  return data;
-}
+    const query = 'SELECT * FROM users WHERE username = ?';
+    const data = await db.run_query(query, username);
+    return data;
+};
 
 /**
  * SQL Query function to get a single user personal data by the (unique) userID.
@@ -32,12 +32,12 @@ exports.findByUsername = async function findByUsername(username) {
  * @returns {object} data - The response object containing a single user personal info.
  */
 exports.getUserInfoById = async function getUserInfoById(id) {
-  // TODO: use page, limit, order to give pagination
-  const query = 'SELECT * FROM users WHERE userID = ?';
-  const values = [id];
-  const data = await db.run_query(query, values);
-  return data;
-}
+    // TODO: use page, limit, order to give pagination
+    const query = 'SELECT * FROM users WHERE userID = ?';
+    const values = [id];
+    const data = await db.run_query(query, values);
+    return data;
+};
 
 /**
  * SQL Query function to create an user account.
@@ -45,10 +45,10 @@ exports.getUserInfoById = async function getUserInfoById(id) {
  * @returns {object} data - The response object.
  */
 exports.register = async function register(user) {
-  const query = 'INSERT INTO users SET ?';
-  const data = await db.run_query(query, user);
-  return data;
-}
+    const query = 'INSERT INTO users SET ?';
+    const data = await db.run_query(query, user);
+    return data;
+};
 
 /**
  * SQL Query function to update an user personal information.
@@ -57,11 +57,11 @@ exports.register = async function register(user) {
  * @returns {object} data - The response object.
  */
 exports.updateById = async function updateById(id, user) {
-  const query = 'UPDATE users SET ? WHERE userID = ?';
-  const values = [user, id];
-  const data = await db.run_query(query, values);
-  return data;
-}
+    const query = 'UPDATE users SET ? WHERE userID = ?';
+    const values = [user, id];
+    const data = await db.run_query(query, values);
+    return data;
+};
 
 /**
  * SQL Query function delete an user account.
@@ -69,8 +69,8 @@ exports.updateById = async function updateById(id, user) {
  * @returns {object} data - The response object.
  */
 exports.deleteAccountById = async function deleteAccountById(id) {
-  const query = 'DELETE FROM users WHERE userID = ?';
-  const values = [id];
-  const data = await db.run_query(query, values);
-  return data;
-}
+    const query = 'DELETE FROM users WHERE userID = ?';
+    const values = [id];
+    const data = await db.run_query(query, values);
+    return data;
+};

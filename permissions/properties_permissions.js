@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 /**
 * A module to handle permissions on properties.
 * @module permissions/properties_permissions
@@ -11,7 +12,7 @@ const ac = new AccessControl();
 // Normal User permissions
 ac.grant('user').condition({ Fn: 'EQUALS', args: { 'role': 'admin' } }).execute('read').on('properties', [' ']);
 
-//mAdmin permissions
+// Admin permissions
 ac.grant('admin').condition({ Fn: 'EQUALS', args: { 'role': 'admin' } }).execute('read').on('properties');
 ac.grant('admin').condition({ Fn: 'NOT_EQUALS', args: { 'requester': '$.owner' } }).execute('delete').on('properties');
 ac.grant('admin').condition({ Fn: 'NOT_EQUALS', args: { 'requester': '$.owner' } }).execute('update').on('properties');

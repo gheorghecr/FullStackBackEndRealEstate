@@ -24,35 +24,35 @@ const categoryAddSchema = require('../schemas/categories_schema.json').definitio
  * @returns {function} - A Koa middleware handler taking (ctx, next) params
  */
 const makeKoaValidator = (schema, resource) => {
-  const v = new Validator();
-  const validationOptions = {
-    throwError: true,
-    propertyName: resource
-  };
+    const v = new Validator();
+    const validationOptions = {
+        throwError: true,
+        propertyName: resource,
+    };
 
-  /**
+    /**
    * Koa middleware handler function to do validation
    * @param {object} ctx - The Koa request/response context object
    * @param {function} next - The Koa next callback
    * @throws {ValidationError} a jsonschema library exception
    */
-  const handler = async (ctx, next) => {
-    const body = ctx.request.body;
-    try {
-      v.validate(body, schema, validationOptions);
-      await next();
-    } catch (error) {
-      if (error instanceof ValidationError) {
-        console.error(error);
-        ctx.body = { message: error.stack };
-        ctx.status = 400;
-      } else {
-        throw error;
-      }
-    }
-  }
-  return handler;
-}
+    const handler = async (ctx, next) => {
+        const { body } = ctx.request;
+        try {
+            v.validate(body, schema, validationOptions);
+            await next();
+        } catch (error) {
+            if (error instanceof ValidationError) {
+                console.error(error);
+                ctx.body = { message: error.stack };
+                ctx.status = 400;
+            } else {
+                throw error;
+            }
+        }
+    };
+    return handler;
+};
 
 /** Validate data against user schema for creating new users */
 exports.validateUser = makeKoaValidator(userSchema, 'user');

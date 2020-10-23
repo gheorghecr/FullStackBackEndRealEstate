@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 /**
 * A module to handle permissions on USERS.
 * @module permissions/user_permissions
