@@ -280,7 +280,7 @@ async function updatePropertyByID(cnx) {
 
 
 
-// Get's
+// Gets
 router.get('/', getAllProp);
 router.get('/adminview', auth, getAllPropAdminView);
 router.get('/highpriority', getAllPropHighPriority);
