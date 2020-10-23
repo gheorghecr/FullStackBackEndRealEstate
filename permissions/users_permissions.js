@@ -1,3 +1,4 @@
+/* eslint-disable newline-per-chained-call */
 /* eslint-disable quote-props */
 /**
 * A module to handle permissions on USERS.
