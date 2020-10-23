@@ -402,3 +402,22 @@ paths:
                 $ref: ./features_schema.json#/definitions/featuresList
         '404':
           description: Nothing found.   
+  
+  /features/{id}:
+    summary: Represents the features for a given house.
+    description: >
+      This resource represents the features for a given house.
+    get:
+      tags:
+        - Features
+      description:
+        Get the list of features for a given property.
+      responses:
+        '201':
+          description: List of features for the property.
+          content:
+            application/json:
+              schema:
+                $ref: ./features_schema.json#/definitions/featuresForGivenProperty
+        '404':
+          description: Nothing found.

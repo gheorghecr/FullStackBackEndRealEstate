@@ -1,18 +1,18 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "definitions": {
-      "categoriesForGivenProperty": {
-        "$id": "#categoriesForGivenProperty",
-        "title": "Categories for a given property.",
-        "description": "List of categories for a given property.",
+      "featuresForGivenProperty": {
+        "$id": "#featuresForGivenProperty",
+        "title": "Features for a given property.",
+        "description": "List of features for a given property.",
         "type": "object",
         "properties": {
           "ID": {
-            "description": "ID of the category.",
+            "description": "ID of the feature.",
             "type": "integer"
           },
           "name": {
-            "description": "Name of the category.",
+            "description": "Name of the feature.",
             "type": "string"
           }
         }
