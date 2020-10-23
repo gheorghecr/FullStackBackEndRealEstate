@@ -17,7 +17,7 @@ exports.getAllCategories = async function getAllCategories() {
 
 /**
  * SQL Query function to get the categories for a given property.
- * @param {integer} propID - category ID.
+ * @param {integer} id - property ID.
  * @returns {object} data - The response object containing all categories for a given property.
  */
 exports.getCategoriesForProperty = async function getCategoriesForProperty(id) {
