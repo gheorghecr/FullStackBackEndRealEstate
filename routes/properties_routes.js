@@ -33,7 +33,7 @@ const router = Router({ prefix: '/api/properties' });
 /**
  * Function that gets the list of all properties, that are visible to the admin.
  * @param {object} cnx - The request object.
- * @returns {function} - List of all properties.
+ * @returns {object} cnx - List of all properties.
  */
 async function getAllPropAdminView(cnx) {
   const permission = permissions.readAllAdmin(cnx.state.user);
@@ -56,7 +56,7 @@ async function getAllPropAdminView(cnx) {
  * Function that gets the list of all properties, that are visible to the public.
  * Includes the ones where the visibility is set to false.
  * @param {object} cnx - The request object.
- * @returns {function} - List of all properties.
+ * @returns {object} cnx - List of all properties.
  */
 async function getAllProp(cnx) {
   const result = await model.getAll();
@@ -71,7 +71,7 @@ async function getAllProp(cnx) {
 /**
  * Function that gets the an property detail by it's ID.
  * @param {object} cnx - The request object.
- * @returns {function} - Property details.
+ * @returns {object} cnx - Property details.
  */
 async function getAllPropById(cnx) {
   const id = cnx.params.id;
@@ -87,7 +87,7 @@ async function getAllPropById(cnx) {
 /**
  * Function that gets all properties with high priority.
  * @param {object} cnx - The request object.
- * @returns {function} - List of properties with high priority.
+ * @returns {object} cnx - List of properties with high priority.
  */
 async function getAllPropHighPriority(cnx) {
   const result = await model.getPropHighPriority();
@@ -140,7 +140,7 @@ async function deletePropById(cnx) {
 /**
  * Function that toggles the high priority attribute of a property by it's ID.
  * @param {object} cnx - The request object.
- * @returns {function} - List of properties with high priority.
+ * @returns {object} cnx - The response object.
  */
 async function toggleHighPriority(cnx) {
   /// Get the property ID from the route parameters.

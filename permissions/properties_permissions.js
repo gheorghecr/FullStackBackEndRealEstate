@@ -1,6 +1,6 @@
 /**
 * A module to handle permissions on properties.
-* @module permissions/user_permissions
+* @module permissions/properties_permissions
 * @author Gheorghe Craciun
 */
 
