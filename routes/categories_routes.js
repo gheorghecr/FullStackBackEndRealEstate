@@ -56,7 +56,7 @@ async function getAllCategoriesForProperty(cnx) {
 }
 
 /**
- * Function that deletes a category by it's ID.
+ * Function that adds a category by it's ID.
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */

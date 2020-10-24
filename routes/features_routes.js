@@ -12,13 +12,13 @@ const bodyParser = require('koa-bodyparser');
 const model = require('../models/features_model');
 
 // Import auth part
-//const auth = require('../controllers/auth');
+const auth = require('../controllers/auth');
 
 // Deal with Permissions
-//const permissions = require('../permissions/features_permissions');
+const permissions = require('../permissions/features_permissions');
 
 // Validation Schemas
-//const { validateCategoryAdd } = require('../controllers/validation');
+const { validateFeatureAdd } = require('../controllers/validation');
 
 // Since we are handling users use a URI that begin's with an appropriate path
 const router = Router({ prefix: '/api/features' });
@@ -55,6 +55,33 @@ async function getAllFeaturesForProperty(cnx) {
     }
 }
 
+/**
+ * Function that adds a feature by it's ID.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function addFeatures(cnx) {
+    // check permission if user can add a feature
+    const permission = permissions.addFeature(cnx.state.user);
+
+    const { body } = cnx.request;
+
+    if (!permission.granted) {
+        // if permission is not granted
+        cnx.status = 403;
+    } else {
+        const result = await model.addFeatures(body);
+        if (result) {
+            // feature addedd
+            cnx.status = 201;
+            cnx.body = { id: result.insertId, created: true, link: `${cnx.request.path}/${result.insertId}` };
+        } else {
+            // feature not addedd
+            cnx.status = 501;
+        }
+    }
+}
+
 // Gets
 router.get('/', getAllFeatures);
 router.get('/:id([0-9]{1,})', getAllFeaturesForProperty);
@@ -63,7 +90,7 @@ router.get('/:id([0-9]{1,})', getAllFeaturesForProperty);
 //router.del('/:id([0-9]{1,})', auth, deleteById);
 
 // Post
-//router.post('/', auth, bodyParser(), validateCategoryAdd, addCategories);
+router.post('/', auth, bodyParser(), validateFeatureAdd, addFeatures);
 
 // Export object.
 module.exports = router;

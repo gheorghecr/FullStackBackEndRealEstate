@@ -38,18 +38,18 @@
         }
       },
   
-      "addCategory": {
-        "$id": "#addCategory",
-        "title": "Add category",
-        "description": "Data to add a new category.",
+      "addFeatures": {
+        "$id": "#addFeatures",
+        "title": "Add feature",
+        "description": "Data to add a new feature.",
         "type": "object",
         "properties": {
           "name": {
-            "description": "Name of the category.",
+            "description": "Name of the feature.",
             "type": "string"
           },
           "description": {
-            "description": "Description of the category",
+            "description": "Description of the feature",
             "type": "string"
           }
         },
@@ -57,9 +57,9 @@
         "additionalProperties": false
       },
   
-      "categoryUpdated": {
-        "$id": "#categoryUpdated",
-        "title": "Category Updated",
+      "featureUpdated": {
+        "$id": "#featureUpdated",
+        "title": "Feature Updated",
         "description": "Confirmation of a successful creation/update.",
         "type": "object",
         "properties": {
@@ -74,9 +74,9 @@
         }
       },
   
-      "categoryDeleted": {
-        "$id": "#categoryDeleted",
-        "title": "Category Deleted",
+      "featureDeleted": {
+        "$id": "#featureDeleted",
+        "title": "Feature Deleted",
         "description": "Confirmation of a successful deletion",
         "type": "object",
         "properties": {

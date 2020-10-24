@@ -401,7 +401,30 @@ paths:
               schema:
                 $ref: ./features_schema.json#/definitions/featuresList
         '404':
-          description: Nothing found.   
+          description: Nothing found.  
+    post:
+      tags:
+        - Features
+      description:
+        Add a new feature.
+      requestBody:
+        description: All feature data.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./features_schema.json#/definitions/addFeature
+      responses:
+        '201':
+          description: Feature added
+          content:
+            application/json:
+              schema:
+                $ref: ./features_schema.json#/definitions/featureUpdated
+        '403':
+          description: No permission to add a new feature
+        '501':
+          description: Feature not added 
   
   /features/{id}:
     summary: Represents the features for a given house.

@@ -26,3 +26,14 @@ exports.getFeaturesForProperty = async function getFeaturesForProperty(id) {
     const result = await db.run_query(query, id);
     return result;
 };
+
+/**
+ * SQL Query function to add a feature.
+ * @param {object} feature - The feature object.
+ * @returns {object} data - The response object.
+ */
+exports.addFeatures = async function addFeatures(feature) {
+    const query = 'INSERT INTO features SET ?;';
+    const data = await db.run_query(query, feature);
+    return data;
+};
