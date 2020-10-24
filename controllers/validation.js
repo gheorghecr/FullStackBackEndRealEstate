@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
 * A module to run JSON Schema based validation on request/response data.
 * @module controllers/validation
