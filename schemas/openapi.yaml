@@ -413,7 +413,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./features_schema.json#/definitions/addFeature
+              $ref: ./features_schema.json#/definitions/addFeatures
       responses:
         '201':
           description: Feature added
@@ -444,3 +444,19 @@ paths:
                 $ref: ./features_schema.json#/definitions/featuresForGivenProperty
         '404':
           description: Nothing found.
+    delete:
+        tags:
+          - Features
+        description:
+          Delete feature by id.
+        responses:
+          '200':
+            description: Confirmation of deletion.
+            content:
+              application/json:
+                schema:
+                  $ref: ./features_schema.json#/definitions/featureDeleted
+          '403':
+            description: No Permissions to delete.
+          '501':
+            description: Category not deleted

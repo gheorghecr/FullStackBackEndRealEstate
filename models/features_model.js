@@ -37,3 +37,14 @@ exports.addFeatures = async function addFeatures(feature) {
     const data = await db.run_query(query, feature);
     return data;
 };
+
+/**
+ * SQL Query function to delete a feature by it's ID.
+ * @param {integer} id - feature ID.
+ * @returns {object} data - The response object.
+ */
+exports.deleteFeatureById = async function deleteFeatureById(id) {
+    const query = 'DELETE FROM features WHERE ID = ?;';
+    const data = await db.run_query(query, id);
+    return data;
+};
