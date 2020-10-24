@@ -29,7 +29,7 @@ exports.getCategoriesForProperty = async function getCategoriesForProperty(id) {
 
 /**
  * SQL Query function to delete a category by it's ID.
- * @param {integer} propID - category ID.
+ * @param {integer} id - category ID.
  * @returns {object} data - The response object.
  */
 exports.deleteCategoryById = async function deleteCategoryById(id) {
