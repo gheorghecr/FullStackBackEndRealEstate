@@ -56,7 +56,7 @@ exports.deleteFeatureById = async function deleteFeatureById(id) {
  * @returns {object} data - The response object.
  */
 exports.updateFeature = async function updateFeature(id, feature) {
-    const query = 'UPDATE features SET ? WHERE ID = 1';
+    const query = 'UPDATE features SET ? WHERE ID = ?';
     const values = [feature, id];
     const data = await db.run_query(query, values);
     return data;

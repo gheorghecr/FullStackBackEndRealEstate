@@ -90,7 +90,7 @@ async function addFeatures(cnx) {
 async function updateById(cnx) {
     const featureID = cnx.params.id;
 
-    // check permission if user can delete a feature
+    // check permission if user can update a feature
     const permission = permissions.updateFeature(cnx.state.user);
 
     const { body } = cnx.request;
