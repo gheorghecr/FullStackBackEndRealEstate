@@ -1,0 +1,227 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    
+    "propertiesView": {
+      "$id": "#propertiesView",
+      "title": "Properties View",
+      "description": "Data visible to all users.",
+      "type": "object",
+      "properties": {
+        "prop_ID": {
+          "description": "Property ID",
+          "type": "integer"
+        },
+        "price": {
+          "description": "Property price",
+          "type": "integer"
+        },
+        "title": {
+          "description": "Property title",
+          "type": "string"
+        },
+        "description": {
+          "description": "Property description",
+          "type": "string"
+        },
+        "status": {
+          "description": "Property status (Under Offer, For sale, Sold)",
+          "type": "string"
+        },
+        "location": {
+          "description": "Property Address",
+          "type": "string"
+        },
+        "visibility": {
+          "description": "If property is can viewed by normal admin",
+          "type": "boolean"
+        },
+        "highPriority": {
+          "description": "If property has a high priority",
+          "type": "boolean"
+        },
+        "sellerID": {
+          "description": "Real estate agent account ID",
+          "type": "integer"
+        },
+        "buyerID": {
+          "description": "Client account ID",
+          "type": "integer"
+        },
+        "dateAdded": {
+          "description": "TIMESTAMP when property was added",
+          "type": "string"
+        }
+      }
+    },
+    
+    "addProperty": {
+      "$id": "#addProperty",
+      "title": "Add property",
+      "description": "Data to add a new property.",
+      "type": "object",
+      "properties": {
+        "price": {
+          "description": "Property price",
+          "type": "number"
+        },
+        "title": {
+          "description": "Add Title",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the property",
+          "type": "string"
+        },
+        "status": {
+          "description": "Status of the property (For Sale, Under Offer, Sold)",
+          "type": "string"
+        },
+        "location": {
+          "description": "Property Address",
+          "type": "string"
+        },
+        "visibility": {
+          "description": "If property is visible to the general public or not",
+          "type": "boolean"
+        },
+        "highPriority": {
+          "description": "Property is a high Priority",
+          "type": "boolean"
+        },
+        "sellerID": {
+          "description": "Seller ID",
+          "type": "integer"
+        },
+        "buyerID": {
+          "description": "Buyer ID",
+          "type": "integer"
+        }
+      },
+      "required": ["price", "title", "description", "status", "location", "sellerID"],
+      "additionalProperties": false
+    },
+
+    "updateProperty": {
+      "$id": "#updateProperty",
+      "title": "Update property",
+      "description": "Data to update a property.",
+      "type": "object",
+      "properties": {
+        "price": {
+          "description": "Property price",
+          "type": "number"
+        },
+        "title": {
+          "description": "Add Title",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the property",
+          "type": "string"
+        },
+        "status": {
+          "description": "Status of the property (For Sale, Under Offer, Sold)",
+          "type": "string"
+        },
+        "location": {
+          "description": "Property Address",
+          "type": "string"
+        },
+        "visibility": {
+          "description": "If property is visible to the general public or not",
+          "type": "boolean"
+        },
+        "highPriority": {
+          "description": "Property is a high Priority",
+          "type": "boolean"
+        },
+        "sellerID": {
+          "description": "Seller ID",
+          "type": "integer"
+        },
+        "buyerID": {
+          "description": "Buyer ID",
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "propertiesToggleHighPriority": {
+      "$id": "#propertiesToggleHighPriority",
+      "title": "Properties Toggle High Priority",
+      "description": "Confirmation of a successful user update",
+      "type": "object",
+      "properties": {
+        "ID": {
+          "description": "ID of the updated property.",
+          "type": "integer"
+        },
+        "updated": {
+          "description": "Boolean indicator of success",
+          "type": "boolean"
+        },
+        "link": {
+          "description": "Path to retrieve user record",
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    
+    "propertyUpdated": {
+      "$id": "#propertyUpdated",
+      "title": "Property Updated",
+      "description": "Confirmation of a successful user update/creation",
+      "type": "object",
+      "properties": {
+        "ID": {
+          "description": "ID of the updated property record",
+          "type": "integer"
+        },
+        "updated": {
+          "description": "Boolean indicator of success",
+          "type": "boolean"
+        },
+        "link": {
+          "description": "Path to retrieve user record",
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    
+    "propertyUpdateStatus": {
+      "$id": "#propertyUpdateStatus",
+      "title": "Property Updated",
+      "description": "Confirmation of a successful user update",
+      "type": "object",
+      "properties": {
+        "status": {
+          "description": "New status for the property",
+          "type": "string"
+        }
+      },
+      "required": ["status"],
+      "additionalProperties": false
+    },
+      
+    "propertyDeleted": {
+      "$id": "#propertyDeleted",
+      "title": "Property Deleted",
+      "description": "Confirmation of a successful deletion",
+      "type": "object",
+      "properties": {
+        "ID": {
+          "description": "ID of the deleted property record",
+          "type": "integer"
+        },
+        "deleted": {
+          "description": "Boolean indicator of success",
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

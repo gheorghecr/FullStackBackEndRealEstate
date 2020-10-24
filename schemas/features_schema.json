@@ -1,0 +1,117 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+      "featuresForGivenProperty": {
+        "$id": "#featuresForGivenProperty",
+        "title": "Features for a given property.",
+        "description": "List of features for a given property.",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "description": "ID of the feature.",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name of the feature.",
+            "type": "string"
+          }
+        }
+      },
+      "featuresList": {
+        "$id": "#featuresList",
+        "title": "Features List",
+        "description": "A list containing all features",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "description": "ID of the feature.",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name of the feature.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the feature.",
+            "type": "string"
+          }
+        }
+      },
+  
+      "addFeatures": {
+        "$id": "#addFeatures",
+        "title": "Add feature",
+        "description": "Data to add a new feature.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the feature.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the feature",
+            "type": "string"
+          }
+        },
+        "required": ["name", "description"],
+        "additionalProperties": false
+      },
+
+      "updateFeature": {
+        "$id": "#updateFeature",
+        "title": "Update feature",
+        "description": "Data to update a feature.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the feature.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the feature",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+  
+      "featureUpdated": {
+        "$id": "#featureUpdated",
+        "title": "Feature Updated",
+        "description": "Confirmation of a successful creation/update.",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "description": "ID of the created/updated property record",
+            "type": "integer"
+          },
+          "updated": {
+            "description": "Boolean indicator of success",
+            "type": "boolean"
+          },
+          "link": {
+            "description": "Path to retrieve feature record",
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+  
+      "featureDeleted": {
+        "$id": "#featureDeleted",
+        "title": "Feature Deleted",
+        "description": "Confirmation of a successful deletion",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "description": "ID of the deleted property record",
+            "type": "integer"
+          },
+          "deleted": {
+            "description": "Boolean indicator of success",
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }

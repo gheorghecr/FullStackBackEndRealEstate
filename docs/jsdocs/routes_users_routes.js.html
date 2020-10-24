@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: routes/users_routes.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: routes/users_routes.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+* A module to handle the user routes.
+* @module routes/user_routes
+* @author Gheorghe Craciun
+*/
+
+const Router = require('koa-router');
+const bodyParser = require('koa-bodyparser');
+
+// Connect with model for DB
+const model = require('../models/users_model');
+
+// Import auth part
+const auth = require('../controllers/auth');
+
+// Password encryption
+const bcrypt = require('bcrypt');
+
+// Validation Schemas
+const {validateUser, validateUserUpdate} = require('../controllers/validation');
+
+// Deal with Permissions
+const permissions = require('../permissions/users_permissions');
+
+// Since we are handling users use a URI that begings with an appropriate path
+const router = Router({prefix: '/api/users'});
+
+
+router.get('/', auth, getAll);
+router.post('/', bodyParser(), validateUser,  createAccount);
+
+router.get('/:id([0-9]{1,})', auth, getById);
+router.put('/:id([0-9]{1,})', auth, bodyParser(), validateUserUpdate, updateUserInfo);
+router.del('/:id([0-9]{1,})', auth, deleteUserById);
+
+
+// Handle the functions used abose.
+
+
+/**
+ * Funtion that gets the the list of all users Personal Info, from the DB and returns it, if the user is an ADMIN.
+ * @param {object} cnx - The request object.
+ * @returns {function} - List of all users with it's personal data.
+ */
+async function getAll(cnx) {
+  const permission = permissions.readAll(cnx.state.user);
+  if (!permission.granted) {
+    cnx.status = 403;
+  } else {
+    const result = await model.getAll();
+    if (result.length) {
+      cnx.body = result;
+    }
+  }
+}
+
+/**
+ * Funtion that gets and returns an user (by it's ID) personal Info. Each user can only acess it's own data. 
+ * If the user is an ADMIN  has acess to all users data. Filters data so it does not show sentive data such as password.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function getById(cnx){ 
+  let id = cnx.params.id; 
+  
+  // get user from DB (check if exists)
+  let user =  await model.getUserInfoById(id);
+  
+  // if user is found in the database continue
+  // otherwise send message back saying user not found
+  if (user.length) {
+    //check permissions
+    const permission = permissions.read(cnx.state.user, user[0]);
+  
+    //filter data which user cannot see
+    user[0] = permission.filter(user[0])
+    if (!permission.granted) {
+      cnx.status = 403;
+    } else {
+      if (user.length) {
+        cnx.status = 201;
+        cnx.body = user[0];
+      }
+    }
+  } else {
+    cnx.status = 404;
+    cnx.body = {Message: "User Not found"};
+  }
+}
+
+/**
+ * Funtion allows an user to register on the application. And return and the userID if account was sucessfully created.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function createAccount(cnx) { 
+  let body = cnx.request.body; 
+  
+  // encrypt password
+  const hash = bcrypt.hashSync(body.password, 10);
+  body.password = hash;
+  
+  // perform query on database
+  let result =  await model.register(body);
+  if (result) {
+    cnx.status = 201;
+    cnx.body = {ID: result.insertId}
+  } else {
+    cnx.status = 500;
+  }
+}
+
+/**
+ * Funtion allows an user to update it's own personal data. And then lets the user know if update was sucessful or not.
+ * Admin can update any user data.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function updateUserInfo(cnx) { 
+  let id = cnx.params.id; 
+  let body = cnx.request.body; 
+  
+  //get the user first, (check if exisits)
+  let user =  await model.getUserInfoById(id);
+  
+  // if user is found in the database continue
+  // otherwise send message back saying user not found
+  if (user.length) {
+    //check permission if user can update info
+    const permission = permissions.update(cnx.state.user, user[0]);
+
+    if (!permission.granted) {
+      // if permission is not granted
+      cnx.status = 403;
+      cnx.body = {Message: "You don't have permission to update this."};
+    } else {
+      // if user is updating password, encryp it
+      if(body.password) {
+        body.password = bcrypt.hashSync(body.password, 10);
+      }
+      //perform update on database
+      let result =  await model.updateById(id, body);
+      if (result.affectedRows > 0) {
+        cnx.status = 201;
+        cnx.body = {Message: "Account Updated succesfully"};
+      } else {
+        cnx.status = 404;
+        cnx.body = {Message: "Nothing was updated"};
+      }
+    }
+  } else {
+    cnx.status = 404;
+    cnx.body = {Message: "User Not found"};
+  }
+  
+}
+
+/**
+ * Funtion allows an user to delete it's own account. And then lets the user know if update was sucessful or not.
+ * Admin can delete any user account.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function deleteUserById(cnx){ 
+  /// Get the ID from the route parameters. 
+  let id = cnx.params.id; 
+  
+  let result = await model.deleteAccountById(id);
+  
+  // If it exists then return the article as JSON. 
+  // Otherwise return a 404 Not Found status code
+  if (result) {
+    cnx.status = 201;
+    cnx.body = {Message: "Account Deleted succesfully"};
+  } else {
+    cnx.status = 404; 
+  }  
+}
+
+// Export object.
+module.exports = router; </code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-cofig.html">cofig</a></li><li><a href="module-controllers_validation.html">controllers/validation</a></li><li><a href="module-docs.html">docs</a></li><li><a href="module-helpers_database.html">helpers/database</a></li><li><a href="module-index.html">index</a></li><li><a href="module-models_user_model.html">models/user_model</a></li><li><a href="module-permissions_user_permissions.html">permissions/user_permissions</a></li><li><a href="module-routes_user_routes.html">routes/user_routes</a></li></ul><h3>Classes</h3><ul><li><a href="module-helpers_database-DatabaseException.html">DatabaseException</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Oct 17 2020 17:16:47 GMT+0000 (GMT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
