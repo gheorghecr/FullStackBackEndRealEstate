@@ -56,6 +56,24 @@
         "required": ["name", "description"],
         "additionalProperties": false
       },
+
+      "updateFeature": {
+        "$id": "#updateFeature",
+        "title": "Update feature",
+        "description": "Data to update a feature.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the feature.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the feature",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
   
       "featureUpdated": {
         "$id": "#featureUpdated",
@@ -67,9 +85,14 @@
             "description": "ID of the created/updated property record",
             "type": "integer"
           },
-          "deleted": {
+          "updated": {
             "description": "Boolean indicator of success",
             "type": "boolean"
+          },
+          "link": {
+            "description": "Path to retrieve feature record",
+            "type": "string",
+            "format": "uri"
           }
         }
       },

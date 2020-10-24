@@ -18,7 +18,7 @@ const auth = require('../controllers/auth');
 const permissions = require('../permissions/features_permissions');
 
 // Validation Schemas
-const { validateFeatureAdd } = require('../controllers/validation');
+const { validateFeatureAdd, validateFeatureUpdate } = require('../controllers/validation');
 
 // Since we are handling users use a URI that begin's with an appropriate path
 const router = Router({ prefix: '/api/features' });
@@ -83,6 +83,34 @@ async function addFeatures(cnx) {
 }
 
 /**
+ * Function that updates a feature by it's ID.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function updateById(cnx) {
+    const featureID = cnx.params.id;
+
+    // check permission if user can delete a feature
+    const permission = permissions.updateFeature(cnx.state.user);
+
+    const { body } = cnx.request;
+
+    if (!permission.granted) {
+        // if permission is not granted
+        cnx.status = 403;
+    } else {
+        const result = await model.updateFeature(featureID, body);
+        if (result.changedRows > 0) {
+            cnx.status = 200;
+            cnx.body = { ID: featureID, updated: true, link: `${cnx.request.path}/${featureID}` };
+        } else {
+            cnx.status = 501;
+            cnx.body = { ID: featureID, updated: false };
+        }
+    }
+}
+
+/**
  * Function that deletes a feature by it's ID.
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
@@ -117,6 +145,9 @@ router.del('/:id([0-9]{1,})', auth, deleteById);
 
 // Post
 router.post('/', auth, bodyParser(), validateFeatureAdd, addFeatures);
+
+// Put
+router.put('/:id([0-9]{1,})', auth, bodyParser(), validateFeatureUpdate, updateById);
 
 // Export object.
 module.exports = router;

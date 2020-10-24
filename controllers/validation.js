@@ -19,6 +19,8 @@ const categoryAddSchema = require('../schemas/categories_schema.json').definitio
 
 const featureAddSchema = require('../schemas/features_schema.json').definitions.addFeatures;
 
+const featureUpdateSchema = require('../schemas/features_schema.json').definitions.updateFeature;
+
 /**
  * Wrapper that returns a Koa middleware validator for a given schema.
  * @param {object} schema - The JSON schema definition of the resource
@@ -68,3 +70,5 @@ exports.validatePropertyUpdate = makeKoaValidator(propertyUpdateSchema, 'updateP
 exports.validateCategoryAdd = makeKoaValidator(categoryAddSchema, 'addCategory');
 /** Validate data against features schema for adding a feature */
 exports.validateFeatureAdd = makeKoaValidator(featureAddSchema, 'addFeature');
+/** Validate data against features schema for adding a feature */
+exports.validateFeatureUpdate = makeKoaValidator(featureUpdateSchema, 'updateFeature');

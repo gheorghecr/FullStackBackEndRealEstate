@@ -460,3 +460,15 @@ paths:
             description: No Permissions to delete.
           '501':
             description: Category not deleted
+    put:
+      tags:
+        - Features
+      description:
+        Update feature.
+      requestBody:
+        description: Feature new properties.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./features_schema.json#/definitions/featureUpdated
