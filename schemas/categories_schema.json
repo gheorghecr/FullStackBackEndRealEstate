@@ -57,6 +57,24 @@
       "additionalProperties": false
     },
 
+    "updateCategory": {
+      "$id": "#updateCategory",
+      "title": "Update category",
+      "description": "Data to update a category.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name of the category.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the category",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+
     "categoryUpdated": {
       "$id": "#categoryUpdated",
       "title": "Category Updated",

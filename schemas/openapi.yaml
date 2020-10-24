@@ -383,6 +383,29 @@ paths:
           description: No Permissions to delete.
         '501':
           description: Category not deleted
+    put:
+      tags:
+        - Categories
+      description:
+        Update category.
+      requestBody:
+        description: Category new attributes.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./categories_schema.json#/definitions/updateCategory
+      responses:
+        '200':
+          description: Confirmation of update.
+          content:
+            application/json:
+              schema:
+                $ref: ./categories_schema.json#/definitions/categoryUpdated
+        '403':
+          description: No Permissions to update.
+        '501':
+          description: Nothing was updated.
 
   /features:
     summary: Represents the property features list.
@@ -472,3 +495,14 @@ paths:
           application/json:
             schema:
               $ref: ./features_schema.json#/definitions/featureUpdated
+      responses:
+        '200':
+          description: Confirmation of update.
+          content:
+            application/json:
+              schema:
+                $ref: ./features_schema.json#/definitions/featureUpdated
+        '403':
+          description: No Permissions to update.
+        '501':
+          description: Nothing was updated.

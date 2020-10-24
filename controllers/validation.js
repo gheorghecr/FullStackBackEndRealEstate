@@ -18,6 +18,8 @@ const propertyUpdateSchema = require('../schemas/properties_schema.json').defini
 
 const categoryAddSchema = require('../schemas/categories_schema.json').definitions.addCategory;
 
+const categoryUpdateSchema = require('../schemas/categories_schema.json').definitions.updateCategory;
+
 const featureAddSchema = require('../schemas/features_schema.json').definitions.addFeatures;
 
 const featureUpdateSchema = require('../schemas/features_schema.json').definitions.updateFeature;
@@ -63,12 +65,17 @@ const makeKoaValidator = (schema, resource) => {
 exports.validateUser = makeKoaValidator(userSchema, 'user');
 /** Validate data against user schema for updating existing users */
 exports.validateUserUpdate = makeKoaValidator(userUpdateSchema, 'userUpdate');
+
 /** Validate data against properties schema for adding a new property */
 exports.validatePropertyAdd = makeKoaValidator(propertyAddSchema, 'addProperty');
 /** Validate data against properties schema for updating a property */
 exports.validatePropertyUpdate = makeKoaValidator(propertyUpdateSchema, 'updateProperty');
+
 /** Validate data against categories schema for adding a category */
 exports.validateCategoryAdd = makeKoaValidator(categoryAddSchema, 'addCategory');
+/** Validate data against categories schema for adding a category */
+exports.validateCategoryUpdate = makeKoaValidator(categoryUpdateSchema, 'updateCategory');
+
 /** Validate data against features schema for adding a feature */
 exports.validateFeatureAdd = makeKoaValidator(featureAddSchema, 'addFeature');
 /** Validate data against features schema for adding a feature */

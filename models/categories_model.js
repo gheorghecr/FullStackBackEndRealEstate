@@ -48,3 +48,16 @@ exports.addCategory = async function addCategory(category) {
     const data = await db.run_query(query, category);
     return data;
 };
+
+/**
+ * SQL Query function to update the categories by it's ID.
+ * @param {integer} id - categoryID.
+ * @param {integer} category - feature Object.
+ * @returns {object} data - The response object.
+ */
+exports.updateCategory = async function updateCategory(id, category) {
+    const query = 'UPDATE categories SET ? WHERE ID = ?';
+    const values = [category, id];
+    const data = await db.run_query(query, values);
+    return data;
+};
