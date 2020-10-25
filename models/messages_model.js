@@ -16,3 +16,14 @@ exports.getAllMessagesForConversation = async function getAllMessagesForConversa
     const data = await db.run_query(query, conversationID);
     return data;
 };
+
+/**
+ * SQL Query function to add a message.
+ * @param {object} message - The message object.
+ * @returns {object} data - The response object.
+ */
+exports.addMessage = async function addMessage(message) {
+    const query = 'INSERT INTO messages SET ?;';
+    const data = await db.run_query(query, message);
+    return data;
+};

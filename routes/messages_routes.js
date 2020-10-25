@@ -18,7 +18,7 @@ const auth = require('../controllers/auth');
 const permissions = require('../permissions/messages_permissions');
 
 // Validation Schemas
-//const { validateFeatureAdd, validateFeatureUpdate } = require('../controllers/validation');
+const { validateMessageAdd } = require('../controllers/validation');
 
 // Since we are handling users use a URI that begin's with an appropriate path
 const router = Router({ prefix: '/api/messages' });
@@ -38,12 +38,12 @@ async function getAllMessagesForConversation(cnx) {
         cnx.status = 403;
     } else {
         const result = await model.getAllMessagesForConversation(conversationID);
-    if (result.length) {
-        cnx.status = 200;
-        cnx.body = result;
-    } else {
-        cnx.status = 404;
-    }
+        if (result.length) {
+            cnx.status = 200;
+            cnx.body = result;
+        } else {
+            cnx.status = 404;
+        }
     }
 }
 
@@ -64,32 +64,25 @@ async function getAllMessagesForConversation(cnx) {
 //     }
 // }
 
-// /**
-//  * Function that adds a feature by it's ID.
-//  * @param {object} cnx - The request object.
-//  * @returns {object} cnx - The response object.
-//  */
-// async function addmessages(cnx) {
-//     // check permission if user can add a feature
-//     const permission = permissions.addFeature(cnx.state.user);
+/**
+ * Function that adds a message .
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function addMessages(cnx) {
+    const { body } = cnx.request;
 
-//     const { body } = cnx.request;
-
-//     if (!permission.granted) {
-//         // if permission is not granted
-//         cnx.status = 403;
-//     } else {
-//         const result = await model.addmessages(body);
-//         if (result) {
-//             // feature addedd
-//             cnx.status = 201;
-//             cnx.body = { id: result.insertId, created: true, link: `${cnx.request.path}/${result.insertId}` };
-//         } else {
-//             // feature not addedd
-//             cnx.status = 501;
-//         }
-//     }
-// }
+    const result = await model.addMessage(body);
+    if (result) {
+        // message addedd
+        cnx.status = 201;
+        cnx.body = { id: result.insertId, created: true, link: `${cnx.request.path}/messageID/${result.insertId}` };
+    } else {
+        // message not addedd
+        cnx.status = 501;
+        cnx.body = { id: result.insertId, created: false };
+    }
+}
 
 // /**
 //  * Function that updates a feature by it's ID.
@@ -147,13 +140,13 @@ async function getAllMessagesForConversation(cnx) {
 
 // Gets
 router.get('/:id([0-9]{1,})', auth, getAllMessagesForConversation);
-// router.get('/:id([0-9]{1,})', getAllmessagesForProperty);
+//router.get('/messageID/:id([0-9]{1,})', getAllmessagesForProperty); // Get by messageID
 
 // // Delete
 // router.del('/:id([0-9]{1,})', auth, deleteById);
 
-// // Post
-// router.post('/', auth, bodyParser(), validateFeatureAdd, addmessages);
+// Post
+router.post('/', auth, bodyParser(), validateMessageAdd, addMessages);
 
 // // Put
 // router.put('/:id([0-9]{1,})', auth, bodyParser(), validateFeatureUpdate, updateById);

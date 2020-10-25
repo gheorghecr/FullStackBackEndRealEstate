@@ -529,3 +529,29 @@ paths:
           description: No Permissions to read.
         '404':
           description: Nothing found.
+  /messages:
+    summary: Represents the messages.
+    description: >
+      This resource represents the messages.
+    
+    post:
+      tags:
+        - Messages
+      description:
+        Add a message.
+      requestBody:
+        description: Message properties.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./messages_schema.json#/definitions/addMessage
+      responses:
+        '201':
+          description: List of features for the property.
+          content:
+            application/json:
+              schema:
+                $ref: ./messages_schema.json#/definitions/messageUpdated
+        '501':
+          description: Nothing found.
