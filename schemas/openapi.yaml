@@ -520,7 +520,7 @@ paths:
         Get the all messages for a given conversation.
       responses:
         '201':
-          description: List of features for the property.
+          description: List of messages a conversation.
           content:
             application/json:
               schema:
@@ -588,4 +588,24 @@ paths:
               schema:
                 $ref: ./messages_schema.json#/definitions/messageUpdated
         '501':
+          description: Nothing found.
+  /messages/byID/{id}:
+    summary: Represents the messages.
+    description: >
+      This resource represents the messages.
+    get:
+      tags:
+        - Messages
+      description:
+        Get a messages for by it's ID.
+      responses:
+        '201':
+          description: Message
+          content:
+            application/json:
+              schema:
+                $ref: ./messages_schema.json#/definitions/messagesList
+        '403':
+          description: No Permissions to read.
+        '404':
           description: Nothing found.

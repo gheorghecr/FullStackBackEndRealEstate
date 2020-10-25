@@ -47,23 +47,6 @@ async function getAllMessagesForConversation(cnx) {
     }
 }
 
-// /**
-//  * Function that gets the list of messages for a given property.
-//  * @param {object} cnx - The request object.
-//  * @returns {object} cnx - The response object.
-//  */
-// async function getAllmessagesForProperty(cnx) {
-//     const propID = cnx.params.id;
-
-//     const result = await model.getmessagesForProperty(propID);
-//     if (result.length) {
-//         cnx.status = 200;
-//         cnx.body = result;
-//     } else {
-//         cnx.status = 404;
-//     }
-// }
-
 /**
  * Function that adds a message .
  * @param {object} cnx - The request object.
@@ -81,6 +64,32 @@ async function addMessages(cnx) {
         // message not addedd
         cnx.status = 501;
         cnx.body = { id: result.insertId, created: false };
+    }
+}
+
+/**
+ * Function that gets a message by it's ID.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function getMessageByID(cnx) {
+    const messageID = cnx.params.id;
+
+    const messageToCheckSenderID = await model.getMessageByID(messageID);
+
+    const permission = permissions.readByID(cnx.state.user, messageToCheckSenderID[0]);
+
+    if (!permission.granted) {
+        // if permission is not granted
+        cnx.status = 403;
+    } else {
+        const result = await model.getMessageByID(messageID);
+        if (result.length) {
+            cnx.status = 200;
+            cnx.body = result;
+        } else {
+            cnx.status = 404;
+        }
     }
 }
 
@@ -146,6 +155,7 @@ async function deleteMessageById(cnx) {
 
 // Gets
 router.get('/:id([0-9]{1,})', auth, getAllMessagesForConversation);
+router.get('/byID/:id([0-9]{1,})', auth, getMessageByID);
 
 // Puts
 router.put('/:id([0-9]{1,})', auth, toggleArchived);

@@ -23,3 +23,4 @@ ac.grant('admin').execute('update').on('messages');
 exports.readAllForConversation = (requester) => ac.can(requester.role).execute('read').sync().on('messages');
 exports.toggleArchived = (requester) => ac.can(requester.role).execute('update').sync().on('messages');
 exports.deleteByID = (requester, data) => ac.can(requester.role).context({ requester: requester.userID, owner: data.fromID }).execute('delete').sync().on('messages');
+exports.readByID = (requester, data) => ac.can(requester.role).context({ requester: requester.userID, owner: data.fromID }).execute('read').sync().on('messages');
