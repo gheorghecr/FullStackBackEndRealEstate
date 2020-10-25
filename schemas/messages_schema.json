@@ -113,14 +113,14 @@
         }
       },
   
-      "featureDeleted": {
-        "$id": "#featureDeleted",
-        "title": "Feature Deleted",
-        "description": "Confirmation of a successful deletion",
+      "messageDeleted": {
+        "$id": "#messageDeleted",
+        "title": "Message Deleted",
+        "description": "Confirmation of a successful deletion.",
         "type": "object",
         "properties": {
           "ID": {
-            "description": "ID of the deleted property record",
+            "description": "ID of the deleted message record",
             "type": "integer"
           },
           "deleted": {

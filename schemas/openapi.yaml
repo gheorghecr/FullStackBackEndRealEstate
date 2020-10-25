@@ -529,11 +529,29 @@ paths:
           description: No Permissions to read.
         '404':
           description: Nothing found.
+    delete:
+        tags:
+          - Messages
+        description:
+          Delete message by it's ID.
+        responses:
+          '200':
+            description: Confirmation of deletion.
+            content:
+              application/json:
+                schema:
+                  $ref: ./messages_schema.json#/definitions/messageDeleted
+          '403':
+            description: No Permissions to delete.
+          '404': 
+            description: Message not found.
+          '501':
+            description: Message not deleted
+    
   /messages:
     summary: Represents the messages.
     description: >
       This resource represents the messages.
-    
     post:
       tags:
         - Messages
