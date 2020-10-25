@@ -547,6 +547,22 @@ paths:
             description: Message not found.
           '501':
             description: Message not deleted
+    put:
+      tags:
+        - Messages
+      description:
+        Toggle archived property of a message.
+      responses:
+        '200':
+          description: Confirmation of update.
+          content:
+            application/json:
+              schema:
+                $ref: ./messages_schema.json#/definitions/messageUpdated
+        '403':
+          description: No Permissions to update.
+        '501':
+          description: Nothing was updated.
     
   /messages:
     summary: Represents the messages.

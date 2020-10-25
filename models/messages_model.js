@@ -49,3 +49,14 @@ exports.deleteMessageByID = async function deleteMessageByID(messageID) {
     const data = await db.run_query(query, messageID);
     return data;
 };
+
+/**
+ * SQL Query function to toggle the archived attribute of a message by it's ID.
+ * @param {integer} messageID - message ID.
+ * @returns {object} data - The response object.
+ */
+exports.toggleArchived = async function toggleArchived(messageID) {
+    const query = 'UPDATE messages SET archived = !archived WHERE messageID = ?';
+    const data = await db.run_query(query, messageID);
+    return data;
+};

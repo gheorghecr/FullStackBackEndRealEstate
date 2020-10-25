@@ -72,33 +72,15 @@
         "required": ["fromID", "toID", "propertyID", "messageText"],
         "additionalProperties": false
       },
-
-      "updateFeature": {
-        "$id": "#updateFeature",
-        "title": "Update feature",
-        "description": "Data to update a feature.",
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "Name of the feature.",
-            "type": "string"
-          },
-          "description": {
-            "description": "Description of the feature",
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
   
       "messageUpdated": {
         "$id": "#messageUpdated",
         "title": "Message Updated",
-        "description": "Confirmation of a successful creation/update.",
+        "description": "Confirmation of a successful update.",
         "type": "object",
         "properties": {
           "ID": {
-            "description": "ID of the created/updated property record",
+            "description": "ID of the updated property record",
             "type": "integer"
           },
           "updated": {

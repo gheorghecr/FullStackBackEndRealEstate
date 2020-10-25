@@ -84,33 +84,31 @@ async function addMessages(cnx) {
     }
 }
 
-// /**
-//  * Function that updates a feature by it's ID.
-//  * @param {object} cnx - The request object.
-//  * @returns {object} cnx - The response object.
-//  */
-// async function updateById(cnx) {
-//     const featureID = cnx.params.id;
+/**
+ * Function that toggles the archived property of a message.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function toggleArchived(cnx) {
+    const messageID = cnx.params.id;
 
-//     // check permission if user can update a feature
-//     const permission = permissions.updateFeature(cnx.state.user);
+    // check permission if user can update a feature
+    const permission = permissions.toggleArchived(cnx.state.user);
 
-//     const { body } = cnx.request;
-
-//     if (!permission.granted) {
-//         // if permission is not granted
-//         cnx.status = 403;
-//     } else {
-//         const result = await model.updateFeature(featureID, body);
-//         if (result.changedRows > 0) {
-//             cnx.status = 200;
-//             cnx.body = { ID: featureID, updated: true, link: `${cnx.request.path}/${featureID}` };
-//         } else {
-//             cnx.status = 501;
-//             cnx.body = { ID: featureID, updated: false };
-//         }
-//     }
-// }
+    if (!permission.granted) {
+        // if permission is not granted
+        cnx.status = 403;
+    } else {
+        const result = await model.toggleArchived(messageID);
+        if (result.changedRows > 0) {
+            cnx.status = 200;
+            cnx.body = { ID: messageID, updated: true, link: `${cnx.request.path}/${messageID}` };
+        } else {
+            cnx.status = 501;
+            cnx.body = { ID: messageID, updated: false };
+        }
+    }
+}
 
 /**
  * Function that deletes a message by it's ID.
@@ -148,16 +146,15 @@ async function deleteMessageById(cnx) {
 
 // Gets
 router.get('/:id([0-9]{1,})', auth, getAllMessagesForConversation);
-//router.get('/messageID/:id([0-9]{1,})', getAllmessagesForProperty); // Get by messageID
+
+// Puts
+router.put('/:id([0-9]{1,})', auth, toggleArchived);
 
 // Delete
 router.del('/:id([0-9]{1,})', auth, deleteMessageById);
 
 // Post
 router.post('/', auth, bodyParser(), validateMessageAdd, addMessages);
-
-// // Put
-// router.put('/:id([0-9]{1,})', auth, bodyParser(), validateFeatureUpdate, updateById);
 
 // Export object.
 module.exports = router;
