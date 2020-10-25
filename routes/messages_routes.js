@@ -109,7 +109,7 @@ async function toggleArchived(cnx) {
         cnx.status = 403;
     } else {
         const result = await model.toggleArchived(messageID);
-        if (result.changedRows > 0) {
+        if (result.affectedRows > 0) {
             cnx.status = 200;
             cnx.body = { ID: messageID, updated: true, link: `${cnx.request.path}/${messageID}` };
         } else {

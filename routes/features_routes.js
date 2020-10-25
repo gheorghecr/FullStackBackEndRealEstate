@@ -100,7 +100,7 @@ async function updateById(cnx) {
         cnx.status = 403;
     } else {
         const result = await model.updateFeature(featureID, body);
-        if (result.changedRows > 0) {
+        if (result.affectedRows > 0) {
             cnx.status = 200;
             cnx.body = { ID: featureID, updated: true, link: `${cnx.request.path}/${featureID}` };
         } else {
