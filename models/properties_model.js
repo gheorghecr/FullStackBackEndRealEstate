@@ -47,6 +47,17 @@ exports.getPropHighPriority = async function getPropHighPriority() {
 };
 
 /**
+ * SQL Query function to get all properties that are listed by an user.
+ * @param {integer} userID - User ID.
+ * @returns {object} data - The response object containing a list of properties with high priority.
+ */
+exports.getPropBySeller = async function getPropBySeller(userID) {
+    const query = 'SELECT * FROM properties WHERE sellerID = ?';
+    const data = await db.run_query(query, userID);
+    return data;
+};
+
+/**
  * SQL Query function delete a property by it's ID from DB.
  * @param {integer} id - Property ID.
  * @returns {object} data - The response object.

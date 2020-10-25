@@ -79,6 +79,22 @@ async function getAllPropById(cnx) {
 }
 
 /**
+ * Function that gets all properties that are listed by an user.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - List of properties with high priority.
+ */
+async function getAllPropByUserID(cnx) {
+    const { id } = cnx.params;
+    const result = await model.getPropBySeller(id);
+    if (result.length) {
+        cnx.status = 200;
+        cnx.body = result;
+    } else {
+        cnx.status = 404;
+    }
+}
+
+/**
  * Function that gets all properties with high priority.
  * @param {object} cnx - The request object.
  * @returns {object} cnx - List of properties with high priority.
@@ -276,6 +292,7 @@ router.get('/adminview', auth, getAllPropAdminView);
 router.get('/highpriority', getAllPropHighPriority);
 router.get('/togglehighpriority/:id([0-9]{1,})', auth, toggleHighPriority);
 router.get('/:id([0-9]{1,})', getAllPropById);
+router.get('/seller/:id([0-9]{1,})', getAllPropByUserID);
 
 // Post's
 router.post('/', bodyParser(), auth, validatePropertyAdd, addProperty);
