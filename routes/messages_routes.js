@@ -112,38 +112,46 @@ async function addMessages(cnx) {
 //     }
 // }
 
-// /**
-//  * Function that deletes a feature by it's ID.
-//  * @param {object} cnx - The request object.
-//  * @returns {object} cnx - The response object.
-//  */
-// async function deleteById(cnx) {
-//     const featureID = cnx.params.id;
+/**
+ * Function that deletes a message by it's ID.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function deleteMessageById(cnx) {
+    const messageID = cnx.params.id;
 
-//     // check permission if user can delete a feature
-//     const permission = permissions.deleteFeature(cnx.state.user);
+    const message = await model.getMessageByID(messageID);
 
-//     if (!permission.granted) {
-//         // if permission is not granted
-//         cnx.status = 403;
-//     } else {
-//         const result = await model.deleteFeatureById(featureID);
-//         if (result.affectedRows > 0) {
-//             cnx.status = 200;
-//             cnx.body = { ID: featureID, deleted: true };
-//         } else {
-//             cnx.status = 501;
-//             cnx.body = { ID: featureID, deleted: false };
-//         }
-//     }
-// }
+    // if message is found in the database continue
+    // otherwise send error message back saying message not found
+    if (message.length) {
+        // check permission if user can delete message
+        const permission = permissions.deleteByID(cnx.state.user, message[0]);
+        if (!permission.granted) {
+            // if permission is not granted
+            cnx.status = 403;
+        } else {
+            // perform delete on database
+            const result = await model.deleteMessageByID(messageID);
+            if (result.affectedRows > 0) {
+                cnx.status = 200;
+                cnx.body = { ID: messageID, deleted: true };
+            } else {
+                cnx.status = 400;
+                cnx.body = { ID: messageID, deleted: false };
+            }
+        }
+    } else {
+        cnx.status = 404;
+    }
+}
 
 // Gets
 router.get('/:id([0-9]{1,})', auth, getAllMessagesForConversation);
 //router.get('/messageID/:id([0-9]{1,})', getAllmessagesForProperty); // Get by messageID
 
-// // Delete
-// router.del('/:id([0-9]{1,})', auth, deleteById);
+// Delete
+router.del('/:id([0-9]{1,})', auth, deleteMessageById);
 
 // Post
 router.post('/', auth, bodyParser(), validateMessageAdd, addMessages);
