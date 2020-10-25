@@ -257,7 +257,14 @@ paths:
   /properties/togglehighpriority/{id}:
     summary: Represents an list of properties with high priority
     description: >
-      This resource toggles the high priority attribute of a property. 
+      This resource toggles the high priority attribute of a property.
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: Numeric id of the property.
     get:
       tags:
         - Properties
@@ -280,6 +287,13 @@ paths:
     summary: Update property Status
     description: >
       This resource updates the status attribute of the property.
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: Numeric id of the property.
     put:
       tags:
         - Properties
@@ -377,6 +391,13 @@ paths:
     summary: Represents the categories for a given house.
     description: >
       This resource represents the categories for a given house.
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: Numeric id of the category.
     get:
       tags:
         - Categories
@@ -477,6 +498,13 @@ paths:
     summary: Represents the features for a given house.
     description: >
       This resource represents the features for a given house.
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: Numeric id of the feature.
     get:
       tags:
         - Features
@@ -535,6 +563,13 @@ paths:
     summary: Represents the messages for a conversation.
     description: >
       This resource represents the messages for a conversation.
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: Numeric id of the message.
     get:
       tags:
         - Messages
@@ -615,6 +650,13 @@ paths:
     summary: Represents the messages.
     description: >
       This resource represents the messages.
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: Numeric id of the message.
     get:
       tags:
         - Messages
