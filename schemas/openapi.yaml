@@ -18,9 +18,11 @@ tags:
   - name: Properties
     description: Access and perform CRUD operations on properties entries.
   - name: Categories
-    description: Access the property category list.   
+    description: Access and perform CRUD operations on property category.   
   - name: Features
-    description: Access the property features list. 
+    description: Access and perform CRUD operations on property features. 
+  - name: Messages
+    description: Access and perform CRUD operations on messages. 
 paths:
   /users:
     summary: Represents an individual user
@@ -506,3 +508,24 @@ paths:
           description: No Permissions to update.
         '501':
           description: Nothing was updated.
+    
+  /messages/{id}:
+    summary: Represents the messages for a conversation.
+    description: >
+      This resource represents the messages for a conversation.
+    get:
+      tags:
+        - Messages
+      description:
+        Get the all messages for a given conversation.
+      responses:
+        '201':
+          description: List of features for the property.
+          content:
+            application/json:
+              schema:
+                $ref: ./messages_schema.json#/definitions/messagesList
+        '403':
+          description: No Permissions to read.
+        '404':
+          description: Nothing found.

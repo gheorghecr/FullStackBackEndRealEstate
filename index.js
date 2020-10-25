@@ -13,11 +13,13 @@ const properties = require('./routes/properties_routes.js');
 const users = require('./routes/users_routes.js');
 const categories = require('./routes/categories_routes.js');
 const features = require('./routes/features_routes.js');
+const messages = require('./routes/messages_routes.js');
 
 app.use(properties.routes());
 app.use(users.routes());
 app.use(categories.routes());
 app.use(features.routes());
+app.use(messages.routes());
 
 // Run the app as a process on a given port
 const port = process.env.PORT || 3000;
