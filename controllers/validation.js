@@ -53,7 +53,7 @@ const makeKoaValidator = (schema, resource) => {
         } catch (error) {
             if (error instanceof ValidationError) {
                 console.error(error);
-                ctx.body = { message: error.stack };
+                ctx.body = { message: error };
                 ctx.status = 400;
             } else {
                 throw error;
