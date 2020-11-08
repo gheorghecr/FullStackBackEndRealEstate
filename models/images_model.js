@@ -5,27 +5,27 @@
 */
 const db = require('../helpers/database');
 
-// /**
-//  * SQL Query function to get all features from the DB.
-//  * @returns {object} data - The response object containing all features.
-//  */
-// exports.getAllFeatures = async function getAllFeatures() {
-//     const query = 'SELECT * FROM features';
-//     const data = await db.run_query(query);
-//     return data;
-// };
+/**
+ * SQL Query function to get all images name for a property from the DB.
+ * @param {integer} propID - property ID.
+ * @returns {object} data - The response object containing all images name.
+ */
+exports.getAllImagesNamesForProperty = async function getAllImagesNamesForProperty(propID) {
+    const query = 'SELECT * FROM propertiesImages WHERE prop_ID = ?';
+    const data = await db.run_query(query, propID);
+    return data;
+};
 
-// /**
-//  * SQL Query function to get the features for a given property.
-//  * @param {integer} id - property ID.
-//  * @returns {object} data - The response object containing all features for a given property.
-//  */
-// exports.getFeaturesForProperty = async function getFeaturesForProperty(id) {
-//     let query = 'SELECT f.ID, f.name FROM propertyFeatures as pf INNER JOIN features AS f';
-//     query += ' ON pf.featureID = f.ID WHERE pf.propertyID = ?;';
-//     const result = await db.run_query(query, id);
-//     return result;
-// };
+/**
+ * SQL Query function to get an image name by it's ID.
+ * @param {integer} imageID - property ID.
+ * @returns {object} data - The response object containing all images name.
+ */
+exports.getImageNameByImageID = async function getImageNameByImageID(imageID) {
+    const query = 'SELECT imageName FROM propertiesImages WHERE imageID = ?';
+    const data = await db.run_query(query, imageID);
+    return data;
+};
 
 /**
  * SQL Query function to store the image name for a property on the database.
@@ -40,13 +40,13 @@ exports.storeImageName = async function storeImageName(propID, imageName) {
     return data;
 };
 
-// /**
-//  * SQL Query function to delete a feature by it's ID.
-//  * @param {integer} id - feature ID.
-//  * @returns {object} data - The response object.
-//  */
-// exports.deleteFeatureById = async function deleteFeatureById(id) {
-//     const query = 'DELETE FROM features WHERE ID = ?;';
-//     const data = await db.run_query(query, id);
-//     return data;
-// };
+/**
+ * SQL Query function to delete an image by it's ID.
+ * @param {integer} imageID - image ID.
+ * @returns {object} data - The response object.
+ */
+exports.deleteImageById = async function deleteImageById(imageID) {
+    const query = 'DELETE FROM propertiesImages WHERE imageID = ?;';
+    const data = await db.run_query(query, imageID);
+    return data;
+};
