@@ -9,6 +9,7 @@ const fs = require('fs-extra');
 
 const Router = require('koa-router');
 
+// Used to get an file
 const multer = require('koa-multer');
 
 const bodyParser = require('koa-bodyparser');
@@ -20,10 +21,10 @@ const model = require('../models/images_model');
 const auth = require('../controllers/auth');
 
 // Deal with Permissions
-// const permissions = require('../permissions/features_permissions');
+const permissions = require('../permissions/images_permissions');
 
 // Validation Schemas
-// const { validateFeatureAdd, validateFeatureUpdate } = require('../controllers/validation');
+const { validateImageAdd } = require('../controllers/validation');
 
 // Since we are handling users use a URI that begin's with an appropriate path
 const router = Router({ prefix: '/api/images' });
@@ -58,27 +59,33 @@ async function getAllImagesForProperty(cnx) {
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */
-// TODO: Write api doc. Add permission. And Validation
 async function addImage(cnx) {
     const propID = cnx.params.id;
     const { files } = cnx.req;
 
-    for (const file of files) {
-        const fileNameForDB = `${Date.now()}.${file.originalname}`;
-        // Convert buffer bytes to bitmap
-        const bitmap = Buffer.from(file.buffer, 'base64');
-        // Save the image to the right folder
-        fs.writeFileSync(`public/${fileNameForDB}`, bitmap);
-        const result = model.storeImageName(propID, fileNameForDB);
-        if (result) {
-            // image addedd
-            cnx.status = 201;
-            // TODO: Update link to retrieve image
-            cnx.body = { id: result.insertId, created: true, link: `${cnx.request.path}/messageID/${result.insertId}` };
-        } else {
-            // image not addedd
-            cnx.status = 501;
-            cnx.body = { id: result.insertId, created: false };
+    const permission = permissions.addImage(cnx.state.user);
+
+    if (!permission.granted) {
+        // if permission is not granted
+        cnx.status = 403;
+    } else {
+        for (const file of files) {
+            const fileNameForDB = `${Date.now()}.${file.originalname}`;
+            // Convert buffer bytes to bitmap
+            const bitmap = Buffer.from(file.buffer, 'base64');
+            // Save the image to the right folder
+            fs.writeFileSync(`public/${fileNameForDB}`, bitmap);
+            const result = model.storeImageName(propID, fileNameForDB);
+            if (result) {
+                // image addedd
+                cnx.status = 201;
+                // TODO: Update link to retrieve image
+                cnx.body = { id: result.insertId, created: true, link: `${cnx.request.path}/messageID/${result.insertId}` };
+            } else {
+                // image not addedd
+                cnx.status = 501;
+                cnx.body = { id: result.insertId, created: false };
+            }
         }
     }
 }
@@ -90,7 +97,7 @@ router.get('/:id([0-9]{1,})', getAllImagesForProperty);
 // router.del('/:id([0-9]{1,})', auth, deleteById);
 
 // Post
-router.post('/:id([0-9]{1,})', upload.array('file'), auth, bodyParser(), addImage);
+router.post('/:id([0-9]{1,})', upload.array('file'), auth, bodyParser(), validateImageAdd, addImage);
 
 // // Put
 // router.put('/:id([0-9]{1,})', auth, bodyParser(), validateFeatureUpdate, updateById);
