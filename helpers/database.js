@@ -1,3 +1,6 @@
+/* eslint-disable camelcase */
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-console */
 /**
 * A module to run SQL queries on MySQL on behalf of the API models.
 * @module helpers/database
@@ -18,32 +21,32 @@ const info = require('../config');
 * @throws {DatabaseException} Custom exception for DB query failures
 */
 exports.run_query = async function run_query(query, values) {
-  try {
-    const connection = await mysql.createConnection(info.config);
-    const data = await connection.query(query, values);
-    await connection.end();
-    return data;
-  } catch (error) {
+    try {
+        const connection = await mysql.createConnection(info.config);
+        const data = await connection.query(query, values);
+        await connection.end();
+        return data;
+    } catch (error) {
     /**
      * Avoing to send sensitive information to the response object.
      * Log it and throw a generic error.
      */
-    const errorId = uuidv4();
-    console.error(Date.now(), errorId, query, values, error.message);
-    throw new DatabaseException('Database error.', error.code, errorId);
-  }
-}
+        const errorId = uuidv4();
+        console.error(Date.now(), errorId, query, values, error.message);
+        throw new DatabaseException('Database error.', error.code, errorId);
+    }
+};
 
 /**
- * A custom error constructor to re-raise DB errors in a sanitised way.
+ * A custom error constructor to re-raise DB errors in a sanitized way.
  * @class
  * @param {string} message - the error message
  * @param {number|string} code - the original error's error code
  * @param {string} id - a UUID identifier for the error instanced
  */
 function DatabaseException(message, code, id) {
-  this.message = message;
-  this.code = code;
-  this.id = id;
-  this.name = 'DatabaseException';
+    this.message = message;
+    this.code = code;
+    this.id = id;
+    this.name = 'DatabaseException';
 }

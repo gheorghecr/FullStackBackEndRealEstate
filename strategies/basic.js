@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 /* eslint-disable no-console */
 /**
 * A module to handle Basic user authentication.
@@ -5,7 +6,7 @@
 * @author Gheorghe Craciun
 */
 
-const BasicStrategy = require('passport-http').BasicStrategy;
+const { BasicStrategy } = require('passport-http');
 
 const bcrypt = require('bcrypt');
 
