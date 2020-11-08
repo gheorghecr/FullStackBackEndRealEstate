@@ -112,13 +112,7 @@ async function deleteImageById(cnx) {
             const result = await model.deleteImageById(imageID);
             if (result.affectedRows > 0) {
                 // Delete the correct image from the public folder
-                fs.unlink(`./public/${imageName[0].imageName}`, (err) => {
-                    if (err) {
-                        console.log(`failed to delete local image:${err}`);
-                    } else {
-                        console.log('successfully deleted local image');
-                    }
-                });
+                fs.unlink(`./public/${imageName[0].imageName}`);
                 cnx.status = 200;
                 cnx.body = { ID: imageID, deleted: true };
             } else {
