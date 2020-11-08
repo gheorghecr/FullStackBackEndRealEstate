@@ -23,6 +23,8 @@ tags:
     description: Access and perform CRUD operations on property features. 
   - name: Messages
     description: Access and perform CRUD operations on messages. 
+  - name: Images
+    description: Access and perform CRUD operations on Images. 
 paths:
   /users:
     summary: Represents an individual user
@@ -673,3 +675,31 @@ paths:
           description: No Permissions to read.
         '404':
           description: Nothing found.
+  /images:
+    summary: Represents an property image.
+    description: >
+      This resource represents an property image.
+      Each image is identified by a numeric `id`.
+    post:
+      tags:
+        - Images.
+      description:
+        Add a new image for a property.
+      requestBody:
+        description: Image data.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./images_schema.json#/definitions/addImage
+      responses:
+        '201':
+          description: Image added.
+          content:
+            application/json:
+              schema:
+                $ref: ./images_schema.json#/definitions/imageAdded
+        '403':
+          description: No Permissions to add an image.
+        '501':
+          description: Image not added.
