@@ -39,19 +39,17 @@ const upload = multer({
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */
+// TODO: Add API documentation
 async function getAllImagesForProperty(cnx) {
     const propID = cnx.params.id;
-    cnx.body = true;
-    cnx.status = 200;
-    //const result = await model.getAllImagesForProperty(propID);
-    // if (result.length) {
-    //     cnx.status = 200;
-    //    
-    //     //cnx.body = result;
 
-    // } else {
-    //     cnx.status = 404;
-    // }
+    const result = await model.getAllImagesNamesForProperty(propID);
+    if (result.length) {
+        cnx.status = 200;
+        cnx.body = result;
+    } else {
+        cnx.status = 404;
+    }
 }
 
 /**
@@ -90,17 +88,57 @@ async function addImage(cnx) {
     }
 }
 
+/**
+ * Function that deletes a image by it's ID.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+// TODO: API DOcumentation
+async function deleteImageById(cnx) {
+    const imageID = cnx.params.id;
+
+    const imageName = await model.getImageNameByImageID(imageID);
+
+    // if image is found in the database continue
+    // otherwise send error message back saying message not found
+    if (imageName.length) {
+        // check permission if user can delete message
+        const permission = permissions.deleteImage(cnx.state.user);
+        if (!permission.granted) {
+            // if permission is not granted
+            cnx.status = 403;
+        } else {
+            // perform delete on database
+            const result = await model.deleteImageById(imageID);
+            if (result.affectedRows > 0) {
+                // Delete the correct image from the public folder
+                fs.unlink(`./public/${imageName[0].imageName}`, (err) => {
+                    if (err) {
+                        console.log(`failed to delete local image:${err}`);
+                    } else {
+                        console.log('successfully deleted local image');
+                    }
+                });
+                cnx.status = 200;
+                cnx.body = { ID: imageID, deleted: true };
+            } else {
+                cnx.status = 400;
+                cnx.body = { ID: imageID, deleted: false };
+            }
+        }
+    } else {
+        cnx.status = 404;
+    }
+}
+
 // Gets
 router.get('/:id([0-9]{1,})', getAllImagesForProperty);
 
 // Delete
-// router.del('/:id([0-9]{1,})', auth, deleteById);
+router.del('/:id([0-9]{1,})', auth, deleteImageById);
 
 // Post
 router.post('/:id([0-9]{1,})', upload.array('file'), auth, bodyParser(), validateImageAdd, addImage);
 
-// // Put
-// router.put('/:id([0-9]{1,})', auth, bodyParser(), validateFeatureUpdate, updateById);
-// router.allowedMethods();
 // Export object.
 module.exports = router;
