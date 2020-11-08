@@ -1,0 +1,93 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+      "featuresForGivenProperty": {
+        "$id": "#featuresForGivenProperty",
+        "title": "Features for a given property.",
+        "description": "List of features for a given property.",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "description": "ID of the feature.",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name of the feature.",
+            "type": "string"
+          }
+        }
+      },
+      "featuresList": {
+        "$id": "#featuresList",
+        "title": "Features List",
+        "description": "A list containing all features",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "description": "ID of the feature.",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Name of the feature.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description of the feature.",
+            "type": "string"
+          }
+        }
+      },
+  
+      "addImage": {
+        "$id": "#addImage",
+        "title": "Add image.",
+        "description": "Data to add a new image for a property.",
+        "type": "object",
+        "properties": {
+          "file": {
+            "description": "File object",
+            "type": "object"
+          }
+        }
+      },
+  
+      "imageAdded": {
+        "$id": "#imageAdded",
+        "title": "Image Added",
+        "description": "Confirmation of a successful creation.",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "description": "ID of the created/updated property record",
+            "type": "integer"
+          },
+          "updated": {
+            "description": "Boolean indicator of success",
+            "type": "boolean"
+          },
+          "link": {
+            "description": "Path to retrieve feature record",
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+  
+      "featureDeleted": {
+        "$id": "#featureDeleted",
+        "title": "Feature Deleted",
+        "description": "Confirmation of a successful deletion",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "description": "ID of the deleted property record",
+            "type": "integer"
+          },
+          "deleted": {
+            "description": "Boolean indicator of success",
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }

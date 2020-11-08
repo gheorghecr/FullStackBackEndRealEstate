@@ -26,6 +26,8 @@ const featureUpdateSchema = require('../schemas/features_schema.json').definitio
 
 const addMessageSchema = require('../schemas/messages_schema.json').definitions.addMessage;
 
+const addImageSchema = require('../schemas/images_schema.json').definitions.addImage;
+
 /**
  * Wrapper that returns a Koa middleware validator for a given schema.
  * @param {object} schema - The JSON schema definition of the resource
@@ -85,3 +87,6 @@ exports.validateFeatureUpdate = makeKoaValidator(featureUpdateSchema, 'updateFea
 
 /** Validate data against messages schema for adding a message */
 exports.validateMessageAdd = makeKoaValidator(addMessageSchema, 'addMessage');
+
+/** Validate data against images schema for adding a image for a property */
+exports.validateImageAdd = makeKoaValidator(addImageSchema, 'addImage');
