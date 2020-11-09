@@ -144,7 +144,7 @@ async function deleteMessageById(cnx) {
                 cnx.status = 200;
                 cnx.body = { ID: messageID, deleted: true };
             } else {
-                cnx.status = 400;
+                cnx.status = 501;
                 cnx.body = { ID: messageID, deleted: false };
             }
         }

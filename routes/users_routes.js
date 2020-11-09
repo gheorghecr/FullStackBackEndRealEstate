@@ -138,7 +138,7 @@ async function updateUserInfo(cnx) {
                 cnx.status = 200;
                 cnx.body = { id, updated: true, link: `${cnx.request.path}/${id}` };
             } else {
-                cnx.status = 400;
+                cnx.status = 501;
             }
         }
     } else {
@@ -175,7 +175,7 @@ async function deleteUserById(cnx) {
                 cnx.status = 200;
                 cnx.body = { ID: id, deleted: true };
             } else {
-                cnx.status = 400;
+                cnx.status = 501;
                 cnx.body = { ID: id, deleted: false };
             }
         }

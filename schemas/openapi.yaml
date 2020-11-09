@@ -110,12 +110,12 @@ paths:
             application/json:
               schema:
                 $ref: ./user_schema.json#/definitions/userUpdated
-        '400':
-          description: "Nothing was updated"
         '403': 
           description: "No permission to update this."
         '404':
           description: Not found
+        '501':
+          description: "Nothing was updated"
     delete:
       tags:
         - Users
@@ -128,12 +128,12 @@ paths:
             application/json:
               schema:
                 $ref: ./user_schema.json#/definitions/userDeleted
-        '400':
-          description: Bad Request
         '403':
           description: No Permissions to delete
         '404':
           description: Not found
+        '501':
+          description: Not implemented
   /properties:
     summary: Represents an list of properties
     description: >
@@ -279,12 +279,12 @@ paths:
             application/json:
               schema:
                 $ref: ./properties_schema.json#/definitions/propertiesToggleHighPriority
-        '400':
-          description: Bad Request.
         '403':
           description: No Permissions to update.
         '404':
           description: No properties with high priority where found.
+        '501':
+          description: Not implemented.
   /properties/status/{id}:
     summary: Update property Status
     description: >

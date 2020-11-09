@@ -173,7 +173,7 @@ async function toggleHighPriority(cnx) {
                 cnx.status = 200;
                 cnx.body = { ID: propID, updated: true, link: `${cnx.request.path}` };
             } else {
-                cnx.status = 400;
+                cnx.status = 501;
                 cnx.body = { ID: propID, updated: false };
             }
         }
