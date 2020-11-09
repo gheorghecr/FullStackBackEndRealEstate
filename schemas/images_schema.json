@@ -1,38 +1,26 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "definitions": {
-      "featuresForGivenProperty": {
-        "$id": "#featuresForGivenProperty",
-        "title": "Features for a given property.",
-        "description": "List of features for a given property.",
+      "imagesNameForGivenProperty": {
+        "$id": "#imagesNameForGivenProperty",
+        "title": "All images names for a given property.",
+        "description": "List of images name for a given property.",
         "type": "object",
         "properties": {
-          "ID": {
-            "description": "ID of the feature.",
+          "imageID": {
+            "description": "ID of the image.",
             "type": "integer"
           },
-          "name": {
-            "description": "Name of the feature.",
-            "type": "string"
-          }
-        }
-      },
-      "featuresList": {
-        "$id": "#featuresList",
-        "title": "Features List",
-        "description": "A list containing all features",
-        "type": "object",
-        "properties": {
-          "ID": {
-            "description": "ID of the feature.",
+          "prop_ID": {
+            "description": "ID of the property that the image belongs.",
             "type": "integer"
           },
-          "name": {
-            "description": "Name of the feature.",
+          "imageName": {
+            "description": "Name of the image.",
             "type": "string"
           },
-          "description": {
-            "description": "Description of the feature.",
+          "dateAdded": {
+            "description": "Date when the image was added.",
             "type": "string"
           }
         }
@@ -73,9 +61,9 @@
         }
       },
   
-      "featureDeleted": {
-        "$id": "#featureDeleted",
-        "title": "Feature Deleted",
+      "imageDeleted": {
+        "$id": "#imageDeleted",
+        "title": "Image Deleted",
         "description": "Confirmation of a successful deletion",
         "type": "object",
         "properties": {

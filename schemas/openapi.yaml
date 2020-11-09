@@ -675,14 +675,14 @@ paths:
           description: No Permissions to read.
         '404':
           description: Nothing found.
-  /images:
+  /images/{propID}:
     summary: Represents an property image.
     description: >
       This resource represents an property image.
       Each image is identified by a numeric `id`.
     post:
       tags:
-        - Images.
+        - Images
       description:
         Add a new image for a property.
       requestBody:
@@ -703,3 +703,41 @@ paths:
           description: No Permissions to add an image.
         '501':
           description: Image not added.
+    get:
+      tags:
+        - Images
+      description:
+        Get the list of images name for a property by property ID.
+      responses:
+        '201':
+          description: Images name list.
+          content:
+            application/json:
+              schema:
+                $ref: ./images_schema.json#/definitions/imagesNameForGivenProperty
+        '404':
+          description: Nothing found.
+  /images/{imageID}:
+    summary: Represents an property image.
+    description: >
+      This resource represents an property image.
+      Each image is identified by a numeric `id`.
+    delete:
+        tags:
+          - Images
+        description:
+          Delete image by it's ID.
+        responses:
+          '200':
+            description: Confirmation of deletion.
+            content:
+              application/json:
+                schema:
+                  $ref: ./images_schema.json#/definitions/imageDeleted
+          '403':
+            description: No Permissions to delete.
+          '404': 
+            description: Image not found.
+          '501':
+            description: Image not deleted.
+  

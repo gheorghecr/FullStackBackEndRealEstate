@@ -39,7 +39,6 @@ const upload = multer({
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */
-// TODO: Add API documentation
 async function getAllImagesForProperty(cnx) {
     const propID = cnx.params.id;
 
@@ -49,6 +48,7 @@ async function getAllImagesForProperty(cnx) {
         cnx.body = result;
     } else {
         cnx.status = 404;
+        cnx.body = { message: 'Nothing was found' };
     }
 }
 
@@ -93,7 +93,6 @@ async function addImage(cnx) {
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */
-// TODO: API DOcumentation
 async function deleteImageById(cnx) {
     const imageID = cnx.params.id;
 
@@ -116,7 +115,7 @@ async function deleteImageById(cnx) {
                 cnx.status = 200;
                 cnx.body = { ID: imageID, deleted: true };
             } else {
-                cnx.status = 400;
+                cnx.status = 501;
                 cnx.body = { ID: imageID, deleted: false };
             }
         }
