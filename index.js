@@ -7,6 +7,7 @@
 
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
+const serve = require('koa-static');
 
 const app = new Koa();
 
@@ -24,6 +25,7 @@ app.use(features.routes());
 app.use(messages.routes());
 app.use(images.routes());
 app.use(bodyParser({ multipart: true }));
+app.use(serve('./public'));
 
 // Run the app as a process on a given port
 const port = process.env.PORT || 3000;

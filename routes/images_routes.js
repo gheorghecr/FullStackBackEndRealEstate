@@ -77,8 +77,8 @@ async function addImage(cnx) {
             if (result) {
                 // image addedd
                 cnx.status = 201;
-                // TODO: Update link to retrieve image
-                cnx.body = { id: result.insertId, created: true, link: `${cnx.request.path}/messageID/${result.insertId}` };
+                // TODO: Update link to retrieve image (is it possible to have just the host?)
+                cnx.body = { id: result.insertId, created: true, link: `/${fileNameForDB}` };
             } else {
                 // image not addedd
                 cnx.status = 501;
