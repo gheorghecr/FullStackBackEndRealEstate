@@ -5,6 +5,7 @@
 * @author Gheorghe Craciun
 */
 
+// Used to store the image
 const fs = require('fs-extra');
 
 const Router = require('koa-router');

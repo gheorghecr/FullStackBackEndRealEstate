@@ -11,6 +11,12 @@ const bodyParser = require('koa-bodyparser');
 // Password encryption
 const bcrypt = require('bcrypt');
 
+// Used to get an file
+const multer = require('koa-multer');
+
+// Used to store the image
+const fs = require('fs-extra');
+
 // Connect with model for DB
 const model = require('../models/users_model');
 
@@ -25,6 +31,11 @@ const permissions = require('../permissions/users_permissions');
 
 // Since we are handling users use a URI that begin's with an appropriate path
 const router = Router({ prefix: '/api/users' });
+
+// Used in order to get the images from the user
+const upload = multer({
+    storage: multer.memoryStorage(),
+});
 
 // Handle functions
 /**
@@ -90,10 +101,10 @@ async function getById(cnx) {
  */
 async function createAccount(cnx) {
     const { body } = cnx.request;
-
     // encrypt password
     const hash = bcrypt.hashSync(body.password, 10);
     body.password = hash;
+
     // perform query on database
     const result = await model.register(body);
     if (result) {
@@ -185,7 +196,7 @@ async function deleteUserById(cnx) {
 }
 
 router.get('/', auth, getAll);
-router.post('/', bodyParser(), validateUser, createAccount);
+router.post('/', upload.array('fileList'), bodyParser(), validateUser, createAccount);
 router.get('/:id([0-9]{1,})', auth, getById);
 router.put('/:id([0-9]{1,})', auth, bodyParser(), validateUserUpdate, updateUserInfo);
 router.del('/:id([0-9]{1,})', auth, deleteUserById);
