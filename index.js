@@ -8,8 +8,15 @@
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
 const serve = require('koa-static');
+const cors = require('@koa/cors');
 
 const app = new Koa();
+
+const options = {
+    origin: '*',
+};
+
+app.use(cors(options));
 
 const properties = require('./routes/properties_routes.js');
 const users = require('./routes/users_routes.js');
