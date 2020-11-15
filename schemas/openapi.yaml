@@ -52,7 +52,13 @@ paths:
                 $ref: ./user_schema.json#/definitions/userUpdated
         '501':
           description: User not created.
-            
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: String
     get:
       tags:
         - Users
