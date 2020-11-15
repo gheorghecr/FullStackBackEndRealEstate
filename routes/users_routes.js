@@ -119,10 +119,9 @@ async function createAccount(cnx) {
         if (result) {
             cnx.status = 201;
             cnx.body = { id: result.insertId, created: true, link: `${cnx.request.path}/${result.insertId}` };
-        } else {
-            cnx.status = 501;
         }
     } catch (error) {
+        cnx.status = 501;
         cnx.body = { errorMessage: error.errorDescription };
     }
 }
