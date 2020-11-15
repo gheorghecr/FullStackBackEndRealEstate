@@ -33,7 +33,7 @@ const checkUserAndPass = async (username, password, done) => {
     let result;
 
     try {
-    // look up the user and check the password if the user exists
+        // look up the user and check the password if the user exists
         result = await users.findByUsername(username);
     } catch (error) {
         console.error(`Error during authentication for user ${username}`);
@@ -45,14 +45,14 @@ const checkUserAndPass = async (username, password, done) => {
         if (verifyPassword(user, password)) {
             console.log(`Successfully authenticated user ${username}`);
             return done(null, user);
-        // eslint-disable-next-line no-else-return
+            // eslint-disable-next-line no-else-return
         } else {
             console.log(`Password incorrect for user ${username}`);
+            return done(null, 'Incorrect password');
         }
-    } else {
-        console.log(`Not found user with username: ${username}`);
     }
-    return done(null, false); // username or password were incorrect
+    console.log(`User with username: ${username} does not exist`);
+    return done(null, 'Username does not exist');
 };
 
 const strategy = new BasicStrategy(checkUserAndPass);

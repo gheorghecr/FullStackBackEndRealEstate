@@ -29,8 +29,9 @@ const { validateUser, validateUserUpdate } = require('../controllers/validation'
 // Deal with Permissions
 const permissions = require('../permissions/users_permissions');
 
-// Since we are handling users use a URI that begin's with an appropriate path
-const router = Router({ prefix: '/api/users' });
+const prefix = '/api/users';
+// eslint-disable-next-line object-shorthand
+const router = Router({ prefix: prefix });
 
 // Used in order to get the images from the user
 const upload = multer({
@@ -38,6 +39,28 @@ const upload = multer({
 });
 
 // Handle functions
+
+// TODO: Add open documentation.
+async function login(cnx) {
+    if (typeof cnx.state.user !== 'object') {
+      // it means that the user was not authenticated and 
+      // ctx.state.user has an error message
+      // send back error message and code
+      cnx.status = 401;
+      cnx.body = { errorMessage: cnx.state.user }
+    } else {
+      const {
+          userID, username, email, firstName, lastName,
+      } = cnx.state.user;
+      const links = {
+          self: `${cnx.protocol}://${cnx.host}${prefix}/${userID}`,
+      };
+      cnx.body = {
+          userID, username, email, firstName, lastName, links,
+      };
+    }
+}
+
 /**
  * Function that gets the the list of all users Personal Info, from the DB and returns it,
  * if the user is an ADMIN.
@@ -74,7 +97,7 @@ async function getById(cnx) {
     // if user is found in the database continue
     // otherwise send message back saying user not found
     if (user.length) {
-    // check permissions
+        // check permissions
         const permission = permissions.read(cnx.state.user, user[0]);
 
         // filter data which user cannot see
@@ -88,7 +111,7 @@ async function getById(cnx) {
             cnx.status = 404;
         }
     } else {
-    // user not found
+        // user not found
         cnx.status = 404;
     }
 }
@@ -143,7 +166,7 @@ async function updateUserInfo(cnx) {
     // if user is found in the database continue
     // otherwise send message back saying user not found
     if (user.length) {
-    // check permission if user can update info
+        // check permission if user can update info
         const permission = permissions.update(cnx.state.user, user[0]);
 
         if (!permission.granted) {
@@ -184,7 +207,7 @@ async function deleteUserById(cnx) {
     // if user is found in the database continue
     // otherwise send message back saying user not found
     if (user.length) {
-    // check permission if user can delete info
+        // check permission if user can delete info
         const permission = permissions.delete(cnx.state.user, user[0]);
 
         if (!permission.granted) {
@@ -207,6 +230,7 @@ async function deleteUserById(cnx) {
 }
 
 router.get('/', auth, getAll);
+router.post('/login', auth, login);
 router.post('/', upload.array('fileList'), bodyParser(), /* validateUser, */ createAccount);
 router.get('/:id([0-9]{1,})', auth, getById);
 router.put('/:id([0-9]{1,})', auth, bodyParser(), validateUserUpdate, updateUserInfo);
