@@ -38,10 +38,13 @@ const upload = multer({
     storage: multer.memoryStorage(),
 });
 
-// Handle functions
-
-// TODO: Add open documentation.
+/**
+ * Function that logs in an user and returns user details to the fron end.
+ * @param {object} cnx - The request object.
+ * @returns {function} - Logged in user details.
+ */
 async function login(cnx) {
+  console.log(cnx.state.user)
     if (typeof cnx.state.user !== 'object') {
       // it means that the user was not authenticated and 
       // ctx.state.user has an error message
@@ -50,13 +53,13 @@ async function login(cnx) {
       cnx.body = { errorMessage: cnx.state.user }
     } else {
       const {
-          userID, username, email, firstName, lastName,
+          userID, username, email, firstName, lastName, role,
       } = cnx.state.user;
       const links = {
           self: `${cnx.protocol}://${cnx.host}${prefix}/${userID}`,
       };
       cnx.body = {
-          userID, username, email, firstName, lastName, links,
+          userID, username, email, firstName, lastName, links, role,
       };
     }
 }
