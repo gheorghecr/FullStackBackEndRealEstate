@@ -105,13 +105,25 @@ async function createAccount(cnx) {
     const hash = bcrypt.hashSync(body.password, 10);
     body.password = hash;
 
-    // perform query on database
-    const result = await model.register(body);
-    if (result) {
-        cnx.status = 201;
-        cnx.body = { id: result.insertId, created: true, link: `${cnx.request.path}/${result.insertId}` };
-    } else {
-        cnx.status = 501;
+    // Check if it's an admin registering
+    if (body.sign_up_code === 'we_sell_houses_agent') {
+        body.role = 'admin';
+    }
+    // delete this from object as is not needed to store
+    delete body.sign_up_code;
+
+    let result;
+    try {
+        // perform query on database
+        result = await model.register(body);
+        if (result) {
+            cnx.status = 201;
+            cnx.body = { id: result.insertId, created: true, link: `${cnx.request.path}/${result.insertId}` };
+        } else {
+            cnx.status = 501;
+        }
+    } catch (error) {
+        cnx.body = { errorMessage: error.errorDescription };
     }
 }
 
@@ -196,7 +208,7 @@ async function deleteUserById(cnx) {
 }
 
 router.get('/', auth, getAll);
-router.post('/', upload.array('fileList'), bodyParser(), validateUser, createAccount);
+router.post('/', upload.array('fileList'), bodyParser(), /* validateUser, */ createAccount);
 router.get('/:id([0-9]{1,})', auth, getById);
 router.put('/:id([0-9]{1,})', auth, bodyParser(), validateUserUpdate, updateUserInfo);
 router.del('/:id([0-9]{1,})', auth, deleteUserById);

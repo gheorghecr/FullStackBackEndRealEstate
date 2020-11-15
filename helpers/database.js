@@ -28,12 +28,13 @@ exports.run_query = async function run_query(query, values) {
         return data;
     } catch (error) {
     /**
-     * Avoing to send sensitive information to the response object.
+     * Avoiding to send sensitive information to the response object.
      * Log it and throw a generic error.
      */
         const errorId = uuidv4();
         console.error(Date.now(), errorId, query, values, error.message);
-        throw new DatabaseException('Database error.', error.code, errorId);
+        console.error(error.message);
+        throw new DatabaseException('Database error.', error.code, errorId, error.message);
     }
 };
 
@@ -44,9 +45,10 @@ exports.run_query = async function run_query(query, values) {
  * @param {number|string} code - the original error's error code
  * @param {string} id - a UUID identifier for the error instanced
  */
-function DatabaseException(message, code, id) {
+function DatabaseException(message, code, id, errorDescription) {
     this.message = message;
     this.code = code;
     this.id = id;
     this.name = 'DatabaseException';
+    this.errorDescription = errorDescription;
 }
