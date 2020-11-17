@@ -1,3 +1,5 @@
+/* eslint-disable prefer-destructuring */
+/* eslint-disable object-shorthand */
 /**
 * A module to handle the user routes.
 * @module routes/user_routes
@@ -13,9 +15,6 @@ const bcrypt = require('bcrypt');
 
 // Used to get an file
 const multer = require('koa-multer');
-
-// Used to store the image
-const fs = require('fs-extra');
 
 // Connect with model for DB
 const model = require('../models/users_model');
@@ -34,9 +33,16 @@ const prefix = '/api/users';
 const router = Router({ prefix: prefix });
 
 // Used in order to get the images from the user
-const upload = multer({
-    storage: multer.memoryStorage(),
+const storage = multer.diskStorage({
+    destination(_req, _file, cb) {
+        cb(null, './public/');
+    },
+    filename(_req, file, cb) {
+        cb(null, Date.now() + file.originalname);
+    },
 });
+
+const upload = multer({ storage: storage });
 
 /**
  * Function that logs in an user and returns user details to the fron end.
@@ -44,23 +50,22 @@ const upload = multer({
  * @returns {function} - Logged in user details.
  */
 async function login(cnx) {
-  console.log(cnx.state.user)
     if (typeof cnx.state.user !== 'object') {
-      // it means that the user was not authenticated and 
-      // ctx.state.user has an error message
-      // send back error message and code
-      cnx.status = 401;
-      cnx.body = { errorMessage: cnx.state.user }
+        // it means that the user was not authenticated and
+        // ctx.state.user has an error message
+        // send back error message and code
+        cnx.status = 401;
+        cnx.body = { errorMessage: cnx.state.user };
     } else {
-      const {
-          userID, username, email, firstName, lastName, role,
-      } = cnx.state.user;
-      const links = {
-          self: `${cnx.protocol}://${cnx.host}${prefix}/${userID}`,
-      };
-      cnx.body = {
-          userID, username, email, firstName, lastName, links, role,
-      };
+        const {
+            userID, username, email, firstName, lastName, role,
+        } = cnx.state.user;
+        const links = {
+            self: `${cnx.protocol}://${cnx.host}${prefix}/${userID}`,
+        };
+        cnx.body = {
+            userID, username, email, firstName, lastName, links, role,
+        };
     }
 }
 
@@ -122,11 +127,13 @@ async function getById(cnx) {
 /**
  * Function allows an user to register on the application.
  * And return and the userID if account was successfully created.
+ * It as well store the avatar image name correctly on the database.
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */
 async function createAccount(cnx) {
-    const { body } = cnx.request;
+    const body = cnx.req.body;
+
     // encrypt password
     const hash = bcrypt.hashSync(body.password, 10);
     body.password = hash;
@@ -137,6 +144,9 @@ async function createAccount(cnx) {
     }
     // delete this from object as is not needed to store
     delete body.sign_up_code;
+
+    // Update avatar URL, with the right image Path
+    body.avatarURL = cnx.req.file.path;
 
     let result;
     try {
@@ -234,7 +244,7 @@ async function deleteUserById(cnx) {
 
 router.get('/', auth, getAll);
 router.post('/login', auth, login);
-router.post('/', upload.array('fileList'), bodyParser(), /* validateUser, */ createAccount);
+router.post('/', upload.single('file'), bodyParser(), /* validateUser, */ createAccount);
 router.get('/:id([0-9]{1,})', auth, getById);
 router.put('/:id([0-9]{1,})', auth, bodyParser(), validateUserUpdate, updateUserInfo);
 router.del('/:id([0-9]{1,})', auth, deleteUserById);
