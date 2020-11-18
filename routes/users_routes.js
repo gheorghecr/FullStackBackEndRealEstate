@@ -146,7 +146,12 @@ async function createAccount(cnx) {
     delete body.sign_up_code;
 
     // Update avatar URL, with the right image Path
-    body.avatarURL = cnx.req.file.path;
+    // If user did not upload avatar. Give it default.
+    if (cnx.req.file) {
+        body.avatarURL = cnx.req.file.path;
+    } else {
+        body.avatarURL = 'public/placeholder.jpg';
+    }
 
     let result;
     try {
@@ -244,7 +249,7 @@ async function deleteUserById(cnx) {
 
 router.get('/', auth, getAll);
 router.post('/login', auth, login);
-router.post('/', upload.single('file'), bodyParser(), /* validateUser, */ createAccount);
+router.post('/', validateUser, upload.single('file'), bodyParser(), createAccount);
 router.get('/:id([0-9]{1,})', auth, getById);
 router.put('/:id([0-9]{1,})', auth, bodyParser(), validateUserUpdate, updateUserInfo);
 router.del('/:id([0-9]{1,})', auth, deleteUserById);
