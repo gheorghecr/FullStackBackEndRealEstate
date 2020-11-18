@@ -40,6 +40,10 @@
           "description": "Password for registration",
           "type": "string",
           "minLength": 6
+        },
+        "file": {
+          "description": "User avatar file",
+          "type": "object"
         }
       },
       "required": ["username", "email", "password", "firstName", "lastName"],
