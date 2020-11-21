@@ -208,6 +208,7 @@ async function toggleHighPriority(cnx) {
  */
 async function addProperty(cnx) {
     const body = cnx.req.body;
+    const currentUserID = cnx.state.user.userID;
 
     // check permission if user can add new property
     const permission = permissions.addProperty(cnx.state.user);
@@ -216,6 +217,7 @@ async function addProperty(cnx) {
         cnx.status = 403;
     } else {
     // perform query on database
+        body.sellerID = currentUserID;
         const result = await model.addProperty(body);
         if (result) {
             // property addedd
