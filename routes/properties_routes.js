@@ -1,3 +1,6 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable prefer-destructuring */
 /**
 * A module to handle the properties routes.
 * @module routes/properties_routes
@@ -7,6 +10,9 @@
 const Router = require('koa-router');
 
 const bodyParser = require('koa-bodyparser');
+
+// Used to get an file
+const multer = require('koa-multer');
 
 // Connect with model for DB
 const model = require('../models/properties_model');
@@ -22,6 +28,18 @@ const permissions = require('../permissions/properties_permissions');
 
 // Since we are handling users use a URI that begins with an appropriate path
 const router = Router({ prefix: '/api/properties' });
+
+// Used in order to get the images from the property
+const storage = multer.diskStorage({
+    destination(_req, _file, cb) {
+        cb(null, './public/');
+    },
+    filename(_req, file, cb) {
+        cb(null, Date.now() + file.originalname);
+    },
+});
+
+const upload = multer({ storage: storage });
 
 // Handle functions
 /**
@@ -189,7 +207,7 @@ async function toggleHighPriority(cnx) {
  * @returns {object} cnx - The response object.
  */
 async function addProperty(cnx) {
-    const { body } = cnx.request;
+    const body = cnx.req.body;
 
     // check permission if user can add new property
     const permission = permissions.addProperty(cnx.state.user);
@@ -203,6 +221,11 @@ async function addProperty(cnx) {
             // property addedd
             cnx.status = 201;
             cnx.body = { id: result.insertId, created: true, link: `${cnx.request.path}/${result.insertId}` };
+
+            // Add images name to the propertiesImages table
+            for (const fileObject of cnx.req.files) {
+                await model.AddPropertyImage(fileObject.path, result.insertId);
+            }
         } else {
             // property not addedd
             cnx.status = 501;
@@ -295,7 +318,7 @@ router.get('/:id([0-9]{1,})', getAllPropById);
 router.get('/seller/:id([0-9]{1,})', getAllPropByUserID);
 
 // Post's
-router.post('/', bodyParser(), auth, validatePropertyAdd, addProperty);
+router.post('/', auth, validatePropertyAdd, upload.array('file', 20), bodyParser(), addProperty);
 
 // Put's
 router.put('/status/:id([0-9]{1,})', bodyParser(), auth, updateStatusByID);

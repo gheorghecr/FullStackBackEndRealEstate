@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /**
 * A module to perform querys related with the properties on the database.
 * @module models/properties_model
@@ -112,6 +113,19 @@ exports.updateStatus = async function updateStatus(status, id) {
 exports.updateProperty = async function updateProperty(property, id) {
     const query = 'UPDATE properties SET ? WHERE prop_ID = ?';
     const values = [property, id];
+    const data = await db.run_query(query, values);
+    return data;
+};
+
+/**
+ * SQL Query function to add the property images name to the propertiesImages table.
+ * @param {string} path - Property Image name.
+ * @param {integer} prop_ID - Property ID
+ * @returns {object} data - The response object.
+ */
+exports.AddPropertyImage = async function AddPropertyImage(path, prop_ID) {
+    const query = 'INSERT INTO propertiesImages SET imageName = ?, prop_ID = ?';
+    const values = [path, prop_ID];
     const data = await db.run_query(query, values);
     return data;
 };

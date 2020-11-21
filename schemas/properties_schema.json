@@ -96,6 +96,10 @@
         "buyerID": {
           "description": "Buyer ID",
           "type": "integer"
+        },
+        "file": {
+          "description": "User avatar file",
+          "type": "object"
         }
       },
       "required": ["price", "title", "description", "status", "location", "sellerID"],
