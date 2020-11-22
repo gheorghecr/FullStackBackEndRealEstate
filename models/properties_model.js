@@ -81,6 +81,17 @@ exports.toggleHighPriority = async function toggleHighPriority(id) {
 };
 
 /**
+ * SQL Query function to toggle the visibility attribute of a property by it's ID.
+ * @param {integer} id - Property ID.
+ * @returns {object} data - The response object.
+ */
+exports.toggleVisibility = async function toggleVisibility(id) {
+    const query = 'UPDATE properties SET visibility = !visibility WHERE prop_ID = ?';
+    const data = await db.run_query(query, id);
+    return data;
+};
+
+/**
  * SQL Query function to add an new property.
  * @param {object} property - User Object.
  * @returns {object} data - The response object.

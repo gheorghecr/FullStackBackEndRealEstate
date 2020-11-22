@@ -201,6 +201,42 @@ async function toggleHighPriority(cnx) {
 }
 
 /**
+ * Function that toggles the visibility attribute of a property by it's ID.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function toggleVisibility(cnx) {
+    /// Get the property ID from the route parameters.
+    const propID = cnx.params.id;
+
+    // get the property first, (check if exists)
+    const property = await model.getPropByID(propID);
+
+    // if property is found in the database continue
+    // otherwise send message back saying user not found
+    if (property.length) {
+    // check permission if user can delete info
+        const permission = permissions.update(cnx.state.user, property[0]);
+        if (!permission.granted) {
+            // if permission is not granted
+            cnx.status = 403;
+        } else {
+            // perform update on database
+            const result = await model.toggleVisibility(propID);
+            if (result.affectedRows > 0) {
+                cnx.status = 200;
+                cnx.body = { ID: propID, updated: true, link: `${cnx.request.path}` };
+            } else {
+                cnx.status = 501;
+                cnx.body = { ID: propID, updated: false };
+            }
+        }
+    } else {
+        cnx.status = 404;
+    }
+}
+
+/**
  * Function allows an admin to add a new property.
  * And return and the propertyID if property was successfully created.
  * @param {object} cnx - The request object.
@@ -316,6 +352,7 @@ router.get('/', getAllProp);
 router.get('/adminview', auth, getAllPropAdminView);
 router.get('/highpriority', getAllPropHighPriority);
 router.get('/togglehighpriority/:id([0-9]{1,})', auth, toggleHighPriority);
+router.get('/togglevisibility/:id([0-9]{1,})', auth, toggleVisibility);
 router.get('/:id([0-9]{1,})', getAllPropById);
 router.get('/seller/:id([0-9]{1,})', getAllPropByUserID);
 
