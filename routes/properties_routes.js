@@ -144,7 +144,7 @@ async function deletePropById(cnx) {
     // otherwise send message back saying user not found
     if (property.length) {
     // check permission if user can delete info
-        const permission = permissions.deleteProp(cnx.state.user, property[0]);
+        const permission = permissions.deleteProp(cnx.state.user);
         if (!permission.granted) {
             // if permission is not granted
             cnx.status = 403;
