@@ -60,6 +60,7 @@ async function getAllPropAdminView(cnx) {
             cnx.body = result;
         } else {
             cnx.status = 404;
+            cnx.body = { message: 'No propreties available' };
         }
     }
 }
@@ -77,6 +78,7 @@ async function getAllProp(cnx) {
         cnx.body = result;
     } else {
         cnx.status = 404;
+        cnx.body = { message: 'No propreties available' };
     }
 }
 
