@@ -264,7 +264,7 @@ async function addProperty(cnx) {
 
             // Add images name to the propertiesImages table
             for (const fileObject of cnx.req.files) {
-                await model.AddPropertyImage(fileObject.path, result.insertId);
+                await model.AddPropertyImage(fileObject.filename, result.insertId);
             }
         } else {
             // property not addedd
