@@ -4,5 +4,5 @@ CREATE TABLE propertiesImages (
     imageName VARCHAR(150) NOT NULL,
     dateAdded DATETIME DEFAULT CURRENT_TIMESTAMP, 
     PRIMARY KEY (imageID),
-    FOREIGN KEY (prop_ID) REFERENCES properties (prop_ID) ON DELETE CASCADE
+    FOREIGN KEY (prop_ID) REFERENCES properties (prop_ID) ON DELETE CASCADE 
 );
