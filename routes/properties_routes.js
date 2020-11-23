@@ -320,7 +320,7 @@ async function updatePropertyByID(cnx) {
     /// Get the property ID from the route parameters.
     const propID = cnx.params.id;
 
-    const { body } = cnx.request;
+    const body = cnx.req.body;
 
     // get the property first, (check if exists)
     const property = await model.getPropByID(propID);
@@ -339,6 +339,11 @@ async function updatePropertyByID(cnx) {
             if (result.affectedRows > 0) {
                 cnx.status = 200;
                 cnx.body = { ID: propID, updated: true, link: `/api/properties/${propID}` };
+
+                // Add images name to the propertiesImages table
+                for (const fileObject of cnx.req.files) {
+                    await model.AddPropertyImage(fileObject.filename, propID);
+                }
             } else {
                 cnx.status = 501;
                 cnx.body = { ID: propID, updated: false };
@@ -363,7 +368,7 @@ router.post('/', auth, validatePropertyAdd, upload.array('file', 20), bodyParser
 
 // Put's
 router.put('/status/:id([0-9]{1,})', bodyParser(), auth, updateStatusByID);
-router.put('/:id([0-9]{1,})', auth, bodyParser(), validatePropertyUpdate, updatePropertyByID);
+router.put('/:id([0-9]{1,})', auth, validatePropertyUpdate, upload.array('file', 20), bodyParser(), updatePropertyByID);
 
 // Del's
 router.del('/:id([0-9]{1,})', auth, deletePropById);
