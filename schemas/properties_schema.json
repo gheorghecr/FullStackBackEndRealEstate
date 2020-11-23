@@ -94,7 +94,7 @@
           "type": "integer"
         },
         "file": {
-          "description": "User avatar file",
+          "description": "Property photo file",
           "type": "object"
         }
       },
@@ -143,6 +143,10 @@
         "buyerID": {
           "description": "Buyer ID",
           "type": "integer"
+        },
+        "file": {
+          "description": "Property photo file",
+          "type": "object"
         }
       },
       "additionalProperties": false
