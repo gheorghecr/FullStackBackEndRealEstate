@@ -40,7 +40,6 @@ async function getAllImagesForProperty(cnx) {
     }
 }
 
-
 /**
  * Function that deletes a image by it's ID.
  * @param {object} cnx - The request object.
