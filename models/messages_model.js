@@ -17,6 +17,17 @@ exports.getAllMessagesForAgent = async function getAllMessagesForAgent(agentID) 
 };
 
 /**
+ * SQL Query function to get an message by it's ID.
+ * @param {object} messageID - The message ID.
+ * @returns {object} data - The response object.
+ */
+exports.getMessageByID = async function getMessageByID(messageID) {
+    const query = 'SELECT * FROM messages WHERE messageID = ?;';
+    const data = await db.run_query(query, messageID);
+    return data;
+};
+
+/**
  * SQL Query function to add a message.
  * @param {object} message - The message object.
  * @returns {object} data - The response object.
