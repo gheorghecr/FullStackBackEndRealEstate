@@ -26,14 +26,23 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
+            <pre class="prettyprint source linenums"><code>/* eslint-disable prefer-destructuring */
+/* eslint-disable object-shorthand */
+/**
 * A module to handle the user routes.
 * @module routes/user_routes
 * @author Gheorghe Craciun
 */
 
 const Router = require('koa-router');
+
 const bodyParser = require('koa-bodyparser');
+
+// Password encryption
+const bcrypt = require('bcrypt');
+
+// Used to get an file
+const multer = require('koa-multer');
 
 // Connect with model for DB
 const model = require('../models/users_model');
@@ -41,172 +50,241 @@ const model = require('../models/users_model');
 // Import auth part
 const auth = require('../controllers/auth');
 
-// Password encryption
-const bcrypt = require('bcrypt');
-
 // Validation Schemas
-const {validateUser, validateUserUpdate} = require('../controllers/validation');
+const { validateUser, validateUserUpdate } = require('../controllers/validation');
 
 // Deal with Permissions
 const permissions = require('../permissions/users_permissions');
 
-// Since we are handling users use a URI that begings with an appropriate path
-const router = Router({prefix: '/api/users'});
+const prefix = '/api/users';
+// eslint-disable-next-line object-shorthand
+const router = Router({ prefix: prefix });
 
+// Used in order to get the images from the user
+const storage = multer.diskStorage({
+    destination(_req, _file, cb) {
+        cb(null, './public/');
+    },
+    filename(_req, file, cb) {
+        cb(null, Date.now() + file.originalname);
+    },
+});
 
-router.get('/', auth, getAll);
-router.post('/', bodyParser(), validateUser,  createAccount);
-
-router.get('/:id([0-9]{1,})', auth, getById);
-router.put('/:id([0-9]{1,})', auth, bodyParser(), validateUserUpdate, updateUserInfo);
-router.del('/:id([0-9]{1,})', auth, deleteUserById);
-
-
-// Handle the functions used abose.
-
+const upload = multer({ storage: storage });
 
 /**
- * Funtion that gets the the list of all users Personal Info, from the DB and returns it, if the user is an ADMIN.
+ * Function that logs in an user and returns user details to the fron end.
+ * @param {object} cnx - The request object.
+ * @returns {function} - Logged in user details.
+ */
+async function login(cnx) {
+    if (typeof cnx.state.user !== 'object') {
+        // it means that the user was not authenticated and
+        // ctx.state.user has an error message
+        // send back error message and code
+        cnx.status = 401;
+        cnx.body = { errorMessage: cnx.state.user };
+    } else {
+        const {
+            userID, username, email, firstName, lastName, role,
+        } = cnx.state.user;
+        const links = {
+            self: `${cnx.protocol}://${cnx.host}${prefix}/${userID}`,
+        };
+        cnx.body = {
+            userID, username, email, firstName, lastName, links, role,
+        };
+    }
+}
+
+/**
+ * Function that gets the the list of all users Personal Info, from the DB and returns it,
+ * if the user is an ADMIN.
  * @param {object} cnx - The request object.
  * @returns {function} - List of all users with it's personal data.
  */
 async function getAll(cnx) {
-  const permission = permissions.readAll(cnx.state.user);
-  if (!permission.granted) {
-    cnx.status = 403;
-  } else {
-    const result = await model.getAll();
-    if (result.length) {
-      cnx.body = result;
-    }
-  }
-}
-
-/**
- * Funtion that gets and returns an user (by it's ID) personal Info. Each user can only acess it's own data. 
- * If the user is an ADMIN  has acess to all users data. Filters data so it does not show sentive data such as password.
- * @param {object} cnx - The request object.
- * @returns {object} cnx - The response object.
- */
-async function getById(cnx){ 
-  let id = cnx.params.id; 
-  
-  // get user from DB (check if exists)
-  let user =  await model.getUserInfoById(id);
-  
-  // if user is found in the database continue
-  // otherwise send message back saying user not found
-  if (user.length) {
-    //check permissions
-    const permission = permissions.read(cnx.state.user, user[0]);
-  
-    //filter data which user cannot see
-    user[0] = permission.filter(user[0])
+    const permission = permissions.readAll(cnx.state.user);
     if (!permission.granted) {
-      cnx.status = 403;
+        cnx.status = 401;
     } else {
-      if (user.length) {
-        cnx.status = 201;
-        cnx.body = user[0];
-      }
+        const result = await model.getAll();
+        if (result.length) {
+            cnx.status = 200;
+            cnx.body = result;
+        }
     }
-  } else {
-    cnx.status = 404;
-    cnx.body = {Message: "User Not found"};
-  }
 }
 
 /**
- * Funtion allows an user to register on the application. And return and the userID if account was sucessfully created.
+ * Function that gets and returns an user (by it's ID) personal Info.
+ * Each user can only access it's own data.
+ * If the user is an ADMIN  has access to all users data. Filters data
+ * so it does not show sensitive data such as password.
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */
-async function createAccount(cnx) { 
-  let body = cnx.request.body; 
-  
-  // encrypt password
-  const hash = bcrypt.hashSync(body.password, 10);
-  body.password = hash;
-  
-  // perform query on database
-  let result =  await model.register(body);
-  if (result) {
-    cnx.status = 201;
-    cnx.body = {ID: result.insertId}
-  } else {
-    cnx.status = 500;
-  }
+async function getById(cnx) {
+    const { id } = cnx.params;
+
+    // get user from DB (check if exists)
+    const user = await model.getUserInfoById(id);
+
+    // if user is found in the database continue
+    // otherwise send message back saying user not found
+    if (user.length) {
+        // check permissions
+        const permission = permissions.read(cnx.state.user, user[0]);
+
+        // filter data which user cannot see
+        user[0] = permission.filter(user[0]);
+        if (!permission.granted) {
+            cnx.status = 401;
+        } else if (user.length) {
+            cnx.status = 200;
+            cnx.body = user[0];
+        } else {
+            cnx.status = 404;
+        }
+    } else {
+        // user not found
+        cnx.status = 404;
+    }
 }
 
 /**
- * Funtion allows an user to update it's own personal data. And then lets the user know if update was sucessful or not.
+ * Function allows an user to register on the application.
+ * And return and the userID if account was successfully created.
+ * It as well store the avatar image name correctly on the database.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function createAccount(cnx) {
+    const body = cnx.req.body;
+
+    // encrypt password
+    const hash = bcrypt.hashSync(body.password, 10);
+    body.password = hash;
+
+    // Check if it's an admin registering
+    if (body.sign_up_code === 'we_sell_houses_agent') {
+        body.role = 'admin';
+    }
+    // delete this from object as is not needed to store
+    delete body.sign_up_code;
+
+    // Update avatar URL, with the right image Path
+    // If user did not upload avatar. Give it default.
+    if (cnx.req.file) {
+        body.avatarURL = cnx.req.file.path;
+    } else {
+        body.avatarURL = 'public/placeholder.jpg';
+    }
+
+    let result;
+    try {
+        // perform query on database
+        result = await model.register(body);
+        if (result) {
+            cnx.status = 201;
+            cnx.body = { id: result.insertId, created: true, link: `${cnx.request.path}/${result.insertId}` };
+        }
+    } catch (error) {
+        cnx.status = 501;
+        cnx.body = { errorMessage: error.errorDescription };
+    }
+}
+
+/**
+ * Function allows an user to update it's own personal data.
+ * And then lets the user know if update was successful or not.
  * Admin can update any user data.
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */
-async function updateUserInfo(cnx) { 
-  let id = cnx.params.id; 
-  let body = cnx.request.body; 
-  
-  //get the user first, (check if exisits)
-  let user =  await model.getUserInfoById(id);
-  
-  // if user is found in the database continue
-  // otherwise send message back saying user not found
-  if (user.length) {
-    //check permission if user can update info
-    const permission = permissions.update(cnx.state.user, user[0]);
+async function updateUserInfo(cnx) {
+    const { id } = cnx.params;
+    const { body } = cnx.request;
 
-    if (!permission.granted) {
-      // if permission is not granted
-      cnx.status = 403;
-      cnx.body = {Message: "You don't have permission to update this."};
+    // get the user first, (check if exists)
+    const user = await model.getUserInfoById(id);
+
+    // if user is found in the database continue
+    // otherwise send message back saying user not found
+    if (user.length) {
+        // check permission if user can update info
+        const permission = permissions.update(cnx.state.user, user[0]);
+
+        if (!permission.granted) {
+            // if permission is not granted
+            cnx.status = 403;
+        } else {
+            // if user is updating password, encrypt it
+            if (body.password) {
+                body.password = bcrypt.hashSync(body.password, 10);
+            }
+            // perform update on database
+            const result = await model.updateById(id, body);
+            if (result.affectedRows > 0) {
+                cnx.status = 200;
+                cnx.body = { id, updated: true, link: `${cnx.request.path}/${id}` };
+            } else {
+                cnx.status = 501;
+            }
+        }
     } else {
-      // if user is updating password, encryp it
-      if(body.password) {
-        body.password = bcrypt.hashSync(body.password, 10);
-      }
-      //perform update on database
-      let result =  await model.updateById(id, body);
-      if (result.affectedRows > 0) {
-        cnx.status = 201;
-        cnx.body = {Message: "Account Updated succesfully"};
-      } else {
         cnx.status = 404;
-        cnx.body = {Message: "Nothing was updated"};
-      }
     }
-  } else {
-    cnx.status = 404;
-    cnx.body = {Message: "User Not found"};
-  }
-  
 }
 
 /**
- * Funtion allows an user to delete it's own account. And then lets the user know if update was sucessful or not.
- * Admin can delete any user account.
+ * Function allows an ADMIN to delete an account.
+ * And then lets the ADMIN know if update was successful or not.
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */
-async function deleteUserById(cnx){ 
-  /// Get the ID from the route parameters. 
-  let id = cnx.params.id; 
-  
-  let result = await model.deleteAccountById(id);
-  
-  // If it exists then return the article as JSON. 
-  // Otherwise return a 404 Not Found status code
-  if (result) {
-    cnx.status = 201;
-    cnx.body = {Message: "Account Deleted succesfully"};
-  } else {
-    cnx.status = 404; 
-  }  
+async function deleteUserById(cnx) {
+    /// Get the ID from the route parameters.
+    const { id } = cnx.params;
+
+    // get the user first, (check if exists)
+    const user = await model.getUserInfoById(id);
+
+    // if user is found in the database continue
+    // otherwise send message back saying user not found
+    if (user.length) {
+        // check permission if user can delete info
+        const permission = permissions.delete(cnx.state.user, user[0]);
+
+        if (!permission.granted) {
+            // if permission is not granted
+            cnx.status = 403;
+        } else {
+            // perform delete on database
+            const result = await model.deleteAccountById(id);
+            if (result.affectedRows > 0) {
+                cnx.status = 200;
+                cnx.body = { ID: id, deleted: true };
+            } else {
+                cnx.status = 501;
+                cnx.body = { ID: id, deleted: false };
+            }
+        }
+    } else {
+        cnx.status = 404;
+    }
 }
 
+router.get('/', auth, getAll);
+router.post('/login', auth, login);
+router.post('/', validateUser, upload.single('file'), bodyParser(), createAccount);
+router.get('/:id([0-9]{1,})', auth, getById);
+router.put('/:id([0-9]{1,})', auth, bodyParser(), validateUserUpdate, updateUserInfo);
+router.del('/:id([0-9]{1,})', auth, deleteUserById);
+
 // Export object.
-module.exports = router; </code></pre>
+module.exports = router;
+</code></pre>
         </article>
     </section>
 
@@ -216,13 +294,13 @@ module.exports = router; </code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-cofig.html">cofig</a></li><li><a href="module-controllers_validation.html">controllers/validation</a></li><li><a href="module-docs.html">docs</a></li><li><a href="module-helpers_database.html">helpers/database</a></li><li><a href="module-index.html">index</a></li><li><a href="module-models_user_model.html">models/user_model</a></li><li><a href="module-permissions_user_permissions.html">permissions/user_permissions</a></li><li><a href="module-routes_user_routes.html">routes/user_routes</a></li></ul><h3>Classes</h3><ul><li><a href="module-helpers_database-DatabaseException.html">DatabaseException</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-cofig.html">cofig</a></li><li><a href="module-controllers_auth.html">controllers/auth</a></li><li><a href="module-controllers_validation.html">controllers/validation</a></li><li><a href="module-docs.html">docs</a></li><li><a href="module-helpers_database.html">helpers/database</a></li><li><a href="module-index.html">index</a></li><li><a href="module-models_categories_model.html">models/categories_model</a></li><li><a href="module-models_features_model.html">models/features_model</a></li><li><a href="module-models_images_model.html">models/images_model</a></li><li><a href="module-models_messages_model.html">models/messages_model</a></li><li><a href="module-models_properties_model.html">models/properties_model</a></li><li><a href="module-models_user_model.html">models/user_model</a></li><li><a href="module-permissions_categories_permissions.html">permissions/categories_permissions</a></li><li><a href="module-permissions_features_permissions.html">permissions/features_permissions</a></li><li><a href="module-permissions_images_permissions.html">permissions/images_permissions</a></li><li><a href="module-permissions_message_permissions.html">permissions/message_permissions</a></li><li><a href="module-permissions_properties_permissions.html">permissions/properties_permissions</a></li><li><a href="module-permissions_user_permissions.html">permissions/user_permissions</a></li><li><a href="module-routes_categories_routes.html">routes/categories_routes</a></li><li><a href="module-routes_features_routes.html">routes/features_routes</a></li><li><a href="module-routes_images_routes.html">routes/images_routes</a></li><li><a href="module-routes_message_routes.html">routes/message_routes</a></li><li><a href="module-routes_properties_routes.html">routes/properties_routes</a></li><li><a href="module-routes_user_routes.html">routes/user_routes</a></li><li><a href="module-strategies_basic.html">strategies/basic</a></li></ul><h3>Classes</h3><ul><li><a href="module-helpers_database-DatabaseException.html">DatabaseException</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Oct 17 2020 17:16:47 GMT+0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 17:32:25 GMT+0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

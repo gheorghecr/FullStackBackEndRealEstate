@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: index</title>
+    <title>JSDoc: Source: permissions/messages_permissions.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,146 +17,44 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: index</h1>
+    <h1 class="page-title">Source: permissions/messages_permissions.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">A module to set up the application and it's routes for the Real Estate Website.</div>
-        
-
-        
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Gheorghe Craciun</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>routes/* for all routes</li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* eslint-disable newline-per-chained-call */
+/* eslint-disable quote-props */
+/**
+* A module to handle permissions on messages.
+* @module permissions/message_permissions
+* @author Gheorghe Craciun
+*/
+
+const AccessControl = require('role-acl');
+
+const ac = new AccessControl();
+
+// Normal User permissions
+ac.grant('user').condition({ Fn: 'EQUALS', args: { 'requester': '$.owner' } }).execute('read').on('messages');
+ac.grant('user').condition({ Fn: 'EQUALS', args: { 'requester': '$.owner' } }).execute('delete').on('messages');
+
+// Admin permissions
+ac.grant('admin').execute('read').on('messages');
+ac.grant('admin').condition({ Fn: 'NOT_EQUALS', args: { 'requester': '$.owner' } }).execute('delete').on('messages');
+ac.grant('admin').condition({ Fn: 'EQUALS', args: { 'requester': '$.owner' } }).execute('delete').on('messages');
+ac.grant('admin').execute('update').on('messages');
+
+exports.readAllForConversation = (requester) => ac.can(requester.role).execute('read').sync().on('messages');
+exports.toggleArchived = (requester) => ac.can(requester.role).execute('update').sync().on('messages');
+exports.deleteByID = (requester, data) => ac.can(requester.role).context({ requester: requester.userID, owner: data.fromID }).execute('delete').sync().on('messages');
+exports.readByID = (requester, data) => ac.can(requester.role).context({ requester: requester.userID, owner: data.fromID }).execute('read').sync().on('messages');
+</code></pre>
+        </article>
+    </section>
 
 
 

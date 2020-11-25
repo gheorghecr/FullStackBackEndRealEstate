@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: models/user_model</title>
+    <title>JSDoc: Module: routes/message_routes</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: models/user_model</h1>
+    <h1 class="page-title">Module: routes/message_routes</h1>
 
     
 
@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description">A module to perform querys related with the user on the database.</div>
+            <div class="description">A module to handle the messages routes.</div>
         
 
         
@@ -94,7 +94,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_users_model.js.html">models/users_model.js</a>, <a href="models_users_model.js.html#line1">line 1</a>
+        <a href="routes_messages_routes.js.html">routes/messages_routes.js</a>, <a href="routes_messages_routes.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -151,7 +151,7 @@
     
 
     
-    <h4 class="name" id=".deleteAccountById"><span class="type-signature">(static) </span>deleteAccountById<span class="signature">(id)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id="~addMessages"><span class="type-signature">(async, inner) </span>addMessages<span class="signature">(cnx)</span><span class="type-signature"> &rarr; {object}</span></h4>
     
 
     
@@ -159,7 +159,7 @@
 
 
 <div class="description">
-    SQL Query function delete an user account.
+    Function that adds a message .
 </div>
 
 
@@ -195,13 +195,13 @@
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>cnx</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">int</span>
+<span class="param-type">object</span>
 
 
             
@@ -211,7 +211,7 @@
 
             
 
-            <td class="description last">User ID.</td>
+            <td class="description last">The request object.</td>
         </tr>
 
     
@@ -252,7 +252,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_users_model.js.html">models/users_model.js</a>, <a href="models_users_model.js.html#line71">line 71</a>
+        <a href="routes_messages_routes.js.html">routes/messages_routes.js</a>, <a href="routes_messages_routes.js.html#line55">line 55</a>
     </li></ul></dd>
     
 
@@ -281,7 +281,7 @@
 
         
 <div class="param-desc">
-    data - The response object.
+    cnx - The response object.
 </div>
 
 
@@ -310,7 +310,7 @@
     
 
     
-    <h4 class="name" id=".findByUsername"><span class="type-signature">(static) </span>findByUsername<span class="signature">(username)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id="~deleteMessageById"><span class="type-signature">(async, inner) </span>deleteMessageById<span class="signature">(cnx)</span><span class="type-signature"> &rarr; {object}</span></h4>
     
 
     
@@ -318,7 +318,7 @@
 
 
 <div class="description">
-    SQL Query function to get a single user personal data by the (unique) username.
+    Function that deletes a message by it's ID.
 </div>
 
 
@@ -354,13 +354,13 @@
 
         <tr>
             
-                <td class="name"><code>username</code></td>
+                <td class="name"><code>cnx</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">object</span>
 
 
             
@@ -370,7 +370,7 @@
 
             
 
-            <td class="description last">User username.</td>
+            <td class="description last">The request object.</td>
         </tr>
 
     
@@ -411,7 +411,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_users_model.js.html">models/users_model.js</a>, <a href="models_users_model.js.html#line23">line 23</a>
+        <a href="routes_messages_routes.js.html">routes/messages_routes.js</a>, <a href="routes_messages_routes.js.html#line101">line 101</a>
     </li></ul></dd>
     
 
@@ -440,7 +440,7 @@
 
         
 <div class="param-desc">
-    data - The response object containing a single user personal info.
+    cnx - The response object.
 </div>
 
 
@@ -469,7 +469,7 @@
     
 
     
-    <h4 class="name" id=".getAll"><span class="type-signature">(static) </span>getAll<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id="~getMessageByForAgent"><span class="type-signature">(async, inner) </span>getMessageByForAgent<span class="signature">(cnx)</span><span class="type-signature"> &rarr; {object}</span></h4>
     
 
     
@@ -477,117 +477,7 @@
 
 
 <div class="description">
-    SQL Query function to gett all users from the DB.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_users_model.js.html">models/users_model.js</a>, <a href="models_users_model.js.html#line12">line 12</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    data - The response object containing all users personal data.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">object</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".getUserInfoById"><span class="type-signature">(static) </span>getUserInfoById<span class="signature">(id)</span><span class="type-signature"> &rarr; {object}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    SQL Query function to get a single user personal data by the (unique) userID.
+    Function that gets the list of all messages for an agent(admin).
 </div>
 
 
@@ -623,13 +513,13 @@
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>cnx</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">int</span>
+<span class="param-type">object</span>
 
 
             
@@ -639,7 +529,7 @@
 
             
 
-            <td class="description last">User ID.</td>
+            <td class="description last">The request object.</td>
         </tr>
 
     
@@ -680,7 +570,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_users_model.js.html">models/users_model.js</a>, <a href="models_users_model.js.html#line34">line 34</a>
+        <a href="routes_messages_routes.js.html">routes/messages_routes.js</a>, <a href="routes_messages_routes.js.html#line31">line 31</a>
     </li></ul></dd>
     
 
@@ -709,7 +599,7 @@
 
         
 <div class="param-desc">
-    data - The response object containing a single user personal info.
+    cnx - The response object.
 </div>
 
 
@@ -738,7 +628,7 @@
     
 
     
-    <h4 class="name" id=".register"><span class="type-signature">(static) </span>register<span class="signature">(user)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id="~toggleArchived"><span class="type-signature">(async, inner) </span>toggleArchived<span class="signature">(cnx)</span><span class="type-signature"> &rarr; {object}</span></h4>
     
 
     
@@ -746,7 +636,7 @@
 
 
 <div class="description">
-    SQL Query function to create an user account.
+    Function that toggles the archived property of a message.
 </div>
 
 
@@ -782,7 +672,7 @@
 
         <tr>
             
-                <td class="name"><code>user</code></td>
+                <td class="name"><code>cnx</code></td>
             
 
             <td class="type">
@@ -798,7 +688,7 @@
 
             
 
-            <td class="description last">User Object.</td>
+            <td class="description last">The request object.</td>
         </tr>
 
     
@@ -839,7 +729,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_users_model.js.html">models/users_model.js</a>, <a href="models_users_model.js.html#line47">line 47</a>
+        <a href="routes_messages_routes.js.html">routes/messages_routes.js</a>, <a href="routes_messages_routes.js.html#line75">line 75</a>
     </li></ul></dd>
     
 
@@ -868,189 +758,7 @@
 
         
 <div class="param-desc">
-    data - The response object.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">object</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".updateById"><span class="type-signature">(static) </span>updateById<span class="signature">(id, user)</span><span class="type-signature"> &rarr; {object}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    SQL Query function to update an user personal information.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">int</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User ID.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>user</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User Object.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_users_model.js.html">models/users_model.js</a>, <a href="models_users_model.js.html#line59">line 59</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    data - The response object.
+    cnx - The response object.
 </div>
 
 

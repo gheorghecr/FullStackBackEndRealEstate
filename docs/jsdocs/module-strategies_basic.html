@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: DatabaseException</title>
+    <title>JSDoc: Module: strategies/basic</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: DatabaseException</h1>
+    <h1 class="page-title">Module: strategies/basic</h1>
 
     
 
@@ -28,8 +28,8 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-helpers_database.html">helpers/database</a>~</span>DatabaseException<span class="signature">(message, code, id)</span><span class="type-signature"></span></h2>
+        
+            
         
     
 </header>
@@ -38,11 +38,120 @@
     <div class="container-overview">
     
         
+            <div class="description">A module to handle Basic user authentication.</div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
 
     
 
     
-    <h4 class="name" id="DatabaseException"><span class="type-signature"></span>new DatabaseException<span class="signature">(message, code, id)</span><span class="type-signature"></span></h4>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Gheorghe Craciun</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="strategies_basic.js.html">strategies/basic.js</a>, <a href="strategies_basic.js.html#line3">line 3</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~checkUserAndPass"><span class="type-signature">(async, inner) </span>checkUserAndPass<span class="signature">(username, password, done)</span><span class="type-signature"> &rarr; {callback}</span></h4>
     
 
     
@@ -50,7 +159,7 @@
 
 
 <div class="description">
-    A custom error constructor to re-raise DB errors in a sanitized way.
+    Function to perform authentication (Login).
 </div>
 
 
@@ -86,7 +195,7 @@
 
         <tr>
             
-                <td class="name"><code>message</code></td>
+                <td class="name"><code>username</code></td>
             
 
             <td class="type">
@@ -102,22 +211,19 @@
 
             
 
-            <td class="description last">the error message</td>
+            <td class="description last">User username.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>code</code></td>
+                <td class="name"><code>password</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
-|
-
 <span class="param-type">string</span>
 
 
@@ -128,20 +234,20 @@
 
             
 
-            <td class="description last">the original error's error code</td>
+            <td class="description last">User Password.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>done</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">callback</span>
 
 
             
@@ -151,7 +257,7 @@
 
             
 
-            <td class="description last">a UUID identifier for the error instanced</td>
+            <td class="description last">Callback to be performed.</td>
         </tr>
 
     
@@ -192,7 +298,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="helpers_database.js.html">helpers/database.js</a>, <a href="helpers_database.js.html#line48">line 48</a>
+        <a href="strategies_basic.js.html">strategies/basic.js</a>, <a href="strategies_basic.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -217,13 +323,135 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    done - call done() with either an error or the user, depending on outcome.
+</div>
 
 
 
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">callback</span>
 
+
+    </dd>
+</dl>
 
     
-    </div>
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~verifyPassword"><span class="type-signature">(inner) </span>verifyPassword<span class="signature">(user, password)</span><span class="type-signature"> &rarr; {bool}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Function to very if 2 password are equal.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>user</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">User Object.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>password</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Second Password.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
 
     
 
@@ -239,6 +467,72 @@
 
     
 
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="strategies_basic.js.html">strategies/basic.js</a>, <a href="strategies_basic.js.html#line21">line 21</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - True or false depending if password match or not.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">bool</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
     
 
     

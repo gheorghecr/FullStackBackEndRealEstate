@@ -26,19 +26,35 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
+            <pre class="prettyprint source linenums"><code>/* eslint-disable no-console */
+/**
 * A module to run JSON Schema based validation on request/response data.
 * @module controllers/validation
 * @author Gheorghe Craciun
 * @see schemas/* for JSON Schema definition files
 */
 
-const {Validator, ValidationError} = require('jsonschema');
+const { Validator, ValidationError } = require('jsonschema');
 
 const userSchema = require('../schemas/user_schema.json').definitions.user;
 
 const userUpdateSchema = require('../schemas/user_schema.json').definitions.userUpdate;
 
+const propertyAddSchema = require('../schemas/properties_schema.json').definitions.addProperty;
+
+const propertyUpdateSchema = require('../schemas/properties_schema.json').definitions.updateProperty;
+
+const categoryAddSchema = require('../schemas/categories_schema.json').definitions.addCategory;
+
+const categoryUpdateSchema = require('../schemas/categories_schema.json').definitions.updateCategory;
+
+const featureAddSchema = require('../schemas/features_schema.json').definitions.addFeatures;
+
+const featureUpdateSchema = require('../schemas/features_schema.json').definitions.updateFeature;
+
+const addMessageSchema = require('../schemas/messages_schema.json').definitions.addMessage;
+
+const addImageSchema = require('../schemas/images_schema.json').definitions.addImage;
 
 /**
  * Wrapper that returns a Koa middleware validator for a given schema.
@@ -47,43 +63,62 @@ const userUpdateSchema = require('../schemas/user_schema.json').definitions.user
  * @returns {function} - A Koa middleware handler taking (ctx, next) params
  */
 const makeKoaValidator = (schema, resource) => {
+    const v = new Validator();
+    const validationOptions = {
+        throwError: true,
+        propertyName: resource,
+    };
 
-  const v = new Validator();
-  const validationOptions = {
-    throwError: true,
-    propertyName: resource
-  };
-  
-  /**
+    /**
    * Koa middleware handler function to do validation
    * @param {object} ctx - The Koa request/response context object
    * @param {function} next - The Koa next callback
    * @throws {ValidationError} a jsonschema library exception
    */
-  const handler = async (ctx, next) => {
-
-    const body = ctx.request.body;
-
-    try {
-      v.validate(body, schema, validationOptions);
-      await next();
-    } catch (error) {
-      if (error instanceof ValidationError) {
-        console.error(error);
-        ctx.body = {message: error.stack};
-        ctx.status = 400;      
-      } else {
-        throw error;
-      }
-    }
-  }
-  return handler;
-}
+    const handler = async (ctx, next) => {
+        const { body } = ctx.request;
+        try {
+            v.validate(body, schema, validationOptions);
+            await next();
+        } catch (error) {
+            if (error instanceof ValidationError) {
+                console.error(error);
+                ctx.body = { message: error };
+                ctx.status = 400;
+            } else {
+                throw error;
+            }
+        }
+    };
+    return handler;
+};
 
 /** Validate data against user schema for creating new users */
 exports.validateUser = makeKoaValidator(userSchema, 'user');
 /** Validate data against user schema for updating existing users */
-exports.validateUserUpdate = makeKoaValidator(userUpdateSchema, 'userUpdate');</code></pre>
+exports.validateUserUpdate = makeKoaValidator(userUpdateSchema, 'userUpdate');
+
+/** Validate data against properties schema for adding a new property */
+exports.validatePropertyAdd = makeKoaValidator(propertyAddSchema, 'addProperty');
+/** Validate data against properties schema for updating a property */
+exports.validatePropertyUpdate = makeKoaValidator(propertyUpdateSchema, 'updateProperty');
+
+/** Validate data against categories schema for adding a category */
+exports.validateCategoryAdd = makeKoaValidator(categoryAddSchema, 'addCategory');
+/** Validate data against categories schema for adding a category */
+exports.validateCategoryUpdate = makeKoaValidator(categoryUpdateSchema, 'updateCategory');
+
+/** Validate data against features schema for adding a feature */
+exports.validateFeatureAdd = makeKoaValidator(featureAddSchema, 'addFeature');
+/** Validate data against features schema for adding a feature */
+exports.validateFeatureUpdate = makeKoaValidator(featureUpdateSchema, 'updateFeature');
+
+/** Validate data against messages schema for adding a message */
+exports.validateMessageAdd = makeKoaValidator(addMessageSchema, 'addMessage');
+
+/** Validate data against images schema for adding a image for a property */
+exports.validateImageAdd = makeKoaValidator(addImageSchema, 'addImage');
+</code></pre>
         </article>
     </section>
 
@@ -93,13 +128,13 @@ exports.validateUserUpdate = makeKoaValidator(userUpdateSchema, 'userUpdate');</
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-cofig.html">cofig</a></li><li><a href="module-controllers_validation.html">controllers/validation</a></li><li><a href="module-docs.html">docs</a></li><li><a href="module-helpers_database.html">helpers/database</a></li><li><a href="module-index.html">index</a></li><li><a href="module-models_user_model.html">models/user_model</a></li><li><a href="module-permissions_user_permissions.html">permissions/user_permissions</a></li><li><a href="module-routes_user_routes.html">routes/user_routes</a></li></ul><h3>Classes</h3><ul><li><a href="module-helpers_database-DatabaseException.html">DatabaseException</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-cofig.html">cofig</a></li><li><a href="module-controllers_auth.html">controllers/auth</a></li><li><a href="module-controllers_validation.html">controllers/validation</a></li><li><a href="module-docs.html">docs</a></li><li><a href="module-helpers_database.html">helpers/database</a></li><li><a href="module-index.html">index</a></li><li><a href="module-models_categories_model.html">models/categories_model</a></li><li><a href="module-models_features_model.html">models/features_model</a></li><li><a href="module-models_images_model.html">models/images_model</a></li><li><a href="module-models_messages_model.html">models/messages_model</a></li><li><a href="module-models_properties_model.html">models/properties_model</a></li><li><a href="module-models_user_model.html">models/user_model</a></li><li><a href="module-permissions_categories_permissions.html">permissions/categories_permissions</a></li><li><a href="module-permissions_features_permissions.html">permissions/features_permissions</a></li><li><a href="module-permissions_images_permissions.html">permissions/images_permissions</a></li><li><a href="module-permissions_message_permissions.html">permissions/message_permissions</a></li><li><a href="module-permissions_properties_permissions.html">permissions/properties_permissions</a></li><li><a href="module-permissions_user_permissions.html">permissions/user_permissions</a></li><li><a href="module-routes_categories_routes.html">routes/categories_routes</a></li><li><a href="module-routes_features_routes.html">routes/features_routes</a></li><li><a href="module-routes_images_routes.html">routes/images_routes</a></li><li><a href="module-routes_message_routes.html">routes/message_routes</a></li><li><a href="module-routes_properties_routes.html">routes/properties_routes</a></li><li><a href="module-routes_user_routes.html">routes/user_routes</a></li><li><a href="module-strategies_basic.html">strategies/basic</a></li></ul><h3>Classes</h3><ul><li><a href="module-helpers_database-DatabaseException.html">DatabaseException</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Oct 17 2020 17:16:47 GMT+0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 17:32:25 GMT+0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

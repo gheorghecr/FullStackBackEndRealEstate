@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: index</title>
+    <title>JSDoc: Source: strategies/basic.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,146 +17,78 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: index</h1>
+    <h1 class="page-title">Source: strategies/basic.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">A module to set up the application and it's routes for the Real Estate Website.</div>
-        
-
-        
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Gheorghe Craciun</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>routes/* for all routes</li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* eslint-disable func-names */
+/* eslint-disable no-console */
+/**
+* A module to handle Basic user authentication.
+* @module strategies/basic
+* @author Gheorghe Craciun
+*/
+
+const { BasicStrategy } = require('passport-http');
+
+const bcrypt = require('bcrypt');
+
+const users = require('../models/users_model');
+
+/**
+ * Function to very if 2 password are equal.
+ * @param {object} user - User Object.
+ * @param {string} password - Second Password.
+ * @returns {bool} - True or false depending if password match or not.
+ */
+const verifyPassword = function (user, password) {
+    return bcrypt.compareSync(password, user.password);
+};
+
+/**
+ * Function to perform authentication (Login).
+ * @param {string} username - User username.
+ * @param {string} password - User Password.
+ * @param {callback} done - Callback to be performed.
+ * @returns {callback} done - call done() with either an error or the user, depending on outcome.
+ */
+const checkUserAndPass = async (username, password, done) => {
+    let result;
+
+    try {
+        // look up the user and check the password if the user exists
+        result = await users.findByUsername(username);
+    } catch (error) {
+        console.error(`Error during authentication for user ${username}`);
+        return done(error);
+    }
+    if (result.length) {
+        const user = result[0];
+        // verify if user password matches.
+        if (verifyPassword(user, password)) {
+            console.log(`Successfully authenticated user ${username}`);
+            return done(null, user);
+            // eslint-disable-next-line no-else-return
+        } else {
+            console.log(`Password incorrect for user ${username}`);
+            return done(null, 'Incorrect password');
+        }
+    }
+    console.log(`User with username: ${username} does not exist`);
+    return done(null, 'Username does not exist');
+};
+
+const strategy = new BasicStrategy(checkUserAndPass);
+
+module.exports = strategy;
+</code></pre>
+        </article>
+    </section>
 
 
 

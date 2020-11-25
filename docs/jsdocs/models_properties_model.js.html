@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/properties_model.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/properties_model.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* eslint-disable camelcase */
+/**
+* A module to perform querys related with the properties on the database.
+* @module models/properties_model
+* @author Gheorghe Craciun
+*/
+const db = require('../helpers/database');
+
+/**
+ * SQL Query function to get all properties that are visible from the DB.
+ * @returns {object} data - The response object containing all properties data.
+ */
+exports.getAll = async function getAll() {
+    const query = 'SELECT * FROM properties WHERE visibility = 1';
+    const data = await db.run_query(query);
+    return data;
+};
+
+/**
+ * SQL Query function to get all properties (Admin view) from the DB.
+ * @returns {object} data - The response object containing all properties data.
+ */
+exports.getAllAdminView = async function getAllAdminView() {
+    const query = 'SELECT * FROM properties';
+    const data = await db.run_query(query);
+    return data;
+};
+
+/**
+ * SQL Query function to get an property details by it's ID.
+ * @param {integer} propID - property ID.
+ * @returns {object} data - The response object containing the property details.
+ */
+exports.getPropByID = async function getPropByID(propID) {
+    const query = 'SELECT * FROM properties WHERE prop_ID = ?';
+    const data = await db.run_query(query, propID);
+    return data;
+};
+
+/**
+ * SQL Query function to get all properties that have high priority from the DB.
+ * @returns {object} data - The response object containing a list of properties with high priority.
+ */
+exports.getPropHighPriority = async function getPropHighPriority() {
+    const query = 'SELECT * FROM properties WHERE highPriority = 1';
+    const data = await db.run_query(query);
+    return data;
+};
+
+/**
+ * SQL Query function to get all properties that are listed by an user.
+ * @param {integer} userID - User ID.
+ * @returns {object} data - The response object containing a list of properties with high priority.
+ */
+exports.getPropBySeller = async function getPropBySeller(userID) {
+    const query = 'SELECT * FROM properties WHERE sellerID = ?';
+    const data = await db.run_query(query, userID);
+    return data;
+};
+
+/**
+ * SQL Query function delete a property by it's ID from DB.
+ * @param {integer} id - Property ID.
+ * @returns {object} data - The response object.
+ */
+exports.deletePropertyById = async function deletePropertyById(id) {
+    const query = 'DELETE FROM properties WHERE prop_ID = ?';
+    const data = await db.run_query(query, id);
+    return data;
+};
+
+/**
+ * SQL Query function to toggle the highPriority attribute of a property by it's ID.
+ * @param {integer} id - Property ID.
+ * @returns {object} data - The response object.
+ */
+exports.toggleHighPriority = async function toggleHighPriority(id) {
+    const query = 'UPDATE properties SET highPriority = !highPriority WHERE prop_ID = ?';
+    const data = await db.run_query(query, id);
+    return data;
+};
+
+/**
+ * SQL Query function to toggle the visibility attribute of a property by it's ID.
+ * @param {integer} id - Property ID.
+ * @returns {object} data - The response object.
+ */
+exports.toggleVisibility = async function toggleVisibility(id) {
+    const query = 'UPDATE properties SET visibility = !visibility WHERE prop_ID = ?';
+    const data = await db.run_query(query, id);
+    return data;
+};
+
+/**
+ * SQL Query function to add an new property.
+ * @param {object} property - User Object.
+ * @returns {object} data - The response object.
+ */
+exports.addProperty = async function addProperty(property) {
+    const query = 'INSERT INTO properties SET ?';
+    const data = await db.run_query(query, property);
+    return data;
+};
+
+/**
+ * SQL Query function to update the property status.
+ * @param {integer} id - Property ID.
+ * @param {string} status - Property Status
+ * @returns {object} data - The response object.
+ */
+exports.updateStatus = async function updateStatus(status, id) {
+    const query = 'UPDATE properties SET status = ? WHERE prop_ID = ?';
+    const values = [status, id];
+    const data = await db.run_query(query, values);
+    return data;
+};
+
+/**
+ * SQL Query function to update the property attributes.
+ * @param {object} property - Property object.
+ * @param {integer} id - Property ID.
+ * @returns {object} data - The response object.
+ */
+exports.updateProperty = async function updateProperty(property, id) {
+    const query = 'UPDATE properties SET ? WHERE prop_ID = ?';
+    const values = [property, id];
+    const data = await db.run_query(query, values);
+    return data;
+};
+
+/**
+ * SQL Query function to add the property images name to the propertiesImages table.
+ * @param {string} path - Property Image name.
+ * @param {integer} prop_ID - Property ID
+ * @returns {object} data - The response object.
+ */
+exports.AddPropertyImage = async function AddPropertyImage(path, prop_ID) {
+    const query = 'INSERT INTO propertiesImages SET imageName = ?, prop_ID = ?';
+    const values = [path, prop_ID];
+    const data = await db.run_query(query, values);
+    return data;
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-cofig.html">cofig</a></li><li><a href="module-controllers_auth.html">controllers/auth</a></li><li><a href="module-controllers_validation.html">controllers/validation</a></li><li><a href="module-docs.html">docs</a></li><li><a href="module-helpers_database.html">helpers/database</a></li><li><a href="module-index.html">index</a></li><li><a href="module-models_categories_model.html">models/categories_model</a></li><li><a href="module-models_features_model.html">models/features_model</a></li><li><a href="module-models_images_model.html">models/images_model</a></li><li><a href="module-models_messages_model.html">models/messages_model</a></li><li><a href="module-models_properties_model.html">models/properties_model</a></li><li><a href="module-models_user_model.html">models/user_model</a></li><li><a href="module-permissions_categories_permissions.html">permissions/categories_permissions</a></li><li><a href="module-permissions_features_permissions.html">permissions/features_permissions</a></li><li><a href="module-permissions_images_permissions.html">permissions/images_permissions</a></li><li><a href="module-permissions_message_permissions.html">permissions/message_permissions</a></li><li><a href="module-permissions_properties_permissions.html">permissions/properties_permissions</a></li><li><a href="module-permissions_user_permissions.html">permissions/user_permissions</a></li><li><a href="module-routes_categories_routes.html">routes/categories_routes</a></li><li><a href="module-routes_features_routes.html">routes/features_routes</a></li><li><a href="module-routes_images_routes.html">routes/images_routes</a></li><li><a href="module-routes_message_routes.html">routes/message_routes</a></li><li><a href="module-routes_properties_routes.html">routes/properties_routes</a></li><li><a href="module-routes_user_routes.html">routes/user_routes</a></li><li><a href="module-strategies_basic.html">strategies/basic</a></li></ul><h3>Classes</h3><ul><li><a href="module-helpers_database-DatabaseException.html">DatabaseException</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 17:32:25 GMT+0000 (GMT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

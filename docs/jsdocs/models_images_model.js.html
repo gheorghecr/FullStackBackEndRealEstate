@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: index</title>
+    <title>JSDoc: Source: models/images_model.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,146 +17,70 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: index</h1>
+    <h1 class="page-title">Source: models/images_model.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">A module to set up the application and it's routes for the Real Estate Website.</div>
-        
-
-        
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Gheorghe Craciun</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>routes/* for all routes</li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+* A module to perform query's related with the property images on the database.
+* @module models/images_model
+* @author Gheorghe Craciun
+*/
+const db = require('../helpers/database');
+
+/**
+ * SQL Query function to get all images name for a property from the DB.
+ * @param {integer} propID - property ID.
+ * @returns {object} data - The response object containing all images name.
+ */
+exports.getAllImagesNamesForProperty = async function getAllImagesNamesForProperty(propID) {
+    const query = 'SELECT * FROM propertiesImages WHERE prop_ID = ?';
+    const data = await db.run_query(query, propID);
+    return data;
+};
+
+/**
+ * SQL Query function to get an image name by it's ID.
+ * @param {integer} imageID - property ID.
+ * @returns {object} data - The response object containing all images name.
+ */
+exports.getImageNameByImageID = async function getImageNameByImageID(imageID) {
+    const query = 'SELECT imageName FROM propertiesImages WHERE imageID = ?';
+    const data = await db.run_query(query, imageID);
+    return data;
+};
+
+/**
+ * SQL Query function to store the image name for a property on the database.
+ * @param {propID} propID - The property ID.
+ * @param {imageName} imageName - The image name.
+ * @returns {object} data - The response object.
+ */
+exports.storeImageName = async function storeImageName(propID, imageName) {
+    const query = 'INSERT INTO propertiesImages SET prop_ID = ?, imageName = ?;';
+    const values = [propID, imageName];
+    const data = await db.run_query(query, values);
+    return data;
+};
+
+/**
+ * SQL Query function to delete an image by it's ID.
+ * @param {integer} imageID - image ID.
+ * @returns {object} data - The response object.
+ */
+exports.deleteImageById = async function deleteImageById(imageID) {
+    const query = 'DELETE FROM propertiesImages WHERE imageID = ?;';
+    const data = await db.run_query(query, imageID);
+    return data;
+};
+</code></pre>
+        </article>
+    </section>
 
 
 

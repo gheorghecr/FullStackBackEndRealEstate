@@ -26,7 +26,9 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
+            <pre class="prettyprint source linenums"><code>/* eslint-disable newline-per-chained-call */
+/* eslint-disable quote-props */
+/**
 * A module to handle permissions on USERS.
 * @module permissions/user_permissions
 * @author Gheorghe Craciun
@@ -36,21 +38,21 @@ const AccessControl = require('role-acl');
 
 const ac = new AccessControl();
 
-//Normal User permissions
-ac.grant('user').condition({Fn:'EQUALS', args: {'requester':'$.owner'}}).execute('read').on('user', ['*', '!password', '!passwordSalt', '!role', "!signUpCode"]);
-ac.grant('user').condition({Fn:'EQUALS', args: {'requester':'$.owner'}}).execute('update').on('user', ['firstName', 'lastName', 'about', 'password', 'email', 'avatarURL']);
+// Normal User permissions
+ac.grant('user').condition({ Fn: 'EQUALS', args: { 'requester': '$.owner' } }).execute('read').on('user', ['*', '!password', '!passwordSalt', '!role', '!signUpCode']);
+ac.grant('user').condition({ Fn: 'EQUALS', args: { 'requester': '$.owner' } }).execute('update').on('user', ['firstName', 'lastName', 'about', 'password', 'email', 'avatarURL']);
 
 // Admin permissions
 ac.grant('admin').execute('read').on('user');
 ac.grant('admin').execute('read').on('users');
 ac.grant('admin').execute('update').on('user');
-ac.grant('admin').condition({Fn:'NOT_EQUALS', args: {'requester':'$.owner'}}).execute('delete').on('user');
-
+ac.grant('admin').condition({ Fn: 'NOT_EQUALS', args: { 'requester': '$.owner' } }).execute('delete').on('user');
 
 exports.readAll = (requester) => ac.can(requester.role).execute('read').sync().on('users');
-exports.read = (requester, data) => ac.can(requester.role).context({requester: requester.userID, owner: data.userID}).execute('read').sync().on('user');
-exports.update = (requester, data) => ac.can(requester.role).context({requester: requester.userID, owner:data.userID}).execute('update').sync().on('user');
-exports.delete = (requester, data) => ac.can(requester.role).context({requester: requester.userID, owner:data.userID}).execute('delete').sync().on('user');</code></pre>
+exports.read = (requester, data) => ac.can(requester.role).context({ requester: requester.userID, owner: data.userID }).execute('read').sync().on('user');
+exports.update = (requester, data) => ac.can(requester.role).context({ requester: requester.userID, owner: data.userID }).execute('update').sync().on('user');
+exports.delete = (requester, data) => ac.can(requester.role).context({ requester: requester.userID, owner: data.userID }).execute('delete').sync().on('user');
+</code></pre>
         </article>
     </section>
 
@@ -60,13 +62,13 @@ exports.delete = (requester, data) => ac.can(requester.role).context({requester:
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-cofig.html">cofig</a></li><li><a href="module-controllers_validation.html">controllers/validation</a></li><li><a href="module-docs.html">docs</a></li><li><a href="module-helpers_database.html">helpers/database</a></li><li><a href="module-index.html">index</a></li><li><a href="module-models_user_model.html">models/user_model</a></li><li><a href="module-permissions_user_permissions.html">permissions/user_permissions</a></li><li><a href="module-routes_user_routes.html">routes/user_routes</a></li></ul><h3>Classes</h3><ul><li><a href="module-helpers_database-DatabaseException.html">DatabaseException</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-cofig.html">cofig</a></li><li><a href="module-controllers_auth.html">controllers/auth</a></li><li><a href="module-controllers_validation.html">controllers/validation</a></li><li><a href="module-docs.html">docs</a></li><li><a href="module-helpers_database.html">helpers/database</a></li><li><a href="module-index.html">index</a></li><li><a href="module-models_categories_model.html">models/categories_model</a></li><li><a href="module-models_features_model.html">models/features_model</a></li><li><a href="module-models_images_model.html">models/images_model</a></li><li><a href="module-models_messages_model.html">models/messages_model</a></li><li><a href="module-models_properties_model.html">models/properties_model</a></li><li><a href="module-models_user_model.html">models/user_model</a></li><li><a href="module-permissions_categories_permissions.html">permissions/categories_permissions</a></li><li><a href="module-permissions_features_permissions.html">permissions/features_permissions</a></li><li><a href="module-permissions_images_permissions.html">permissions/images_permissions</a></li><li><a href="module-permissions_message_permissions.html">permissions/message_permissions</a></li><li><a href="module-permissions_properties_permissions.html">permissions/properties_permissions</a></li><li><a href="module-permissions_user_permissions.html">permissions/user_permissions</a></li><li><a href="module-routes_categories_routes.html">routes/categories_routes</a></li><li><a href="module-routes_features_routes.html">routes/features_routes</a></li><li><a href="module-routes_images_routes.html">routes/images_routes</a></li><li><a href="module-routes_message_routes.html">routes/message_routes</a></li><li><a href="module-routes_properties_routes.html">routes/properties_routes</a></li><li><a href="module-routes_user_routes.html">routes/user_routes</a></li><li><a href="module-strategies_basic.html">strategies/basic</a></li></ul><h3>Classes</h3><ul><li><a href="module-helpers_database-DatabaseException.html">DatabaseException</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Oct 17 2020 17:16:47 GMT+0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 17:32:25 GMT+0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

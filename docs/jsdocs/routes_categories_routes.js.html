@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: routes/categories_routes.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: routes/categories_routes.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+* A module to handle the categories routes.
+* @module routes/categories_routes
+* @author Gheorghe Craciun
+*/
+
+const Router = require('koa-router');
+
+const bodyParser = require('koa-bodyparser');
+
+// Connect with model for DB
+const model = require('../models/categories_model');
+
+// Import auth part
+const auth = require('../controllers/auth');
+
+// Deal with Permissions
+const permissions = require('../permissions/categories_permissions');
+
+// Validation Schemas
+const { validateCategoryAdd, validateCategoryUpdate } = require('../controllers/validation');
+
+// Since we are handling users use a URI that begin's with an appropriate path
+const router = Router({ prefix: '/api/categories' });
+
+/**
+ * Function that gets the list of all categories.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function getAllCategories(cnx) {
+    const result = await model.getAllCategories();
+    if (result.length) {
+        cnx.status = 200;
+        cnx.body = result;
+    } else {
+        cnx.status = 404;
+    }
+}
+
+/**
+ * Function that gets the list of categories for a given property.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function getAllCategoriesForProperty(cnx) {
+    const propID = cnx.params.id;
+
+    const result = await model.getCategoriesForProperty(propID);
+    if (result.length) {
+        cnx.status = 200;
+        cnx.body = result;
+    } else {
+        cnx.status = 404;
+    }
+}
+
+/**
+ * Function that adds a category by it's ID.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function addCategories(cnx) {
+    // check permission if user can add a category
+    const permission = permissions.addCategory(cnx.state.user);
+
+    const { body } = cnx.request;
+
+    if (!permission.granted) {
+        // if permission is not granted
+        cnx.status = 403;
+    } else {
+        const result = await model.addCategory(body);
+        if (result) {
+            // category addedd
+            cnx.status = 201;
+            cnx.body = { id: result.insertId, created: true, link: `${cnx.request.path}/${result.insertId}` };
+        } else {
+            // category not addedd
+            cnx.status = 501;
+        }
+    }
+}
+
+/**
+ * Function that updates an category by it's ID.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function updateById(cnx) {
+    const categoryID = cnx.params.id;
+
+    // check permission if user can update a category
+    const permission = permissions.updateCategory(cnx.state.user);
+
+    const { body } = cnx.request;
+
+    if (!permission.granted) {
+        // if permission is not granted
+        cnx.status = 403;
+    } else {
+        const result = await model.updateCategory(categoryID, body);
+        if (result.affectedRows > 0) {
+            cnx.status = 200;
+            cnx.body = { ID: categoryID, updated: true, link: `${cnx.request.path}/${categoryID}` };
+        } else {
+            cnx.status = 501;
+            cnx.body = { ID: categoryID, updated: false };
+        }
+    }
+}
+
+/**
+ * Function that deletes a category by it's ID.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function deleteById(cnx) {
+    const categoryID = cnx.params.id;
+
+    // check permission if user can delete a category
+    const permission = permissions.deleteCategory(cnx.state.user);
+
+    if (!permission.granted) {
+        // if permission is not granted
+        cnx.status = 403;
+    } else {
+        const result = await model.deleteCategoryById(categoryID);
+        if (result.affectedRows > 0) {
+            cnx.status = 200;
+            cnx.body = { ID: categoryID, deleted: true };
+        } else {
+            cnx.status = 501;
+            cnx.body = { ID: categoryID, deleted: false };
+        }
+    }
+}
+
+// Gets
+router.get('/', getAllCategories);
+router.get('/:id([0-9]{1,})', getAllCategoriesForProperty);
+
+// Delete
+router.del('/:id([0-9]{1,})', auth, deleteById);
+
+// Post
+router.post('/', auth, bodyParser(), validateCategoryAdd, addCategories);
+
+// Put
+router.put('/:id([0-9]{1,})', auth, bodyParser(), validateCategoryUpdate, updateById);
+
+// Export object.
+module.exports = router;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-cofig.html">cofig</a></li><li><a href="module-controllers_auth.html">controllers/auth</a></li><li><a href="module-controllers_validation.html">controllers/validation</a></li><li><a href="module-docs.html">docs</a></li><li><a href="module-helpers_database.html">helpers/database</a></li><li><a href="module-index.html">index</a></li><li><a href="module-models_categories_model.html">models/categories_model</a></li><li><a href="module-models_features_model.html">models/features_model</a></li><li><a href="module-models_images_model.html">models/images_model</a></li><li><a href="module-models_messages_model.html">models/messages_model</a></li><li><a href="module-models_properties_model.html">models/properties_model</a></li><li><a href="module-models_user_model.html">models/user_model</a></li><li><a href="module-permissions_categories_permissions.html">permissions/categories_permissions</a></li><li><a href="module-permissions_features_permissions.html">permissions/features_permissions</a></li><li><a href="module-permissions_images_permissions.html">permissions/images_permissions</a></li><li><a href="module-permissions_message_permissions.html">permissions/message_permissions</a></li><li><a href="module-permissions_properties_permissions.html">permissions/properties_permissions</a></li><li><a href="module-permissions_user_permissions.html">permissions/user_permissions</a></li><li><a href="module-routes_categories_routes.html">routes/categories_routes</a></li><li><a href="module-routes_features_routes.html">routes/features_routes</a></li><li><a href="module-routes_images_routes.html">routes/images_routes</a></li><li><a href="module-routes_message_routes.html">routes/message_routes</a></li><li><a href="module-routes_properties_routes.html">routes/properties_routes</a></li><li><a href="module-routes_user_routes.html">routes/user_routes</a></li><li><a href="module-strategies_basic.html">strategies/basic</a></li></ul><h3>Classes</h3><ul><li><a href="module-helpers_database-DatabaseException.html">DatabaseException</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 17:32:25 GMT+0000 (GMT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

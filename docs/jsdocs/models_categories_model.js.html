@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: index</title>
+    <title>JSDoc: Source: models/categories_model.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,146 +17,81 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: index</h1>
+    <h1 class="page-title">Source: models/categories_model.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">A module to set up the application and it's routes for the Real Estate Website.</div>
-        
-
-        
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Gheorghe Craciun</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>routes/* for all routes</li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+* A module to perform query's related with the categories on the database.
+* @module models/categories_model
+* @author Gheorghe Craciun
+*/
+const db = require('../helpers/database');
+
+/**
+ * SQL Query function to get all categories from the DB.
+ * @returns {object} data - The response object containing all categories.
+ */
+exports.getAllCategories = async function getAllCategories() {
+    const query = 'SELECT * FROM categories';
+    const data = await db.run_query(query);
+    return data;
+};
+
+/**
+ * SQL Query function to get the categories for a given property.
+ * @param {integer} id - property ID.
+ * @returns {object} data - The response object containing all categories for a given property.
+ */
+exports.getCategoriesForProperty = async function getCategoriesForProperty(id) {
+    let query = 'SELECT c.ID, c.name FROM propertyCategories as pc INNER JOIN categories AS c';
+    query += ' ON pc.categoryID = c.ID WHERE pc.propertyID = ?;';
+    const result = await db.run_query(query, id);
+    return result;
+};
+
+/**
+ * SQL Query function to delete a category by it's ID.
+ * @param {integer} id - category ID.
+ * @returns {object} data - The response object.
+ */
+exports.deleteCategoryById = async function deleteCategoryById(id) {
+    const query = 'DELETE FROM categories WHERE ID = ?;';
+    const data = await db.run_query(query, id);
+    return data;
+};
+
+/**
+ * SQL Query function to add a category.
+ * @param {object} category - The category object.
+ * @returns {object} data - The response object.
+ */
+exports.addCategory = async function addCategory(category) {
+    const query = 'INSERT INTO categories SET ?;';
+    const data = await db.run_query(query, category);
+    return data;
+};
+
+/**
+ * SQL Query function to update the categories by it's ID.
+ * @param {integer} id - categoryID.
+ * @param {integer} category - feature Object.
+ * @returns {object} data - The response object.
+ */
+exports.updateCategory = async function updateCategory(id, category) {
+    const query = 'UPDATE categories SET ? WHERE ID = ?';
+    const values = [category, id];
+    const data = await db.run_query(query, values);
+    return data;
+};
+</code></pre>
+        </article>
+    </section>
 
 
 

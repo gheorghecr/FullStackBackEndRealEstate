@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: index</title>
+    <title>JSDoc: Source: routes/images_routes.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,146 +17,104 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: index</h1>
+    <h1 class="page-title">Source: routes/images_routes.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">A module to set up the application and it's routes for the Real Estate Website.</div>
-        
-
-        
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Gheorghe Craciun</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>routes/* for all routes</li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* eslint-disable no-restricted-syntax */
+/**
+* A module to handle the images routes.
+* @module routes/images_routes
+* @author Gheorghe Craciun
+*/
+
+// Used to store the image
+const fs = require('fs-extra');
+
+const Router = require('koa-router');
+
+// Connect with model for DB
+const model = require('../models/images_model');
+
+// Import auth part
+const auth = require('../controllers/auth');
+
+// Deal with Permissions
+const permissions = require('../permissions/images_permissions');
+
+// Since we are handling users use a URI that begin's with an appropriate path
+const router = Router({ prefix: '/api/images' });
+
+/**
+ * Function that gets an the images names for an property.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function getAllImagesForProperty(cnx) {
+    const propID = cnx.params.id;
+
+    const result = await model.getAllImagesNamesForProperty(propID);
+    if (result.length) {
+        cnx.status = 200;
+        cnx.body = result;
+    } else {
+        cnx.status = 404;
+        cnx.body = { message: 'Nothing was found' };
+    }
+}
+
+/**
+ * Function that deletes a image by it's ID.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function deleteImageById(cnx) {
+    const imageID = cnx.params.id;
+
+    const imageName = await model.getImageNameByImageID(imageID);
+
+    // if image is found in the database continue
+    // otherwise send error message back saying message not found
+    if (imageName.length) {
+        // check permission if user can delete message
+        const permission = permissions.deleteImage(cnx.state.user);
+        if (!permission.granted) {
+            // if permission is not granted
+            cnx.status = 403;
+        } else {
+            // perform delete on database
+            const result = await model.deleteImageById(imageID);
+            if (result.affectedRows > 0) {
+                // Delete the correct image from the public folder
+                fs.unlink(`./public/${imageName[0].imageName}`);
+                cnx.status = 200;
+                cnx.body = { ID: imageID, deleted: true };
+            } else {
+                cnx.status = 501;
+                cnx.body = { ID: imageID, deleted: false };
+            }
+        }
+    } else {
+        cnx.status = 404;
+    }
+}
+
+// Gets
+router.get('/:id([0-9]{1,})', getAllImagesForProperty);
+
+// Delete
+router.del('/:id([0-9]{1,})', auth, deleteImageById);
+
+// Export object.
+module.exports = router;
+</code></pre>
+        </article>
+    </section>
 
 
 

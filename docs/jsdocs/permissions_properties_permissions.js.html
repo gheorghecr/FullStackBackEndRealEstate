@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: index</title>
+    <title>JSDoc: Source: permissions/properties_permissions.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,146 +17,45 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: index</h1>
+    <h1 class="page-title">Source: permissions/properties_permissions.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">A module to set up the application and it's routes for the Real Estate Website.</div>
-        
-
-        
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Gheorghe Craciun</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>routes/* for all routes</li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* eslint-disable newline-per-chained-call */
+/* eslint-disable quote-props */
+/**
+* A module to handle permissions on properties.
+* @module permissions/properties_permissions
+* @author Gheorghe Craciun
+*/
+
+const AccessControl = require('role-acl');
+
+const ac = new AccessControl();
+
+// Normal User permissions
+ac.grant('user').condition({ Fn: 'EQUALS', args: { 'role': 'user' } }).execute('read').on('properties', [' ']);
+
+// Admin permissions
+ac.grant('admin').condition({ Fn: 'EQUALS', args: { 'role': 'admin' } }).execute('read').on('properties');
+ac.grant('admin').execute('delete').on('properties');
+ac.grant('admin').execute('update').on('properties');
+ac.grant('admin').execute('create').on('properties');
+ac.grant('admin').execute('update').on('properties');
+
+exports.readAllAdmin = (requester) => ac.can(requester.role).context({ role: requester.role }).execute('read').sync().on('properties');
+exports.deleteProp = (requester) => ac.can(requester.role).execute('delete').sync().on('properties');
+exports.toggleHighPriority = (requester) => ac.can(requester.role).execute('update').sync().on('properties');
+exports.addProperty = (requester) => ac.can(requester.role).execute('create').sync().on('properties');
+exports.update = (requester) => ac.can(requester.role).execute('update').sync().on('properties');
+</code></pre>
+        </article>
+    </section>
 
 
 

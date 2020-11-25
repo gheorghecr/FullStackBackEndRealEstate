@@ -94,7 +94,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_users_routes.js.html">routes/users_routes.js</a>, <a href="routes_users_routes.js.html#line1">line 1</a>
+        <a href="routes_users_routes.js.html">routes/users_routes.js</a>, <a href="routes_users_routes.js.html#line3">line 3</a>
     </li></ul></dd>
     
 
@@ -159,7 +159,9 @@
 
 
 <div class="description">
-    Funtion allows an user to register on the application. And return and the userID if account was sucessfully created.
+    Function allows an user to register on the application.
+And return and the userID if account was successfully created.
+It as well store the avatar image name correctly on the database.
 </div>
 
 
@@ -252,7 +254,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_users_routes.js.html">routes/users_routes.js</a>, <a href="routes_users_routes.js.html#line96">line 96</a>
+        <a href="routes_users_routes.js.html">routes/users_routes.js</a>, <a href="routes_users_routes.js.html#line134">line 134</a>
     </li></ul></dd>
     
 
@@ -318,8 +320,8 @@
 
 
 <div class="description">
-    Funtion allows an user to delete it's own account. And then lets the user know if update was sucessful or not.
-Admin can delete any user account.
+    Function allows an ADMIN to delete an account.
+And then lets the ADMIN know if update was successful or not.
 </div>
 
 
@@ -412,7 +414,7 @@ Admin can delete any user account.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_users_routes.js.html">routes/users_routes.js</a>, <a href="routes_users_routes.js.html#line164">line 164</a>
+        <a href="routes_users_routes.js.html">routes/users_routes.js</a>, <a href="routes_users_routes.js.html#line218">line 218</a>
     </li></ul></dd>
     
 
@@ -478,7 +480,8 @@ Admin can delete any user account.
 
 
 <div class="description">
-    Funtion that gets the the list of all users Personal Info, from the DB and returns it, if the user is an ADMIN.
+    Function that gets the the list of all users Personal Info, from the DB and returns it,
+if the user is an ADMIN.
 </div>
 
 
@@ -571,7 +574,7 @@ Admin can delete any user account.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_users_routes.js.html">routes/users_routes.js</a>, <a href="routes_users_routes.js.html#line45">line 45</a>
+        <a href="routes_users_routes.js.html">routes/users_routes.js</a>, <a href="routes_users_routes.js.html#line78">line 78</a>
     </li></ul></dd>
     
 
@@ -637,8 +640,10 @@ Admin can delete any user account.
 
 
 <div class="description">
-    Funtion that gets and returns an user (by it's ID) personal Info. Each user can only acess it's own data. 
-If the user is an ADMIN  has acess to all users data. Filters data so it does not show sentive data such as password.
+    Function that gets and returns an user (by it's ID) personal Info.
+Each user can only access it's own data.
+If the user is an ADMIN  has access to all users data. Filters data
+so it does not show sensitive data such as password.
 </div>
 
 
@@ -731,7 +736,7 @@ If the user is an ADMIN  has acess to all users data. Filters data so it does no
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_users_routes.js.html">routes/users_routes.js</a>, <a href="routes_users_routes.js.html#line63">line 63</a>
+        <a href="routes_users_routes.js.html">routes/users_routes.js</a>, <a href="routes_users_routes.js.html#line99">line 99</a>
     </li></ul></dd>
     
 
@@ -789,6 +794,165 @@ If the user is an ADMIN  has acess to all users data. Filters data so it does no
     
 
     
+    <h4 class="name" id="~login"><span class="type-signature">(async, inner) </span>login<span class="signature">(cnx)</span><span class="type-signature"> &rarr; {function}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Function that logs in an user and returns user details to the fron end.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cnx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The request object.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_users_routes.js.html">routes/users_routes.js</a>, <a href="routes_users_routes.js.html#line52">line 52</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - Logged in user details.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="~updateUserInfo"><span class="type-signature">(async, inner) </span>updateUserInfo<span class="signature">(cnx)</span><span class="type-signature"> &rarr; {object}</span></h4>
     
 
@@ -797,7 +961,8 @@ If the user is an ADMIN  has acess to all users data. Filters data so it does no
 
 
 <div class="description">
-    Funtion allows an user to update it's own personal data. And then lets the user know if update was sucessful or not.
+    Function allows an user to update it's own personal data.
+And then lets the user know if update was successful or not.
 Admin can update any user data.
 </div>
 
@@ -891,7 +1056,7 @@ Admin can update any user data.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_users_routes.js.html">routes/users_routes.js</a>, <a href="routes_users_routes.js.html#line119">line 119</a>
+        <a href="routes_users_routes.js.html">routes/users_routes.js</a>, <a href="routes_users_routes.js.html#line177">line 177</a>
     </li></ul></dd>
     
 
@@ -959,13 +1124,13 @@ Admin can update any user data.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-cofig.html">cofig</a></li><li><a href="module-controllers_validation.html">controllers/validation</a></li><li><a href="module-docs.html">docs</a></li><li><a href="module-helpers_database.html">helpers/database</a></li><li><a href="module-index.html">index</a></li><li><a href="module-models_user_model.html">models/user_model</a></li><li><a href="module-permissions_user_permissions.html">permissions/user_permissions</a></li><li><a href="module-routes_user_routes.html">routes/user_routes</a></li></ul><h3>Classes</h3><ul><li><a href="module-helpers_database-DatabaseException.html">DatabaseException</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-cofig.html">cofig</a></li><li><a href="module-controllers_auth.html">controllers/auth</a></li><li><a href="module-controllers_validation.html">controllers/validation</a></li><li><a href="module-docs.html">docs</a></li><li><a href="module-helpers_database.html">helpers/database</a></li><li><a href="module-index.html">index</a></li><li><a href="module-models_categories_model.html">models/categories_model</a></li><li><a href="module-models_features_model.html">models/features_model</a></li><li><a href="module-models_images_model.html">models/images_model</a></li><li><a href="module-models_messages_model.html">models/messages_model</a></li><li><a href="module-models_properties_model.html">models/properties_model</a></li><li><a href="module-models_user_model.html">models/user_model</a></li><li><a href="module-permissions_categories_permissions.html">permissions/categories_permissions</a></li><li><a href="module-permissions_features_permissions.html">permissions/features_permissions</a></li><li><a href="module-permissions_images_permissions.html">permissions/images_permissions</a></li><li><a href="module-permissions_message_permissions.html">permissions/message_permissions</a></li><li><a href="module-permissions_properties_permissions.html">permissions/properties_permissions</a></li><li><a href="module-permissions_user_permissions.html">permissions/user_permissions</a></li><li><a href="module-routes_categories_routes.html">routes/categories_routes</a></li><li><a href="module-routes_features_routes.html">routes/features_routes</a></li><li><a href="module-routes_images_routes.html">routes/images_routes</a></li><li><a href="module-routes_message_routes.html">routes/message_routes</a></li><li><a href="module-routes_properties_routes.html">routes/properties_routes</a></li><li><a href="module-routes_user_routes.html">routes/user_routes</a></li><li><a href="module-strategies_basic.html">strategies/basic</a></li></ul><h3>Classes</h3><ul><li><a href="module-helpers_database-DatabaseException.html">DatabaseException</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Oct 17 2020 17:16:47 GMT+0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 17:32:25 GMT+0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>
