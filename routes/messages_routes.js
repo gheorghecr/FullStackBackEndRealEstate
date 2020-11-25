@@ -55,15 +55,18 @@ async function getMessageByForAgent(cnx) {
 async function addMessages(cnx) {
     const { body } = cnx.request;
 
-    const result = await model.addMessage(body);
-    if (result) {
-        // message addedd
-        cnx.status = 201;
-        cnx.body = { id: result.insertId, created: true };
-    } else {
+    let result;
+    try {
+        result = await model.addMessage(body);
+        if (result) {
+            // message addedd
+            cnx.status = 201;
+            cnx.body = { id: result.insertId, created: true };
+        }
+    } catch (error) {
         // message not addedd
         cnx.status = 501;
-        cnx.body = { id: result.insertId, created: false };
+        cnx.body = { error, created: false };
     }
 }
 
