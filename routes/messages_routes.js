@@ -28,21 +28,22 @@ const router = Router({ prefix: '/api/messages' });
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */
-async function getMessageByForAgent(cnx) {
-    const conversationID = cnx.params.id;
+async function getMessageForAgent(cnx) {
+    const agentID = cnx.params.id;
 
-    const permission = permissions.readAllForConversation(cnx.state.user);
+    const permission = permissions.readAllForAgent(cnx.state.user);
 
     if (!permission.granted) {
         // if permission is not granted
         cnx.status = 403;
     } else {
-        const result = await model.getAllMessagesForConversation(conversationID);
+        const result = await model.getAllMessagesForAgent(agentID);
         if (result.length) {
             cnx.status = 200;
             cnx.body = result;
         } else {
             cnx.status = 404;
+            cnx.body = { error: 'No Messages found for the current agent!' };
         }
     }
 }
@@ -140,7 +141,7 @@ async function deleteMessageById(cnx) {
 }
 
 // Gets
-router.get('/agent/:id([0-9]{1,})', auth, getMessageByForAgent);
+router.get('/agent/:id([0-9]{1,})', auth, getMessageForAgent);
 
 // Puts
 router.put('/:id([0-9]{1,})', auth, toggleArchived);
