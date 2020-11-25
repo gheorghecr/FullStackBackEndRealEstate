@@ -595,11 +595,37 @@ paths:
           description: No Permissions to update.
         '501':
           description: Nothing was updated.
-    
-  /messages/{id}:
-    summary: Represents the messages for a conversation.
+  /messages/agent/{id}:
+    summary: Represents the messages for an agent.
     description: >
-      This resource represents the messages for a conversation.
+      This resource represents the messages for an agent.
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: Numeric id of the agentID.
+    get:
+        tags:
+          - Messages
+        description:
+          Get the all messages for an given agentID.
+        responses:
+          '201':
+            description: List of messages for the given agent ID.
+            content:
+              application/json:
+                schema:
+                  $ref: ./messages_schema.json#/definitions/messagesList
+          '403':
+            description: No Permissions to read.
+          '404':
+            description: Nothing found.
+  /messages/{id}:
+    summary: Represents an message.
+    description: >
+      This resource represents an message.
     parameters:
       - in: path
         name: id
@@ -607,22 +633,6 @@ paths:
           type: integer
         required: true
         description: Numeric id of the message.
-    get:
-      tags:
-        - Messages
-      description:
-        Get the all messages for a given conversation.
-      responses:
-        '201':
-          description: List of messages a conversation.
-          content:
-            application/json:
-              schema:
-                $ref: ./messages_schema.json#/definitions/messagesList
-        '403':
-          description: No Permissions to read.
-        '404':
-          description: Nothing found.
     delete:
         tags:
           - Messages
@@ -657,7 +667,6 @@ paths:
           description: No Permissions to update.
         '501':
           description: Nothing was updated.
-    
   /messages:
     summary: Represents the messages.
     description: >
@@ -676,40 +685,13 @@ paths:
               $ref: ./messages_schema.json#/definitions/addMessage
       responses:
         '201':
-          description: List of features for the property.
+          description: Message added.
           content:
             application/json:
               schema:
                 $ref: ./messages_schema.json#/definitions/messageUpdated
         '501':
-          description: Nothing found.
-  /messages/byID/{id}:
-    summary: Represents the messages.
-    description: >
-      This resource represents the messages.
-    parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-        description: Numeric id of the message.
-    get:
-      tags:
-        - Messages
-      description:
-        Get a messages for by it's ID.
-      responses:
-        '201':
-          description: Message
-          content:
-            application/json:
-              schema:
-                $ref: ./messages_schema.json#/definitions/messagesList
-        '403':
-          description: No Permissions to read.
-        '404':
-          description: Nothing found.
+          description: Message not added.
   /images/{propID}:
     summary: Represents an property image.
     description: >

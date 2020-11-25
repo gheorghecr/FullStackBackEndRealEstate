@@ -11,20 +11,20 @@
             "description": "ID of the message.",
             "type": "integer"
           },
-          "fromID": {
-            "description": "ID of the sender.",
-            "type": "integer"
+          "fromEmail": {
+            "description": "Email of the sender.",
+            "type": "string"
           },
-          "toID": {
+          "fromName": {
+            "description": "Name of the sender.",
+            "type": "string"
+          },
+          "agentID": {
             "description": "ID of the receiver.",
             "type": "integer"
           },
           "propertyID": {
             "description": "ID of the property for the conversation.",
-            "type": "integer"
-          },
-          "conversationID": {
-            "description": "ID of the conversation.",
             "type": "integer"
           },
           "messageText": {
@@ -44,20 +44,20 @@
         "description": "Data to add a new message.",
         "type": "object",
         "properties": {
-          "fromID": {
-            "description": "ID of the sender.",
-            "type": "integer"
+          "fromEmail": {
+            "description": "Email of the sender.",
+            "type": "string"
           },
-          "toID": {
-            "description": "ID of the receiver.",
+          "fromName": {
+            "description": "Email of the sender.",
+            "type": "string"
+          },
+          "agentID": {
+            "description": "ID of the agent that owns the house.",
             "type": "integer"
           },
           "propertyID": {
             "description": "ID of the property for the conversation.",
-            "type": "integer"
-          },
-          "conversationID": {
-            "description": "ID of the conversation.",
             "type": "integer"
           },
           "messageText": {
@@ -69,7 +69,7 @@
             "type": "boolean"
           }
         },
-        "required": ["fromID", "toID", "propertyID", "messageText"],
+        "required": ["fromEmail", "fromName", "agentID", "propertyID", "messageText"],
         "additionalProperties": false
       },
   
@@ -86,11 +86,6 @@
           "updated": {
             "description": "Boolean indicator of success",
             "type": "boolean"
-          },
-          "link": {
-            "description": "Path to retrieve feature record",
-            "type": "string",
-            "format": "uri"
           }
         }
       },
