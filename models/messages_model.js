@@ -6,14 +6,13 @@
 const db = require('../helpers/database');
 
 /**
- * SQL Query function to get all messages for a conversationID from the DB.
- * @param {integer} conversationID - conversation ID.
+ * SQL Query function to get all messages for an agent from the DB.
+ * @param {integer} agentID - agent ID.
  * @returns {object} data - The response object containing all features.
  */
-// eslint-disable-next-line max-len
-exports.getAllMessagesForConversation = async function getAllMessagesForConversation(conversationID) {
-    const query = 'SELECT * FROM messages WHERE conversationID = ?';
-    const data = await db.run_query(query, conversationID);
+exports.getAllMessagesForAgent = async function getAllMessagesForAgent(agentID) {
+    const query = 'SELECT * FROM messages WHERE agentID = ?';
+    const data = await db.run_query(query, agentID);
     return data;
 };
 
@@ -25,17 +24,6 @@ exports.getAllMessagesForConversation = async function getAllMessagesForConversa
 exports.addMessage = async function addMessage(message) {
     const query = 'INSERT INTO messages SET ?;';
     const data = await db.run_query(query, message);
-    return data;
-};
-
-/**
- * SQL Query function to get an message by it's ID.
- * @param {object} messageID - The message ID.
- * @returns {object} data - The response object.
- */
-exports.getMessageByID = async function getMessageByID(messageID) {
-    const query = 'SELECT * FROM messages WHERE messageID = ?;';
-    const data = await db.run_query(query, messageID);
     return data;
 };
 

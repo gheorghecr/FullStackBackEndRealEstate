@@ -24,11 +24,11 @@ const { validateMessageAdd } = require('../controllers/validation');
 const router = Router({ prefix: '/api/messages' });
 
 /**
- * Function that gets the list of all messages for a conversation.
+ * Function that gets the list of all messages for an agent(admin).
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */
-async function getAllMessagesForConversation(cnx) {
+async function getMessageByForAgent(cnx) {
     const conversationID = cnx.params.id;
 
     const permission = permissions.readAllForConversation(cnx.state.user);
@@ -59,37 +59,11 @@ async function addMessages(cnx) {
     if (result) {
         // message addedd
         cnx.status = 201;
-        cnx.body = { id: result.insertId, created: true, link: `${cnx.request.path}/messageID/${result.insertId}` };
+        cnx.body = { id: result.insertId, created: true };
     } else {
         // message not addedd
         cnx.status = 501;
         cnx.body = { id: result.insertId, created: false };
-    }
-}
-
-/**
- * Function that gets a message by it's ID.
- * @param {object} cnx - The request object.
- * @returns {object} cnx - The response object.
- */
-async function getMessageByID(cnx) {
-    const messageID = cnx.params.id;
-
-    const messageToCheckSenderID = await model.getMessageByID(messageID);
-
-    const permission = permissions.readByID(cnx.state.user, messageToCheckSenderID[0]);
-
-    if (!permission.granted) {
-        // if permission is not granted
-        cnx.status = 403;
-    } else {
-        const result = await model.getMessageByID(messageID);
-        if (result.length) {
-            cnx.status = 200;
-            cnx.body = result;
-        } else {
-            cnx.status = 404;
-        }
     }
 }
 
@@ -154,8 +128,7 @@ async function deleteMessageById(cnx) {
 }
 
 // Gets
-router.get('/:id([0-9]{1,})', auth, getAllMessagesForConversation);
-router.get('/byID/:id([0-9]{1,})', auth, getMessageByID);
+router.get('/agent/:id([0-9]{1,})', auth, getMessageByForAgent);
 
 // Puts
 router.put('/:id([0-9]{1,})', auth, toggleArchived);
