@@ -77,22 +77,30 @@ async function addMessages(cnx) {
  */
 async function toggleArchived(cnx) {
     const messageID = cnx.params.id;
+    const message = await model.getMessageByID(messageID);
 
-    // check permission if user can update a feature
-    const permission = permissions.toggleArchived(cnx.state.user);
+    // if message is found in the database continue
+    // otherwise send error message back saying message not found
+    if (message.length) {
+        // check permission if user can update a feature
+        const permission = permissions.toggleArchived(cnx.state.user, message[0]);
 
-    if (!permission.granted) {
-        // if permission is not granted
-        cnx.status = 403;
-    } else {
-        const result = await model.toggleArchived(messageID);
-        if (result.affectedRows > 0) {
-            cnx.status = 200;
-            cnx.body = { ID: messageID, updated: true, link: `${cnx.request.path}/${messageID}` };
+        if (!permission.granted) {
+            // if permission is not granted
+            cnx.status = 403;
         } else {
-            cnx.status = 501;
-            cnx.body = { ID: messageID, updated: false };
+            const result = await model.toggleArchived(messageID);
+            if (result.affectedRows > 0) {
+                cnx.status = 200;
+                cnx.body = { ID: messageID, updated: true, link: `${cnx.request.path}/${messageID}` };
+            } else {
+                cnx.status = 501;
+                cnx.body = { ID: messageID, updated: false };
+            }
         }
+    } else {
+        cnx.status = 404;
+        cnx.body = { error: 'Message not found!', deleted: false };
     }
 }
 
@@ -127,6 +135,7 @@ async function deleteMessageById(cnx) {
         }
     } else {
         cnx.status = 404;
+        cnx.body = { error: 'Message not found!', deleted: false };
     }
 }
 
