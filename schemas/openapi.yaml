@@ -665,6 +665,8 @@ paths:
                 $ref: ./messages_schema.json#/definitions/messageUpdated
         '403':
           description: No Permissions to update.
+        '404': 
+            description: Message not found.
         '501':
           description: Nothing was updated.
   /messages:
