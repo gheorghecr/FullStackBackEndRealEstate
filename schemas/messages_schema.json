@@ -52,6 +52,10 @@
             "description": "Email of the sender.",
             "type": "string"
           },
+          "fromNumber": {
+            "description": "Phone number of the sender.",
+            "type": "string"
+          },
           "agentID": {
             "description": "ID of the agent that owns the house.",
             "type": "integer"
