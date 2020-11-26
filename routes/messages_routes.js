@@ -93,7 +93,7 @@ async function toggleArchived(cnx) {
             const result = await model.toggleArchived(messageID);
             if (result.affectedRows > 0) {
                 cnx.status = 200;
-                cnx.body = { ID: messageID, updated: true, link: `${cnx.request.path}/${messageID}` };
+                cnx.body = { ID: messageID, updated: true, link: `${cnx.request.path}` };
             } else {
                 cnx.status = 501;
                 cnx.body = { ID: messageID, updated: false };
@@ -150,7 +150,7 @@ router.put('/:id([0-9]{1,})', auth, toggleArchived);
 router.del('/:id([0-9]{1,})', auth, deleteMessageById);
 
 // Post
-router.post('/', auth, bodyParser(), validateMessageAdd, addMessages);
+router.post('/', bodyParser(), validateMessageAdd, addMessages);
 
 // Export object.
 module.exports = router;
