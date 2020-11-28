@@ -153,6 +153,7 @@ async function getAllPropHighPriority(cnx) {
         cnx.body = result;
     } else {
         cnx.status = 404;
+        cnx.body = { message: 'No properties available marked as High Priority' };
     }
 }
 
@@ -173,7 +174,7 @@ async function deletePropById(cnx) {
     // otherwise send message back saying user not found
     if (property.length) {
     // check permission if user can delete info
-        const permission = permissions.deleteProp(cnx.state.user);
+        const permission = permissions.deleteProp(cnx.state.user, property[0]);
         if (!permission.granted) {
             // if permission is not granted
             cnx.status = 403;
@@ -356,7 +357,7 @@ async function updatePropertyByID(cnx) {
     // otherwise send message back saying user not found
     if (property.length) {
     // check permission if user can delete info
-        const permission = permissions.update(cnx.state.user);
+        const permission = permissions.update(cnx.state.user, property[0]);
         if (!permission.granted) {
             // if permission is not granted
             cnx.status = 403;
