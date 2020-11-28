@@ -49,19 +49,45 @@ const upload = multer({ storage: storage });
  * @returns {object} cnx - List of all properties.
  */
 async function getAllPropAdminView(cnx) {
+    const adminID = cnx.state.user.userID;
     const permission = permissions.readAllAdmin(cnx.state.user);
     if (!permission.granted) {
     // permission not granted
         cnx.status = 401;
     } else {
     // permission granted
-        const result = await model.getAllAdminView();
+        const result = await model.getAllAdminView(adminID);
         if (result.length) {
             cnx.status = 200;
             cnx.body = result;
         } else {
             cnx.status = 404;
             cnx.body = { message: 'No properties available' };
+        }
+    }
+}
+
+/**
+ * Function that gets the list of all properties, that are visible to the admin
+ * and are marked as high Priority.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - List of all properties.
+ */
+async function getAllPropAdminViewHighPriority(cnx) {
+    const adminID = cnx.state.user.userID;
+    const permission = permissions.readAllAdmin(cnx.state.user);
+    if (!permission.granted) {
+    // permission not granted
+        cnx.status = 401;
+    } else {
+    // permission granted
+        const result = await model.getAllAdminViewHighPriority(adminID);
+        if (result.length) {
+            cnx.status = 200;
+            cnx.body = result;
+        } else {
+            cnx.status = 404;
+            cnx.body = { message: 'No properties available marked as High Priority' };
         }
     }
 }
@@ -358,6 +384,7 @@ async function updatePropertyByID(cnx) {
 // Gets
 router.get('/', getAllProp);
 router.get('/adminview', auth, getAllPropAdminView);
+router.get('/adminview/highPriority', auth, getAllPropAdminViewHighPriority);
 router.get('/highpriority', getAllPropHighPriority);
 router.get('/togglehighpriority/:id([0-9]{1,})', auth, toggleHighPriority);
 router.get('/togglevisibility/:id([0-9]{1,})', auth, toggleVisibility);

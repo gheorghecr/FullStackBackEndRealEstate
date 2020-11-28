@@ -17,12 +17,27 @@ exports.getAll = async function getAll() {
 };
 
 /**
- * SQL Query function to get all properties (Admin view) from the DB.
+ * SQL Query function to get all properties that belong to the current user (admin) from the DB.
+ * * @param {integer} adminID - Admin ID.
+ *
  * @returns {object} data - The response object containing all properties data.
  */
-exports.getAllAdminView = async function getAllAdminView() {
-    const query = 'SELECT * FROM properties';
-    const data = await db.run_query(query);
+exports.getAllAdminView = async function getAllAdminView(adminID) {
+    const query = 'SELECT * FROM properties WHERE sellerID = ? ';
+    const data = await db.run_query(query, adminID);
+    return data;
+};
+
+/**
+ * SQL Query function to get all properties that belong to the current user (admin)
+ * and are marked as highPriority from the DB.
+ * * @param {integer} adminID - Admin ID.
+ *
+ * @returns {object} data - The response object containing all properties data.
+ */
+exports.getAllAdminViewHighPriority = async function getAllAdminViewHighPriority(adminID) {
+    const query = 'SELECT * FROM properties WHERE sellerID = ? AND highPriority = 1 ';
+    const data = await db.run_query(query, adminID);
     return data;
 };
 
