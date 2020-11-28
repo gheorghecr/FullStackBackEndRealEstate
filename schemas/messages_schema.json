@@ -54,7 +54,7 @@
           },
           "fromNumber": {
             "description": "Phone number of the sender.",
-            "type": "string"
+            "type": "integer"
           },
           "agentID": {
             "description": "ID of the agent that owns the house.",
