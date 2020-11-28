@@ -140,6 +140,21 @@ paths:
           description: Not found.
         '501':
           description: Not implemented.
+  /users/login:
+    get:
+      tags:
+        - Users
+      description:
+        Basic AUTH for Login a user.
+      responses:
+        '200':
+          description: View of user record.
+          content:
+            application/json:
+              schema:
+                $ref: ./user_schema.json#/definitions/userLogin
+        '401':
+          description: Could not authenticate user.
   /properties:
     summary: Represents an list of properties
     description: >

@@ -79,6 +79,43 @@
         }
       }
     },
+
+    "userLogin": {
+      "$id": "#userLogin",
+      "title": "User Logged in successfully",
+      "description": "Data that goes back when a user is logged in",
+      "type": "object",
+      "properties": {
+        "userID": {
+          "description": "Unique userID",
+          "type": "integer"
+        },
+        "username": {
+          "description": "Unique username",
+          "type": "string"
+        },
+        "email": {
+          "description": "Unique email address",
+          "type": "string"
+        },
+        "firstName": {
+          "description": "First name",
+          "type": "string"
+        },
+        "lastName": {
+          "description": "Last name",
+          "type": "string"
+        },
+        "links": {
+          "description": "Link to retrieve user information",
+          "type": "string"
+        },
+        "role": {
+          "description": "User role",
+          "type": "string"
+        }
+      }
+    },
     
     
     "userUpdate": {
