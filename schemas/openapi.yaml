@@ -206,16 +206,38 @@ paths:
       tags:
         - Properties
       description:
-        Get all properties available for ADMINS to view.
+        Get all properties available for the current user (admin) to view.
       responses:
         '200':
-          description: List of properties available for ADMINS.
+          description: List of properties available for the current user (admin).
           content:
             application/json:
               schema:
                 $ref: ./properties_schema.json#/definitions/propertiesView
         '401':
-          description: Non-admin users can't view all properties.
+          description: Non-admin users don't have access to this.
+        '404':
+          description: No properties where found.
+  /properties/adminview/highPriority:
+    summary: Represents an property.
+    description: >
+      This resource represents an individual property in the system that os only available for ADMINS.
+      And are marked as High Priority.
+      Each property is identified by a numeric `id`. 
+    get:
+      tags:
+        - Properties
+      description:
+        Get all the high priority properties available for the current user (admin) to view.
+      responses:
+        '200':
+          description: List of high priority properties available for the current user (admin).
+          content:
+            application/json:
+              schema:
+                $ref: ./properties_schema.json#/definitions/propertiesView
+        '401':
+          description: Non-admin users don't have access to this.
         '404':
           description: No properties where found.
   /properties/{id}:
