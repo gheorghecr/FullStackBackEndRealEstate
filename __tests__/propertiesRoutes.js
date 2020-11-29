@@ -3,13 +3,12 @@
 const request = require('supertest');
 
 const app = require('../app');
-const auth = require('../controllers/auth');
 
 const usernameGeral = 'gheorghe1';
 const passwordGeral = 'password';
 
 beforeAll(async (done) => {
-    const res = await request(app.callback())
+    await request(app.callback())
         .post('/api/users')
         .field('firstName', 'Gheorghe')
         .field('lastName', 'craciun')
