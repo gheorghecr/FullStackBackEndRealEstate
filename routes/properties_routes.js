@@ -437,6 +437,62 @@ async function propertiesSearch(ctx, next) {
     }
 }
 
+/**
+ * Function allows an ADMIN to search for properties by tittle, description, location.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function propertiesSearchAdmin(ctx, next) {
+    const { q } = ctx.request.query;
+    const currentUserID = ctx.state.user.userID;
+
+    if (q && q.length < 3) {
+        ctx.status = 400;
+        ctx.body = { message: "Search string must have at least 3 character's" };
+        return next();
+    }
+
+    // Perform query on the data base
+    const resultTitle = await model.titleSearchAdmin(q, currentUserID);
+    const resultLocation = await model.locationSearchAdmin(q, currentUserID);
+    const resultDescription = await model.descriptionSearchAdmin(q, currentUserID);
+
+    const finalResult = [];
+
+    // For all the results from the model, check if it has something
+    // And then if is not on the finalResults array append it.
+    if (resultTitle.length) {
+        for (const result of resultTitle) {
+            // Check if the property is not already in the finalResult array
+            if (!finalResult.includes(result)) {
+                finalResult.push(result);
+            }
+        }
+    }
+
+    if (resultLocation.length) {
+        for (const result of resultLocation) {
+            // Check if the property is not already in the finalResult array
+            if (!finalResult.includes(result)) {
+                finalResult.push(result);
+            }
+        }
+    }
+
+    if (resultDescription.length) {
+        for (const result of resultDescription) {
+            // Check if the property is not already in the finalResult array
+            if (!finalResult.includes(result)) {
+                finalResult.push(result);
+            }
+        }
+    }
+
+    if (finalResult.length) {
+        ctx.body = finalResult;
+    }
+}
+
 // Gets
 router.get('/', getAllProp);
 router.get('/adminview', auth, getAllPropAdminView);
@@ -447,6 +503,7 @@ router.get('/togglevisibility/:id([0-9]{1,})', auth, toggleVisibility);
 router.get('/:id([0-9]{1,})', getAllPropById);
 router.get('/seller/:id([0-9]{1,})', getAllPropByUserID);
 router.get('/search', propertiesSearch);
+router.get('/search/admin', auth, propertiesSearchAdmin);
 
 // Post's
 router.post('/', auth, validatePropertyAdd, upload.array('file', 20), bodyParser(), addProperty);

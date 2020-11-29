@@ -157,7 +157,7 @@ exports.AddPropertyImage = async function AddPropertyImage(path, prop_ID) {
 };
 
 /**
- * SQL Query function to search for users by an properties title.
+ * SQL Query function to search for property by it's title.
  * @param {string} q - String to search.
  * @returns {object} data - The response object.
  */
@@ -168,7 +168,7 @@ exports.titleSearch = async function titleSearch(q) {
 };
 
 /**
- * SQL Query function to search for users by an properties description.
+ * SQL Query function to search for property by it's description.
  * @param {string} q - String to search.
  * @returns {object} data - The response object.
  */
@@ -179,12 +179,48 @@ exports.descriptionSearch = async function descriptionSearch(q) {
 };
 
 /**
- * SQL Query function to search for users by an properties location.
+ * SQL Query function to search for property by it's location.
  * @param {string} q - String to search.
  * @returns {object} data - The response object.
  */
 exports.locationSearch = async function locationSearch(q) {
     const query = 'SELECT * FROM properties WHERE location LIKE ?;';
     const data = await db.run_query(query, `%${q}%`);
+    return data;
+};
+
+/**
+ * SQL Query function to search for property by it's title. ADMIN
+ * @param {string} q - String to search.
+ * @param {integer} currentUserID - Admin user ID.
+ * @returns {object} data - The response object.
+ */
+exports.titleSearchAdmin = async function titleSearchAdmin(q, currentUserID) {
+    const query = 'SELECT * FROM properties WHERE title LIKE ? AND sellerID = ?;';
+    const data = await db.run_query(query, [`%${q}%`, currentUserID]);
+    return data;
+};
+
+/**
+ * SQL Query function to search for property by it's description. ADMIN
+ * @param {string} q - String to search.
+ * @param {integer} currentUserID - Admin user ID.
+ * @returns {object} data - The response object.
+ */
+exports.descriptionSearchAdmin = async function descriptionSearchAdmin(q, currentUserID) {
+    const query = 'SELECT * FROM properties WHERE description LIKE ? AND sellerID = ?;';
+    const data = await db.run_query(query, [`%${q}%`, currentUserID]);
+    return data;
+};
+
+/**
+ * SQL Query function to search for property by it's location. ADMIN
+ * @param {string} q - String to search.
+ * @param {integer} currentUserID - Admin user ID.
+ * @returns {object} data - The response object.
+ */
+exports.locationSearchAdmin = async function locationSearchAdmin(q, currentUserID) {
+    const query = 'SELECT * FROM properties WHERE location LIKE ? AND sellerID = ?;';
+    const data = await db.run_query(query, [`%${q}%`, currentUserID]);
     return data;
 };
