@@ -155,3 +155,36 @@ exports.AddPropertyImage = async function AddPropertyImage(path, prop_ID) {
     const data = await db.run_query(query, values);
     return data;
 };
+
+/**
+ * SQL Query function to search for users by an properties title.
+ * @param {string} q - String to search.
+ * @returns {object} data - The response object.
+ */
+exports.titleSearch = async function titleSearch(q) {
+    const query = 'SELECT * FROM properties WHERE title LIKE ?;';
+    const data = await db.run_query(query, `%${q}%`);
+    return data;
+};
+
+/**
+ * SQL Query function to search for users by an properties description.
+ * @param {string} q - String to search.
+ * @returns {object} data - The response object.
+ */
+exports.descriptionSearch = async function descriptionSearch(q) {
+    const query = 'SELECT * FROM properties WHERE description LIKE ?;';
+    const data = await db.run_query(query, `%${q}%`);
+    return data;
+};
+
+/**
+ * SQL Query function to search for users by an properties location.
+ * @param {string} q - String to search.
+ * @returns {object} data - The response object.
+ */
+exports.locationSearch = async function locationSearch(q) {
+    const query = 'SELECT * FROM properties WHERE location LIKE ?;';
+    const data = await db.run_query(query, `%${q}%`);
+    return data;
+};

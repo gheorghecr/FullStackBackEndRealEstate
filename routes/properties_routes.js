@@ -52,10 +52,10 @@ async function getAllPropAdminView(cnx) {
     const adminID = cnx.state.user.userID;
     const permission = permissions.readAllAdmin(cnx.state.user);
     if (!permission.granted) {
-    // permission not granted
+        // permission not granted
         cnx.status = 401;
     } else {
-    // permission granted
+        // permission granted
         const result = await model.getAllAdminView(adminID);
         if (result.length) {
             cnx.status = 200;
@@ -77,10 +77,10 @@ async function getAllPropAdminViewHighPriority(cnx) {
     const adminID = cnx.state.user.userID;
     const permission = permissions.readAllAdmin(cnx.state.user);
     if (!permission.granted) {
-    // permission not granted
+        // permission not granted
         cnx.status = 401;
     } else {
-    // permission granted
+        // permission granted
         const result = await model.getAllAdminViewHighPriority(adminID);
         if (result.length) {
             cnx.status = 200;
@@ -173,7 +173,7 @@ async function deletePropById(cnx) {
     // if property is found in the database continue
     // otherwise send message back saying user not found
     if (property.length) {
-    // check permission if user can delete info
+        // check permission if user can delete info
         const permission = permissions.deleteProp(cnx.state.user, property[0]);
         if (!permission.granted) {
             // if permission is not granted
@@ -209,7 +209,7 @@ async function toggleHighPriority(cnx) {
     // if property is found in the database continue
     // otherwise send message back saying user not found
     if (property.length) {
-    // check permission if user can delete info
+        // check permission if user can delete info
         const permission = permissions.toggleHighPriority(cnx.state.user, property[0]);
         if (!permission.granted) {
             // if permission is not granted
@@ -245,7 +245,7 @@ async function toggleVisibility(cnx) {
     // if property is found in the database continue
     // otherwise send message back saying user not found
     if (property.length) {
-    // check permission if user can delete info
+        // check permission if user can delete info
         const permission = permissions.update(cnx.state.user, property[0]);
         if (!permission.granted) {
             // if permission is not granted
@@ -279,10 +279,10 @@ async function addProperty(cnx) {
     // check permission if user can add new property
     const permission = permissions.addProperty(cnx.state.user);
     if (!permission.granted) {
-    // if permission is not granted
+        // if permission is not granted
         cnx.status = 403;
     } else {
-    // perform query on database
+        // perform query on database
         body.sellerID = currentUserID;
         const result = await model.addProperty(body);
         if (result) {
@@ -318,7 +318,7 @@ async function updateStatusByID(cnx) {
     // if property is found in the database continue
     // otherwise send message back saying user not found
     if (property.length) {
-    // check permission if user can delete info
+        // check permission if user can delete info
         const permission = permissions.update(cnx.state.user);
         if (!permission.granted) {
             // if permission is not granted
@@ -356,7 +356,7 @@ async function updatePropertyByID(cnx) {
     // if property is found in the database continue
     // otherwise send message back saying user not found
     if (property.length) {
-    // check permission if user can delete info
+        // check permission if user can delete info
         const permission = permissions.update(cnx.state.user, property[0]);
         if (!permission.granted) {
             // if permission is not granted
@@ -382,6 +382,61 @@ async function updatePropertyByID(cnx) {
     }
 }
 
+/**
+ * Function allows an user to search for properties by tittle, description, location.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function propertiesSearch(ctx, next) {
+    const { q } = ctx.request.query;
+
+    if (q && q.length < 3) {
+        ctx.status = 400;
+        ctx.body = { message: "Search string must have at least 3 character's" };
+        return next();
+    }
+
+    // Perform query on the data base
+    const resultTitle = await model.titleSearch(q);
+    const resultLocation = await model.locationSearch(q);
+    const resultDescription = await model.descriptionSearch(q);
+
+    const finalResult = [];
+
+    // For all the results from the model, check if it has something
+    // And then if is not on the finalResults array append it.
+    if (resultTitle.length) {
+        for (const result of resultTitle) {
+            // Check if the property is not already in the finalResult array
+            if (!finalResult.includes(result)) {
+                finalResult.push(result);
+            }
+        }
+    }
+
+    if (resultLocation.length) {
+        for (const result of resultLocation) {
+            // Check if the property is not already in the finalResult array
+            if (!finalResult.includes(result)) {
+                finalResult.push(result);
+            }
+        }
+    }
+
+    if (resultDescription.length) {
+        for (const result of resultDescription) {
+            // Check if the property is not already in the finalResult array
+            if (!finalResult.includes(result)) {
+                finalResult.push(result);
+            }
+        }
+    }
+
+    if (finalResult.length) {
+        ctx.body = finalResult;
+    }
+}
+
 // Gets
 router.get('/', getAllProp);
 router.get('/adminview', auth, getAllPropAdminView);
@@ -391,6 +446,7 @@ router.get('/togglehighpriority/:id([0-9]{1,})', auth, toggleHighPriority);
 router.get('/togglevisibility/:id([0-9]{1,})', auth, toggleVisibility);
 router.get('/:id([0-9]{1,})', getAllPropById);
 router.get('/seller/:id([0-9]{1,})', getAllPropByUserID);
+router.get('/search', propertiesSearch);
 
 // Post's
 router.post('/', auth, validatePropertyAdd, upload.array('file', 20), bodyParser(), addProperty);
