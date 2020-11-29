@@ -66,6 +66,7 @@ async function login(cnx) {
         cnx.body = {
             userID, username, email, firstName, lastName, links, role,
         };
+        cnx.status = 201;
     }
 }
 
