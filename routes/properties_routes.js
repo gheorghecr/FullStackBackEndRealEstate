@@ -490,6 +490,7 @@ async function propertiesSearchAdmin(ctx, next) {
 
     if (finalResult.length) {
         ctx.body = finalResult;
+        ctx.status = 201;
     }
 }
 
