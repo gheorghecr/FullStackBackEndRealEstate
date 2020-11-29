@@ -8,7 +8,7 @@
     "test:watch": "cross-env DB_DATABASE=test_db jest --watch",
     "testDB:drop": "mysql --user=root --password=codio -e 'DROP DATABASE test_db;'",
     "testDB:create": "mysql --user=root --password=codio -e 'CREATE DATABASE test_db;'",
-    "testDB:migrate": "mysqldump --user=root --password=codio blog_demo | mysql --user=root --password=codio test_db",
+    "testDB:migrate": "mysqldump --user=root --password=codio real_estate | mysql --user=root --password=codio test_db",
     "pretest": "npm run testDB:drop && npm run testDB:create && npm run testDB:migrate"
   },
   "repository": {
