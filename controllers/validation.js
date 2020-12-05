@@ -21,6 +21,8 @@ const categoryAddSchema = require('../schemas/categories_schema.json').definitio
 
 const categoryUpdateSchema = require('../schemas/categories_schema.json').definitions.updateCategory;
 
+const categoryToPropertyAddSchema = require('../schemas/categories_schema.json').definitions.addCategoryForProperty;
+
 const featureAddSchema = require('../schemas/features_schema.json').definitions.addFeatures;
 
 const addFeaturesForProperty = require('../schemas/features_schema.json').definitions.addFeaturesForProperty;
@@ -80,6 +82,10 @@ exports.validatePropertyUpdate = makeKoaValidator(propertyUpdateSchema, 'updateP
 
 /** Validate data against categories schema for adding a category */
 exports.validateCategoryAdd = makeKoaValidator(categoryAddSchema, 'addCategory');
+
+/** Validate data against categories schema for adding a category */
+exports.validateCategoryAddForProperty = makeKoaValidator(categoryToPropertyAddSchema, 'addCategoryForProperty');
+
 /** Validate data against categories schema for adding a category */
 exports.validateCategoryUpdate = makeKoaValidator(categoryUpdateSchema, 'updateCategory');
 
