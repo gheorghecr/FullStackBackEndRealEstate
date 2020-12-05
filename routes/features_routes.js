@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-await-in-loop */
 /**
 * A module to handle the features routes.
 * @module routes/features_routes
@@ -18,7 +20,7 @@ const auth = require('../controllers/auth');
 const permissions = require('../permissions/features_permissions');
 
 // Validation Schemas
-const { validateFeatureAdd, validateFeatureUpdate } = require('../controllers/validation');
+const { validateFeatureAdd, validateFeatureUpdate, validateAddFeatureForProperty } = require('../controllers/validation');
 
 // Since we are handling users use a URI that begin's with an appropriate path
 const router = Router({ prefix: '/api/features' });
@@ -78,6 +80,39 @@ async function addFeatures(cnx) {
         } else {
             // feature not addedd
             cnx.status = 501;
+        }
+    }
+}
+
+/**
+ * Function that adds a feature to a property by it's ID.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+// TODO: Add features for property, DOCS and OPEN API
+async function addFeaturesForProperty(cnx) {
+    // check permission if user can add a feature
+    const permission = permissions.addFeature(cnx.state.user);
+
+    const { body } = cnx.request;
+
+    if (!permission.granted) {
+        // if permission is not granted
+        cnx.status = 403;
+    } else {
+        let result;
+        for (const featureID of body.featuresID) {
+            result = await model.addFeatureForProperty(body.propertyID, featureID);
+            if (!result) {
+                // feature not addedd
+                cnx.status = 501;
+                cnx.body = { Message: 'Features for property was not added. Please try again!', created: false };
+            }
+        }
+        if (result) {
+            // feature addedd
+            cnx.status = 201;
+            cnx.body = { propertyID: body.propertyID, created: true, message: 'Features added successfully' };
         }
     }
 }
@@ -145,6 +180,7 @@ router.del('/:id([0-9]{1,})', auth, deleteById);
 
 // Post
 router.post('/', auth, bodyParser(), validateFeatureAdd, addFeatures);
+router.post('/propertyFeatures', auth, bodyParser(), validateAddFeatureForProperty, addFeaturesForProperty);
 
 // Put
 router.put('/:id([0-9]{1,})', auth, bodyParser(), validateFeatureUpdate, updateById);
