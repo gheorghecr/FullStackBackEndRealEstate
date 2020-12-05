@@ -64,7 +64,7 @@ exports.updateFeature = async function updateFeature(id, feature) {
 
 /**
  * SQL Query function to add the features to a property by property ID and feature ID.
- * @param {integer} propertyID - feature ID.
+ * @param {integer} propertyID - property ID.
  * @param {integer} featureID - feature ID .
  * @returns {object} data - The response object.
  */
