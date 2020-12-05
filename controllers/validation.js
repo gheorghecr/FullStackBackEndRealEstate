@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-console */
 /**
 * A module to run JSON Schema based validation on request/response data.
@@ -21,6 +22,8 @@ const categoryAddSchema = require('../schemas/categories_schema.json').definitio
 const categoryUpdateSchema = require('../schemas/categories_schema.json').definitions.updateCategory;
 
 const featureAddSchema = require('../schemas/features_schema.json').definitions.addFeatures;
+
+const addFeaturesForProperty = require('../schemas/features_schema.json').definitions.addFeaturesForProperty;
 
 const featureUpdateSchema = require('../schemas/features_schema.json').definitions.updateFeature;
 
@@ -90,3 +93,6 @@ exports.validateMessageAdd = makeKoaValidator(addMessageSchema, 'addMessage');
 
 /** Validate data against images schema for adding a image for a property */
 exports.validateImageAdd = makeKoaValidator(addImageSchema, 'addImage');
+
+/** Validate data against property schema for adding a feature for a property */
+exports.validateAddFeatureForProperty = makeKoaValidator(addFeaturesForProperty, 'addFeaturesForProperty');
