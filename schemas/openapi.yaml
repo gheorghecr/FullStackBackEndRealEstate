@@ -703,6 +703,26 @@ paths:
           description: No permission to add a new feature to a property.
         '501':
           description: Property Feature not added.
+  /features/propertyFeatures/{id}:
+    summary: Represents the  features of a property list.
+    description: >
+      This resource represents the list of  features for a property. 
+    delete:
+        tags:
+          - Features
+        description:
+          Delete a property feature by propertyFeatureID.
+        responses:
+          '200':
+            description: Confirmation of deletion.
+            content:
+              application/json:
+                schema:
+                  $ref: ./features_schema.json#/definitions/featureDeleted
+          '403':
+            description: No Permissions to delete.
+          '501':
+            description: Property feature not deleted.
   /messages/agent/{id}:
     summary: Represents the messages for an agent.
     description: >
