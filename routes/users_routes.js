@@ -66,6 +66,7 @@ async function login(cnx) {
         cnx.body = {
             userID, username, email, firstName, lastName, links, role,
         };
+        cnx.status = 201;
     }
 }
 
@@ -133,7 +134,6 @@ async function getById(cnx) {
  */
 async function createAccount(cnx) {
     const body = cnx.req.body;
-
     // encrypt password
     const hash = bcrypt.hashSync(body.password, 10);
     body.password = hash;
