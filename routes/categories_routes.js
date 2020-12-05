@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /**
 * A module to handle the categories routes.
 * @module routes/categories_routes
@@ -18,7 +19,7 @@ const auth = require('../controllers/auth');
 const permissions = require('../permissions/categories_permissions');
 
 // Validation Schemas
-const { validateCategoryAdd, validateCategoryUpdate } = require('../controllers/validation');
+const { validateCategoryAdd, validateCategoryUpdate, validateCategoryAddForProperty } = require('../controllers/validation');
 
 // Since we are handling users use a URI that begin's with an appropriate path
 const router = Router({ prefix: '/api/categories' });
@@ -78,6 +79,39 @@ async function addCategories(cnx) {
         } else {
             // category not addedd
             cnx.status = 501;
+        }
+    }
+}
+
+/**
+ * Function that adds a category to a property by it's ID.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function addCategoryForProperty(cnx) {
+    // check permission if user can add a feature
+    const permission = permissions.addCategory(cnx.state.user);
+
+    const { body } = cnx.request;
+
+    if (!permission.granted) {
+        // if permission is not granted
+        cnx.status = 403;
+    } else {
+        let result;
+        for (const categoryID of body.categoryID) {
+            // eslint-disable-next-line no-await-in-loop
+            result = await model.addCategoryForProperty(body.propertyID, categoryID);
+            if (!result) {
+                // feature not addedd
+                cnx.status = 501;
+                cnx.body = { Message: 'Category for property was not added. Please try again!', created: false };
+            }
+        }
+        if (result) {
+            // feature addedd
+            cnx.status = 201;
+            cnx.body = { propertyID: body.propertyID, created: true, message: 'Category added successfully' };
         }
     }
 }
@@ -145,6 +179,7 @@ router.del('/:id([0-9]{1,})', auth, deleteById);
 
 // Post
 router.post('/', auth, bodyParser(), validateCategoryAdd, addCategories);
+router.post('/propertyCategory', auth, bodyParser(), validateCategoryAddForProperty, addCategoryForProperty);
 
 // Put
 router.put('/:id([0-9]{1,})', auth, bodyParser(), validateCategoryUpdate, updateById);
