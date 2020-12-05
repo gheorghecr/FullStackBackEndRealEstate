@@ -1,5 +1,4 @@
 /* eslint-disable no-restricted-syntax */
-/* eslint-disable no-await-in-loop */
 /**
 * A module to handle the features routes.
 * @module routes/features_routes
@@ -101,6 +100,7 @@ async function addFeaturesForProperty(cnx) {
     } else {
         let result;
         for (const featureID of body.featuresID) {
+            // eslint-disable-next-line no-await-in-loop
             result = await model.addFeatureForProperty(body.propertyID, featureID);
             if (!result) {
                 // feature not addedd
