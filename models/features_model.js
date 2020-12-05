@@ -75,3 +75,14 @@ exports.addFeatureForProperty = async function addFeatureForProperty(propertyID,
     const data = await db.run_query(query, values);
     return data;
 };
+
+/**
+ * SQL Query function to delete a property feature by propertyFeatureID.
+ * @param {integer} propertyFeatureID - propertyFeatureID.
+ * @returns {object} data - The response object.
+ */
+exports.deletePropertyFeature = async function deletePropertyFeature(propertyFeatureID) {
+    const query = 'DELETE FROM propertyFeatures WHERE propertyFeatureID = ?;';
+    const data = await db.run_query(query, propertyFeatureID);
+    return data;
+};
