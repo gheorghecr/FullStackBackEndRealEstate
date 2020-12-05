@@ -170,12 +170,39 @@ async function deleteById(cnx) {
     }
 }
 
+/**
+ * Function that deletes a property category by propertyCategoryID.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function deletePropertyCategory(cnx) {
+    const categoryID = cnx.params.id;
+
+    // check permission if user can delete a feature
+    const permission = permissions.deleteCategory(cnx.state.user);
+
+    if (!permission.granted) {
+        // if permission is not granted
+        cnx.status = 403;
+    } else {
+        const result = await model.deletePropertyCategory(categoryID);
+        if (result.affectedRows > 0) {
+            cnx.status = 200;
+            cnx.body = { ID: categoryID, deleted: true };
+        } else {
+            cnx.status = 501;
+            cnx.body = { ID: categoryID, deleted: false };
+        }
+    }
+}
+
 // Gets
 router.get('/', getAllCategories);
 router.get('/:id([0-9]{1,})', getAllCategoriesForProperty);
 
 // Delete
 router.del('/:id([0-9]{1,})', auth, deleteById);
+router.del('/propertyCategory/:id([0-9]{1,})', auth, deletePropertyCategory);
 
 // Post
 router.post('/', auth, bodyParser(), validateCategoryAdd, addCategories);
