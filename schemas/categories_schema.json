@@ -92,6 +92,46 @@
       }
     },
 
+    "addCategoryForProperty": {
+      "$id": "#addCategoryForProperty",
+      "title": "Add category for property",
+      "description": "Data to add a new category for a property.",
+      "type": "object",
+      "properties": {
+        "propertyID": {
+          "description": "ID of the property.",
+          "type": "integer"
+        },
+        "categoryID": {
+          "description": "Array containing the category ID",
+          "type": "array"
+        }
+      },
+      "required": ["propertyID", "categoryID"],
+      "additionalProperties": false
+    },
+
+    "propertyCategoryAdded": {
+      "$id": "#propertyCategoryAdded",
+      "title": "Property category added ",
+      "description": "Confirmation of a successful addition of the list of categories to the property.",
+      "type": "object",
+      "properties": {
+        "ID": {
+          "propertyID": "ID of the property that was added the categories",
+          "type": "integer"
+        },
+        "created": {
+          "description": "Boolean indicator of success",
+          "type": "boolean"
+        },
+        "message": {
+          "description": "Message of successfully addition.",
+          "type": "string"
+        }
+      }
+    },
+
     "categoryDeleted": {
       "$id": "#categoryDeleted",
       "title": "Category Deleted",
