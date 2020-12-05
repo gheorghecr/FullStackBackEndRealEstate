@@ -253,7 +253,7 @@ And return and the propertyID if property was successfully created.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line248">line 248</a>
+        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line275">line 275</a>
     </li></ul></dd>
     
 
@@ -413,7 +413,7 @@ And then lets the ADMIN know if update was successful or not.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line139">line 139</a>
+        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line166">line 166</a>
     </li></ul></dd>
     
 
@@ -573,7 +573,7 @@ Includes the ones where the visibility is set to false.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line75">line 75</a>
+        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line101">line 101</a>
     </li></ul></dd>
     
 
@@ -790,6 +790,166 @@ Includes the ones where the visibility is set to false.
     
 
     
+    <h4 class="name" id="~getAllPropAdminViewHighPriority"><span class="type-signature">(async, inner) </span>getAllPropAdminViewHighPriority<span class="signature">(cnx)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Function that gets the list of all properties, that are visible to the admin
+and are marked as high Priority.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cnx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The request object.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line76">line 76</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    cnx - List of all properties.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="~getAllPropById"><span class="type-signature">(async, inner) </span>getAllPropById<span class="signature">(cnx)</span><span class="type-signature"> &rarr; {object}</span></h4>
     
 
@@ -891,7 +1051,7 @@ Includes the ones where the visibility is set to false.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line91">line 91</a>
+        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line117">line 117</a>
     </li></ul></dd>
     
 
@@ -1050,7 +1210,7 @@ Includes the ones where the visibility is set to false.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line107">line 107</a>
+        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line133">line 133</a>
     </li></ul></dd>
     
 
@@ -1209,7 +1369,7 @@ Includes the ones where the visibility is set to false.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line123">line 123</a>
+        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line149">line 149</a>
     </li></ul></dd>
     
 
@@ -1239,6 +1399,324 @@ Includes the ones where the visibility is set to false.
         
 <div class="param-desc">
     cnx - List of properties with high priority.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~propertiesSearch"><span class="type-signature">(async, inner) </span>propertiesSearch<span class="signature">(cnx)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Function allows an user to search for properties by tittle, description, location.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cnx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The request object.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line390">line 390</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    cnx - The response object.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~propertiesSearchAdmin"><span class="type-signature">(async, inner) </span>propertiesSearchAdmin<span class="signature">(cnx)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Function allows an ADMIN to search for properties by tittle, description, location.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cnx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The request object.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line445">line 445</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    cnx - The response object.
 </div>
 
 
@@ -1368,7 +1846,7 @@ Includes the ones where the visibility is set to false.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line175">line 175</a>
+        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line202">line 202</a>
     </li></ul></dd>
     
 
@@ -1527,7 +2005,7 @@ Includes the ones where the visibility is set to false.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line211">line 211</a>
+        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line238">line 238</a>
     </li></ul></dd>
     
 
@@ -1686,7 +2164,7 @@ Includes the ones where the visibility is set to false.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line320">line 320</a>
+        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line347">line 347</a>
     </li></ul></dd>
     
 
@@ -1845,7 +2323,7 @@ Includes the ones where the visibility is set to false.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line282">line 282</a>
+        <a href="routes_properties_routes.js.html">routes/properties_routes.js</a>, <a href="routes_properties_routes.js.html#line309">line 309</a>
     </li></ul></dd>
     
 
@@ -1919,7 +2397,7 @@ Includes the ones where the visibility is set to false.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 17:32:25 GMT+0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Dec 05 2020 20:15:53 GMT+0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>
