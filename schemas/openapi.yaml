@@ -504,7 +504,6 @@ paths:
           description: No permission to add a new category.
         '501':
           description: Category not added.
-
   /categories/{id}:
     summary: Represents the categories for a given house.
     description: >
@@ -569,7 +568,53 @@ paths:
           description: No Permissions to update.
         '501':
           description: Nothing was updated.
-
+  /categories/propertyCategory:
+    summary: Represents the  categories of a property list.
+    description: >
+      This resource represents the list of categories for a property. 
+    post:
+      tags:
+        - Categories
+      description:
+        Add a new category for a property.
+      requestBody:
+        description: Data necessary to add a category for a property.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./categories_schema.json#/definitions/addCategoryForProperty
+      responses:
+        '201':
+          description: Feature added
+          content:
+            application/json:
+              schema:
+                $ref: ./categories_schema.json#/definitions/propertyCategoryAdded
+        '403':
+          description: No permission to add a new feature to a property.
+        '501':
+          description: Property Feature not added.
+  /categories/propertyCategory/{id}:
+    summary: Represents the  categories of a property list.
+    description: >
+      This resource represents the list of  categories for a property. 
+    delete:
+        tags:
+          - Categories
+        description:
+          Delete a property category by propertyCategoryID.
+        responses:
+          '200':
+            description: Confirmation of deletion.
+            content:
+              application/json:
+                schema:
+                  $ref: ./features_schema.json#/definitions/featureDeleted
+          '403':
+            description: No Permissions to delete.
+          '501':
+            description: Property category not deleted.
   /features:
     summary: Represents the property features list.
     description: >
