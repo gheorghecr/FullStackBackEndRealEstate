@@ -61,3 +61,17 @@ exports.updateFeature = async function updateFeature(id, feature) {
     const data = await db.run_query(query, values);
     return data;
 };
+
+/**
+ * SQL Query function to add the features to a property by property ID and feature ID.
+ * @param {integer} propertyID - feature ID.
+ * @param {integer} featureID - feature ID .
+ * @returns {object} data - The response object.
+ */
+exports.addFeatureForProperty = async function addFeatureForProperty(propertyID, featureID) {
+    const dataToInsert = { propertyID, featureID };
+    const query = 'INSERT INTO propertyFeatures SET ?';
+    const values = [dataToInsert];
+    const data = await db.run_query(query, values);
+    return data;
+};
