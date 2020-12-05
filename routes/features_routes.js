@@ -170,12 +170,39 @@ async function deleteById(cnx) {
     }
 }
 
+/**
+ * Function that deletes a property feature by propertyFeatureID.
+ * @param {object} cnx - The request object.
+ * @returns {object} cnx - The response object.
+ */
+async function deletePropertyFeature(cnx) {
+    const featureID = cnx.params.id;
+
+    // check permission if user can delete a feature
+    const permission = permissions.deleteFeature(cnx.state.user);
+
+    if (!permission.granted) {
+        // if permission is not granted
+        cnx.status = 403;
+    } else {
+        const result = await model.deletePropertyFeature(featureID);
+        if (result.affectedRows > 0) {
+            cnx.status = 200;
+            cnx.body = { ID: featureID, deleted: true };
+        } else {
+            cnx.status = 501;
+            cnx.body = { ID: featureID, deleted: false };
+        }
+    }
+}
+
 // Gets
 router.get('/', getAllFeatures);
 router.get('/:id([0-9]{1,})', getAllFeaturesForProperty);
 
 // Delete
 router.del('/:id([0-9]{1,})', auth, deleteById);
+router.del('/propertyFeatures/:id([0-9]{1,})', auth, deletePropertyFeature);
 
 // Post
 router.post('/', auth, bodyParser(), validateFeatureAdd, addFeatures);
