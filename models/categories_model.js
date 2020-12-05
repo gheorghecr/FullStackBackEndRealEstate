@@ -75,3 +75,14 @@ exports.addCategoryForProperty = async function addCategoryForProperty(propertyI
     const data = await db.run_query(query, values);
     return data;
 };
+
+/**
+ * SQL Query function to delete a property category by propertyCategoryID.
+ * @param {integer} propertyCategoryID - propertyCategoryID.
+ * @returns {object} data - The response object.
+ */
+exports.deletePropertyCategory = async function deletePropertyCategory(propertyCategoryID) {
+    const query = 'DELETE FROM propertyCategories WHERE propertyCategoryID = ?;';
+    const data = await db.run_query(query, propertyCategoryID);
+    return data;
+};
