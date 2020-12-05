@@ -676,6 +676,33 @@ paths:
           description: No Permissions to update.
         '501':
           description: Nothing was updated.
+  /features/propertyFeatures:
+    summary: Represents the  features of a property list.
+    description: >
+      This resource represents the list of  features for a property. 
+    post:
+      tags:
+        - Features
+      description:
+        Add a new feature for a property.
+      requestBody:
+        description: Data necessary to add a feature for a property.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./features_schema.json#/definitions/addFeaturesForProperty
+      responses:
+        '201':
+          description: Feature added
+          content:
+            application/json:
+              schema:
+                $ref: ./features_schema.json#/definitions/propertyFeatureAdded
+        '403':
+          description: No permission to add a new feature to a property.
+        '501':
+          description: Property Feature not added.
   /messages/agent/{id}:
     summary: Represents the messages for an agent.
     description: >

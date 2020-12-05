@@ -115,6 +115,27 @@
           }
         }
       },
+
+      "propertyFeatureAdded": {
+        "$id": "#propertyFeatureAdded",
+        "title": "Property feature added ",
+        "description": "Confirmation of a successful addition of the list of features to the property.",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "propertyID": "ID of the property that was added the features",
+            "type": "integer"
+          },
+          "created": {
+            "description": "Boolean indicator of success",
+            "type": "boolean"
+          },
+          "message": {
+            "description": "Message of successfully addition.",
+            "type": "string"
+          }
+        }
+      },
   
       "featureDeleted": {
         "$id": "#featureDeleted",
