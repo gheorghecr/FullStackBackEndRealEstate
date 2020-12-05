@@ -57,6 +57,25 @@
         "additionalProperties": false
       },
 
+      "addFeaturesForProperty": {
+        "$id": "#addFeaturesForProperty",
+        "title": "Add feature for property",
+        "description": "Data to add a new feature for a property.",
+        "type": "object",
+        "properties": {
+          "propertyID": {
+            "description": "ID of the property.",
+            "type": "integer"
+          },
+          "featuresID": {
+            "description": "Array containing the features ID",
+            "type": "array"
+          }
+        },
+        "required": ["propertyID", "featuresID"],
+        "additionalProperties": false
+      },
+
       "updateFeature": {
         "$id": "#updateFeature",
         "title": "Update feature",
