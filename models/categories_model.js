@@ -61,3 +61,17 @@ exports.updateCategory = async function updateCategory(id, category) {
     const data = await db.run_query(query, values);
     return data;
 };
+
+/**
+ * SQL Query function to add the category to a property by property ID and category ID.
+ * @param {integer} propertyID - property ID.
+ * @param {integer} categoryID - feature ID .
+ * @returns {object} data - The response object.
+ */
+exports.addCategoryForProperty = async function addCategoryForProperty(propertyID, categoryID) {
+    const dataToInsert = { propertyID, categoryID };
+    const query = 'INSERT INTO propertyCategories SET ?';
+    const values = [dataToInsert];
+    const data = await db.run_query(query, values);
+    return data;
+};
