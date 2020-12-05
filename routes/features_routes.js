@@ -89,7 +89,6 @@ async function addFeatures(cnx) {
  * @param {object} cnx - The request object.
  * @returns {object} cnx - The response object.
  */
-// TODO: Add features for property, DOCS and OPEN API
 async function addFeaturesForProperty(cnx) {
     // check permission if user can add a feature
     const permission = permissions.addFeature(cnx.state.user);
