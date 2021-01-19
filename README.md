@@ -1,7 +1,5 @@
+# BackEnd
 
-# Gheorghe Craciun (craciun2@uni.coventry.ac.uk)
-## 304CEM Backend Assignment BackEnd
-All of the mandatory features are implemented in the frontend and backend.
 
 Accounts already present:
 
